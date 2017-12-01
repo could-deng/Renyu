@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">RenyuMVVM</string>
+    <string name="AppTitle">RenyuMVVM</string>
+
+    <string name="ui_title_total">Total</string>
+    <string name="ui_title_dynamic">Dynamic</string>
+    <string name="ui_title_vip">Vip</string>
+    <string name="ui_title_my">My</string>
+
+
+    <string name="title_focus">Focus</string>
+    <string name="title_popular">Popular</string>
+    <string name="title_invite">Invite</string>
+
+
+    <string name="load_more">正在加载更多</string>
+    <string name="load_pull_to">上拉加载更多</string>
+    <string name="load_none">没有更多内容了</string>
+
+    <string name="dig">赞</string>
+    <string name="cancel">取消</string>
+    <string name="comment">评论</string>
+</resources>

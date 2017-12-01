@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00B4AA</color>
+    <color name="colorPrimaryDark">#00B4AA</color>
+    <color name="colorAccent">#FFFFFF</color>
+
+    <color name="textColorPrimary">#FFFFFF</color>
+
+    <!--上方状态栏颜色-->
+    <color name="colorTheme">@color/colorPrimary</color>
+
+    <!--bottom navigation 横条-->
+    <color name="colorPrimaryLighter">#A5E6DC</color>
+
+    <!--页面背景的颜色-->
+    <color name="colorPageBg">#f2f4f5</color>
+
+    <color name="colorWhite">#ffffffff</color>
+
+    <!--recycleView底部view文字-->
+    <color name="colorBlackTitle">#999</color>
+
+
+
+
+    <!--主页tab背景-->
+    <color name="colorTabBg">#ffffffff</color>
+    <color name="colorTabTextCheck">#ffffffff</color>
+    <color name="colorTabTextNormal">#ffffffff</color>
+    <color name="colorTabLine">#ffffffff</color>
+
+    <!--水波纹或5.0以上选择器颜色-->
+    <color name="tabBackground">#777D7D7D</color>
+    <!--item的水波纹颜色-->
+    <color name="itemBackground">#DD7D7D7D</color>
+    <!--item的5.0一下版本选择器颜色-->
+    <color name="itemLowBackground">@color/colorPrimary</color>
+
+
+
+
+    <color name="font_color_3">#333333</color>
+    <color name="font_color_7">#888888</color>
+    <color name="font_color_41">#ae4ce6</color>
+
+
+    <color name="color_8290af">#8290af</color>
+    <color name="color_cccccc">#cccccc</color>
+    <color name="color_aeaeae">#aeaeae</color>
+    <color name="colorText_abb2c8">#abb2c8</color>
+    <color name="im_social_dig_name_bg">#DDDDDD</color>
+    <color name="line_color">#dadada</color>
+
+    <color name="transparent">#00ffffff</color><!-- Transparent white -->
+
+
+
+    <color name="praise_item_default">#333333</color>
+    <color name="praise_item_selector_default">#cccccc</color>
+    <color name="praise_item">#8290AF</color>
+    <color name="colorTextLighter">#A5B1B8</color>
+    <color name="color_232323">#232323</color>
+    <color name="white">#ffffff</color>
+
+</resources>
