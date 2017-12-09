@@ -14,6 +14,10 @@ import could.bluepay.renyumvvm.databinding.FragmentVipBinding;
 
 public class VipFragment extends BaseFragment<FragmentVipBinding> {
     public static final String TAG = "VipFragment";
+    public String setFragmentName(){
+        return TAG;
+    }
+
     @Override
     protected int getContent() {
         return R.layout.fragment_vip;

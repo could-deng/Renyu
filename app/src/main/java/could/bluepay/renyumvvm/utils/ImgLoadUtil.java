@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import could.bluepay.renyumvvm.R;
+import could.bluepay.renyumvvm.widget.GlideCircleTransform;
 
 /**
  * Created by bluepay on 2017/11/24.
@@ -37,6 +38,20 @@ public class ImgLoadUtil {
                 .error(getDefaultPic(2))
                 .into(imageView);
     }
+
+    @BindingAdapter("android:showCircleImg")
+    public static void showCircleImg(ImageView imageView,String url){
+        Glide.with(imageView.getContext())
+                .load(url)
+                .crossFade(500)
+                .bitmapTransform(new GlideCircleTransform(imageView.getContext()))
+                .placeholder(R.drawable.head)
+                .error(R.drawable.head)
+                .into(imageView);
+
+    }
+
+
 
     @BindingAdapter("android:ttext")
     public static void setText(TextView tv,int text){

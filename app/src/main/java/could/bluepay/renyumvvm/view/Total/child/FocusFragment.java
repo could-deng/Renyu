@@ -30,6 +30,10 @@ import rx.schedulers.Schedulers;
 
 public class FocusFragment <T extends UserListAdapter>extends BaseFragment<FragmentForcusBinding> {
 
+    public static final String TAG = "FocusFragment";
+    public String setFragmentName(){
+        return TAG;
+    }
     //Fragment内容类型
     public static final int ContentTypeFocus = 1;
     public static final int ContentTYpePopular = 2;
@@ -42,8 +46,10 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
 
 
 
-    //是否首页
+    //进入时需不需要网络请求
     private boolean mIsFirst = true;
+
+
     // 开始请求的角标
     private int mStart = 1;
     // 一次请求的数量
@@ -90,7 +96,7 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Logger.e(Logger.DEBUG_TAG,((mType == ContentTypeFocus)?"FocusFragment":"PopularFragment")+"serUserVisibleHit()"+(getUserVisibleHint()?"visible":"invisible"));
+//        Logger.e(Logger.DEBUG_TAG,((mType == ContentTypeFocus)?"FocusFragment":"PopularFragment")+",setUserVisibleHint()"+(getUserVisibleHint()?"visible":"invisible"));
     }
 
     @Override
@@ -132,7 +138,7 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
     @Override
     protected void loadData() {
         Logger.e(Logger.DEBUG_TAG,((mType == ContentTypeFocus)?"FocusFragment":"PopularFragment")+"loadData(),"+(isPrepared?"1":"0")+","+(mIsVisible?"1":"0")+","+(mIsFirst?"1":"0"));
-        if(!isPrepared || !mIsVisible || !mIsFirst){
+        if(!isPrepared || !mIsVisible || !mIsFirst){//
             return;
         }
 
@@ -145,6 +151,11 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
         },500);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mIsFirst = true;//销毁时，重新加载数据时，认为第一次请求
+    }
 
     private void loadCustomData(long uid, int page){
         Observable<UserListBean> totalData ;
@@ -169,7 +180,6 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
 
                     @Override
                     public void onError(Throwable e) {
-                        Logger.e(Logger.DEBUG_TAG,"onError"+e.getMessage());
                         showContentView();
                         if(bindingView.srlFocus.isRefreshing()){
                             bindingView.srlFocus.setRefreshing(false);
@@ -183,7 +193,6 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
 
                     @Override
                     public void onNext(UserListBean userListBean) {
-                        Logger.e(Logger.DEBUG_TAG,userListBean.toString());
                         if(mStart == 1){
                             if(userListBean!=null &&userListBean.getData()!=null
                                     && userListBean.getData().getUser()!=null
@@ -237,7 +246,6 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
                  * */
 
                 Logger.e(Logger.DEBUG_TAG,"onScrollStateChanged(),newState = "+newState);
-
 
                 super.onScrollStateChanged(recyclerView, newState);
                 if(newState == RecyclerView.SCROLL_STATE_IDLE){

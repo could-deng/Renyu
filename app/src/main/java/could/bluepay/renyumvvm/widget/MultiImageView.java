@@ -15,6 +15,7 @@ import java.util.List;
 
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.http.bean.PhotoInfo;
+import could.bluepay.renyumvvm.http.bean.WeiboBean;
 import could.bluepay.renyumvvm.utils.ViewUtils;
 
 /**
@@ -44,12 +45,12 @@ public class MultiImageView extends LinearLayout {
 	private LayoutParams morePara, moreParaColumnFirst;
 	private LayoutParams rowPara;
 
-//	private WeiboBean mDynamicItem;
+	private WeiboBean mDynamicItem;
 
-//	private OnItemClickListener mOnItemClickListener;
-//	public void setOnItemClickListener(OnItemClickListener onItemClickListener){
-//		mOnItemClickListener = onItemClickListener;
-//	}
+	private OnItemClickListener mOnItemClickListener;
+	public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+		mOnItemClickListener = onItemClickListener;
+	}
 
 	public MultiImageView(Context context) {
 		super(context);
@@ -78,9 +79,9 @@ public class MultiImageView extends LinearLayout {
 		initView();
 	}
 
-//	public void setDynamicItem(WeiboBean item){
-//		this.mDynamicItem = item;
-//	}
+	public void setDynamicItem(WeiboBean item){
+		this.mDynamicItem = item;
+	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -227,7 +228,7 @@ public class MultiImageView extends LinearLayout {
 		}
 
 		imageView.setId(photoInfo.url.hashCode());
-//		imageView.setOnClickListener(new ImageOnClickListener(position));
+		imageView.setOnClickListener(new ImageOnClickListener(position));
 		imageView.setBackgroundColor(getResources().getColor(R.color.colorTextLighter));
 //		if(mDynamicItem.isMoneyPicture()){
 //			Glide.with(getContext()).load(photoInfo.url).diskCacheStrategy(DiskCacheStrategy.ALL).bitmapTransform(new BlurTransformation(getContext(),23,4)).into(imageView);
@@ -237,23 +238,25 @@ public class MultiImageView extends LinearLayout {
 		return imageView;
 	}
 
-//	private class ImageOnClickListener implements OnClickListener {
-//
-//		private int position;
-//		public ImageOnClickListener(int position){
-//			this.position = position;
-//		}
-//
-//		@Override
-//		public void onClick(View view) {
-//			if(mOnItemClickListener != null){
+	private class ImageOnClickListener implements OnClickListener {
+
+		private int position;
+		public ImageOnClickListener(int position){
+			this.position = position;
+		}
+
+		@Override
+		public void onClick(View view) {
+			if(mOnItemClickListener != null){
 //				mOnItemClickListener.onItemClick(view, position, mDynamicItem, imagesList, imagesUrlList);
-//			}
-//		}
-//	}
-//
-//	public interface OnItemClickListener{
+				mOnItemClickListener.onItemClick(view,imagesUrlList.get(position),position);
+			}
+		}
+	}
+
+	public interface OnItemClickListener{
 //		void onItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList);
-//	}
+		void onItemClick(View view,String pictureUrl,int PhotoPosition);
+	}
 
 }

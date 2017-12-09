@@ -22,6 +22,7 @@ import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.common.PrefsHelper;
 import could.bluepay.renyumvvm.databinding.ActivityMainBinding;
+import could.bluepay.renyumvvm.model.MemExchange;
 import could.bluepay.renyumvvm.rx.RxBus;
 import could.bluepay.renyumvvm.rx.RxBusBaseMessage;
 import could.bluepay.renyumvvm.rx.RxCodeConstants;
@@ -61,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
         initRxBus();
 //        initContentFragment();
         startShowFragment();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MemExchange.getInstance().clear();
     }
 
     public long getUid(){

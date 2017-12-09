@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RenyuMVVM.iml" filepath="$PROJECT_DIR$/RenyuMVVM.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/extraModule/couldutils/couldutils.iml" filepath="$PROJECT_DIR$/extraModule/couldutils/couldutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/extraModule/extraModule.iml" filepath="$PROJECT_DIR$/extraModule/extraModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/extraModule/http/http.iml" filepath="$PROJECT_DIR$/extraModule/http/http.iml" />
       <module fileurl="file://$PROJECT_DIR$/extraModule/widget/widget.iml" filepath="$PROJECT_DIR$/extraModule/widget/widget.iml" />

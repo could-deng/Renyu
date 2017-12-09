@@ -277,11 +277,9 @@ public class DynamicAdapter extends BaseRecyclerViewAdapter<WeiboBean> {
                                 FavortItem bean = (FavortItem) object;
                                 weiboBean.getFavorters().add(bean);
                                 //// TODO: 2017/11/30 更新点赞列表及弹出框显示的字
-                                if(click!=null){
-                                    click.updateRecycleView(dynamicPosition);
-                                }
-//                                model.updateAdapterIndex(dynamicPosition,adapter);
-//                                notifyItemChanged(dynamicPosition);
+//                                if(click!=null){
+//                                    click.updateRecycleView(dynamicPosition);
+//                                }
 
                             }catch (Exception e){
                                 e.printStackTrace();
@@ -308,10 +306,9 @@ public class DynamicAdapter extends BaseRecyclerViewAdapter<WeiboBean> {
                                 for(FavortItem item:favortItemList){
                                     if(item.getId() == favouriteId){
                                         favortItemList.remove(item);
-                                        if(click!=null){
-                                            click.updateRecycleView(dynamicPosition);
-                                        }
-//                                        notifyItemChanged(dynamicPosition);
+//                                        if(click!=null){
+//                                            click.updateRecycleView(dynamicPosition);
+//                                        }
                                     }
                                 }
                             }

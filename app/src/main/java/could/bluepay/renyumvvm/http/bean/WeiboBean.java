@@ -1,5 +1,9 @@
 package could.bluepay.renyumvvm.http.bean;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+import android.databinding.ObservableList;
+
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -16,7 +20,7 @@ import could.yuanqiang.http.ParamNames;
  * Created by bluepay on 2017/11/27.
  */
 
-public class WeiboBean {
+public class WeiboBean extends BaseObservable{
     /**
      * pid : 12746
      * pcontent : 今日推荐：
@@ -44,55 +48,60 @@ public class WeiboBean {
      */
 
     @ParamNames("pid")
-    private long pid;
+    private @Bindable long pid;
     @ParamNames("pcontent")
-    private String pcontent;
+    private @Bindable String pcontent;
     @ParamNames("qid")
-    private long qid;
+    private @Bindable long qid;
     @ParamNames("pic")
-    private String pic;
+    private @Bindable String pic;
     @ParamNames("insert_time")
-    private String insert_time;
+    private @Bindable String insert_time;
     @ParamNames("status")
-    private int status;
+    private @Bindable int status;
     @ParamNames("tagid")
-    private int tagid;
+    private @Bindable int tagid;
     @ParamNames("hot")
-    private int hot;
+    private @Bindable int hot;
     @ParamNames("score")
-    private int score;
+    private @Bindable int score;
     @ParamNames("type")
-    private int type;
+    private @Bindable int type;
     @ParamNames("paycount")
-    private int paycount;
+    private @Bindable int paycount;
     @ParamNames("fee")
-    private int fee;
+    private @Bindable int fee;
     @ParamNames("top")
-    private int top;
+    private @Bindable int top;
     @ParamNames("sq")
-    private int sq;
+    private @Bindable int sq;
     @ParamNames("video")
-    private String video;
+    private @Bindable String video;
     @ParamNames("priased")
-    private int priased;
+    private @Bindable int priased;
     @ParamNames("payed")
-    private int payed;
+    private @Bindable int payed;
     @ParamNames("relation")
-    private int relation;
+    private @Bindable int relation;
     @ParamNames("user")
-    private UserBeanItem user;
+    private @Bindable UserBeanItem user;
     @ParamNames("commentcount")
-    private int commentcount;
+    private @Bindable int commentcount;
     @ParamNames("praisecount")
-    private int praisecount;
+    private @Bindable int praisecount;
 
-
-    private boolean isMoneyPicture;
-    private boolean isMoneyVideo;
+    @ParamNames("isMoneyPicture")
+    private @Bindable boolean isMoneyPicture;
+    @ParamNames("isMoneyVideo")
+    private @Bindable boolean isMoneyVideo;
     public int curProgress;
-    private List<PhotoInfo> photos = new ArrayList<>();
-    private List<FavortItem> favorters = new ArrayList<>();
-    private List<CommentItem> comments = new ArrayList<>();
+    @ParamNames("photos")
+    private @Bindable List<PhotoInfo> photos = new ArrayList<>();
+    @ParamNames("favorters")
+    private @Bindable List<FavortItem> favorters = new ArrayList<>();
+    @ParamNames("comments")
+    private @Bindable List<CommentItem> comments = new ArrayList<>();
+
     private boolean isExpand;
 
     public long getPid() {
@@ -130,7 +139,7 @@ public class WeiboBean {
     public List<PhotoInfo> getPic() {
 //        Log.i("BluePay", "---pic---"+pic);
         if(photos==null||photos.size()==0){
-            Type photosType = new TypeToken<List<PhotoInfo>>() {
+            Type photosType = new TypeToken<ObservableList<PhotoInfo>>() {
             }.getType();
             try {
                 photos = AppUtils.getList(pic, photosType);

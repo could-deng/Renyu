@@ -14,4 +14,8 @@ public class PhotoInfo {
     public int width;
     @ParamNames("height")
     public int height;
+
+    public PhotoInfo(String url) {
+        this.url = url;
+    }
 }

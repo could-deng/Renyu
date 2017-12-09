@@ -1,8 +1,7 @@
 package could.bluepay.renyumvvm.view.adapter.baseadapter;
 
+import android.databinding.ObservableArrayList;
 import android.support.v7.widget.RecyclerView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +10,8 @@ import java.util.List;
 
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewHolder> {
 
-    protected List<T> data = new ArrayList<>();
+    protected ObservableArrayList<T> data = new ObservableArrayList<>();
+
     protected OnItemClickListener<T> listener;
     protected OnItemLongClickListener<T> longClickListener;
     @Override
@@ -23,7 +23,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     public int getItemCount() {
         return data.size();
     }
-    public void addAll(List<T> datas){
+    public void addAll(ObservableArrayList<T> datas){
         data.addAll(datas);
     }
     public void add(T object){

@@ -12,7 +12,7 @@ import could.bluepay.renyumvvm.databinding.HeaderItemUserlistBinding;
 import could.bluepay.renyumvvm.databinding.ItemLvHotAndNewBinding;
 
 /**
- * Created by bluepay on 2017/11/24.
+ * Popular列表适配器
  */
 
 public class UserListPopularAdapter extends UserListAdapter {

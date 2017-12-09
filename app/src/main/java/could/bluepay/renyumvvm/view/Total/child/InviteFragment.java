@@ -26,7 +26,10 @@ import rx.schedulers.Schedulers;
  */
 
 public class InviteFragment extends BaseFragment<FragmentInviteBinding> {
-
+    public static final String TAG = "InviteFragment";
+    public String setFragmentName(){
+        return TAG;
+    }
 
     //Fragment内容类型
     public static final int ContentTypeInvite = 3;
@@ -81,7 +84,7 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding> {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Logger.e(Logger.DEBUG_TAG,"InviteFragment,serUserVisibleHit()"+(getUserVisibleHint()?"visible":"invisible"));
+//        Logger.e(Logger.DEBUG_TAG,"InviteFragment,serUserVisibleHit()"+(getUserVisibleHint()?"visible":"invisible"));
     }
 
     @Override
@@ -132,6 +135,11 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding> {
         },500);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mIsFirst = true;//销毁时，重新加载数据时，认为第一次请求
+    }
 
     private void loadCustomData(long uid, int page){
         Subscription get = HttpClient.Builder.getAppServer().getInvite(HttpClient.Builder.getHeader(),uid,page, TextUtils.isEmpty(city)?"全国":city)

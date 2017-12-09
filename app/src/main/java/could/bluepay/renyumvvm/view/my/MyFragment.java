@@ -14,6 +14,9 @@ import could.bluepay.renyumvvm.databinding.FragmentMyBinding;
 
 public class MyFragment extends BaseFragment<FragmentMyBinding> {
     public static final String TAG = "MyFragment";
+    public String setFragmentName(){
+        return TAG;
+    }
     @Override
     protected int getContent() {
         return R.layout.fragment_my;
@@ -30,4 +33,6 @@ public class MyFragment extends BaseFragment<FragmentMyBinding> {
         //
         showContentView();
     }
+
+
 }

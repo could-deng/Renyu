@@ -1,1 +1,1 @@
-include ':app', ':extraModule:widget', ':extraModule:http'
+include ':app', ':extraModule:widget', ':extraModule:http', ':extraModule:couldutils'

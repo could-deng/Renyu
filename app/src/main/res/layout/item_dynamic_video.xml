@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="bean"
+            type="could.bluepay.renyumvvm.http.bean.WeiboBean"/>
+    </data>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/rl_user_head"
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+
+            <ImageView
+                android:id="@+id/head_iv"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="5dp"
+                android:scaleType="centerCrop"
+                android:showCircleImg="@{bean.user.photo}"/>
+
+            <ImageView
+                android:id="@+id/icon_vip"
+                android:layout_height="14dp"
+                android:layout_width="14dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/nav_icon_vip_default"
+                android:visibility="@{bean.user.vip==0?View.GONE:View.VISIBLE}"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_8290af"
+                    android:textSize="15sp"
+                    android:maxLines="1"
+                    android:text="@{bean.user.nick_name}"/>
+
+                <TextView
+                    android:id="@+id/urlTipTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="分享了一个连接"
+                    android:ellipsize="end"
+                    android:textColor="@color/color_aeaeae"
+                    android:textSize="14sp"
+                    android:maxLines="1" />
+            </LinearLayout>
+
+            <could.bluepay.renyumvvm.widget.ExpandTextView
+                android:id="@+id/content_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                app:showLines="4"/>
+
+            <!-- 不同的地方 -->
+			<ViewStub
+			    android:id="@+id/view_stub"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+
+			    />
+            <!--<com.ylsna.view.VideoView-->
+                <!--android:id="@+id/video_view"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="200dp"-->
+                <!--android:layout_marginTop="5dp"-->
+            <!--/>-->
+            <!-- 地址、时间 、删除 、点赞、 评论 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorText_abb2c8"
+                    android:textSize="12sp"
+                    android:maxLines="1"
+                    android:text="@{bean.insert_time}"/>
+
+                <TextView
+                    android:id="@+id/delete_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:text="删除"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_8290af"
+                    android:background="@drawable/im_selector_social_dig_name_bg"
+                    android:visibility="gone"/>
+
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="1dip"
+                    android:layout_weight="1" />
+
+                <ImageView 
+                    android:id="@+id/sns_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/im_snsimg"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dig_comment_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="10dip"
+                android:paddingLeft="12dip"
+                android:paddingTop="12dip"
+                android:paddingRight="12dip"
+                android:paddingBottom="8dip"
+                android:background="@drawable/im_distribute_comm_bg"
+                android:orientation="vertical"
+
+                >
+                <!--android:visibility="@{(bean.hasComment()||bean.hasFavort())?View.VISIBLE:View.GONE}"-->
+
+                <could.bluepay.renyumvvm.widget.PraiseListView
+                    android:id="@+id/praise_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lineSpacingMultiplier="1.1"
+                    android:textSize="14sp"
+                    android:textColor="@color/praise_item"
+                    app:item_color="@color/praise_item"
+                    android:text=""
+
+                    />
+                <!--android:visibility="@={(bean.favorters.size >0) ?View.VISIBLE:View.GONE}"-->
+
+                <View 
+                    android:id="@+id/lin_dig"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="@color/line_color"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginBottom="5dip"
+
+                    />
+                <!--android:visibility="@{(bean.hasComment()||bean.hasFavort())?View.VISIBLE:View.GONE}"-->
+                <could.bluepay.renyumvvm.widget.CommentListView
+                    android:id="@+id/comment_list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    app:item_color="@color/praise_item"
+
+                    />
+                <!--android:visibility="@{(bean.hasComment())?View.VISIBLE:View.GONE}"-->
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+</layout>

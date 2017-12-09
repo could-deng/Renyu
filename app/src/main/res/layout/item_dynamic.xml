@@ -150,10 +150,9 @@
                     android:textSize="14sp"
                     android:textColor="@color/praise_item"
                     app:item_color="@color/praise_item"
-                    android:visibility="@={bean.hasFavort?View.VISIBLE:View.GONE}"
                     android:text=""
                     />
-
+                <!--android:visibility="@={bean.hasFavort?View.VISIBLE:View.GONE}"-->
                 <View 
                     android:id="@+id/lin_dig"
                     android:layout_width="match_parent"

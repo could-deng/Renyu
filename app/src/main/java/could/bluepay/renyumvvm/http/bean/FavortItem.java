@@ -5,15 +5,15 @@ import could.yuanqiang.http.ParamNames;
 
 public class FavortItem {
 
-	@ParamNames("id")
+//	@ParamNames("id")
 	private long id;
-	@ParamNames("pid")
+//	@ParamNames("pid")
 	private long pid;
-	@ParamNames("qid")
+//	@ParamNames("qid")
 	private long qid;
-	@ParamNames("nick_name")
+//	@ParamNames("nick_name")
 	private String nick_name;
-	@ParamNames("like_time")
+//	@ParamNames("like_time")
 	private String like_time;
 
 	public long getId() {

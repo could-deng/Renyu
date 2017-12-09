@@ -22,7 +22,7 @@ import could.bluepay.renyumvvm.http.bean.UserBeanItem;
 import could.bluepay.renyumvvm.utils.PerfectClickListener;
 
 /**
- * Created by bluepay on 2017/11/23.
+ * Focus列表和Popular列表的适配器
  */
 
 public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{

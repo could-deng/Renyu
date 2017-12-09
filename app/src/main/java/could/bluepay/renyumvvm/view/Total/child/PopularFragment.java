@@ -12,7 +12,10 @@ import could.bluepay.renyumvvm.databinding.FragmentPopularBinding;
  */
 
 public class PopularFragment extends BaseFragment<FragmentPopularBinding> {
-
+    public static final String TAG = "PopularFragment";
+    public String setFragmentName(){
+        return TAG;
+    }
 
     @Override
     protected int getContent() {

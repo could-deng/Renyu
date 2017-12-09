@@ -21,6 +21,9 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment {
+
+    public abstract String setFragmentName();
+
     //布局view
     protected SV bindingView;
 
@@ -176,9 +179,10 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
     }
     @Override
     public void onDestroy() {
+        Logger.e(Logger.DEBUG_TAG,"onDestroy,"+setFragmentName());
         super.onDestroy();
-        if(this.mCompositeSubscription!=null && mCompositeSubscription.hasSubscriptions()){
-            this.mCompositeSubscription.unsubscribe();
-        }
+//        if(this.mCompositeSubscription!=null && mCompositeSubscription.hasSubscriptions()){
+//            this.mCompositeSubscription.unsubscribe();
+//        }
     }
 }

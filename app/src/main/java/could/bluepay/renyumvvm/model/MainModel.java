@@ -2,6 +2,7 @@ package could.bluepay.renyumvvm.model;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,7 +59,6 @@ public class MainModel {
                 .subscribe(new Observer<HotDynamicBean>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
@@ -83,6 +83,11 @@ public class MainModel {
      * 点赞
      */
     public void doDynamicLike(String nickName, long pid, final RequestImpl listener){
+
+        if(TextUtils.isEmpty(nickName) || pid == 0){
+            return;
+        }
+
         HashMap<String,Object> map = new HashMap<>();
         map.put("uid",uid);
         map.put("nickname",nickName);

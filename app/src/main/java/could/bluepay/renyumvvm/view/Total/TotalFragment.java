@@ -26,6 +26,9 @@ import rx.functions.Action1;
 
 public class TotalFragment extends BaseFragment<FragmentTotalBinding>{
     public static final String TAG = "TotalFragment";
+    public String setFragmentName(){
+        return TAG;
+    }
 
     private ArrayList<String> mTitles ;
     private ArrayList<Fragment> mFragments;

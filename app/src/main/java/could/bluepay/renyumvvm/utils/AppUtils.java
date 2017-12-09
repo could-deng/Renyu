@@ -2,8 +2,14 @@ package could.bluepay.renyumvvm.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.databinding.DataBindingUtil;
+import android.databinding.ObservableList;
+import android.databinding.ViewDataBinding;
 import android.net.Uri;
+import android.os.Looper;
 import android.provider.Browser;
+import android.support.annotation.LayoutRes;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -165,6 +171,32 @@ public class AppUtils {
         }
         return sp;
     }
+
+
+
+    /**
+     * Helper to throw an exception when {@link android.databinding.ViewDataBinding#setVariable(int,
+     * Object)} returns false.
+     */
+    public static void throwMissingVariable(ViewDataBinding binding, int bindingVariable, @LayoutRes int layoutRes) {
+        Context context = binding.getRoot().getContext();
+        Resources resources = context.getResources();
+        String layoutName = resources.getResourceName(layoutRes);
+        String bindingVariableName = DataBindingUtil.convertBrIdToString(bindingVariable);
+        throw new IllegalStateException("Could not bind variable '" + bindingVariableName + "' in layout '" + layoutName + "'");
+    }
+
+    /**
+     * Ensures the call was made on the main thread. This is enforced for all ObservableList change
+     * operations.
+     */
+    public static void ensureChangeOnMainThread() {
+        if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
+            throw new IllegalStateException("You must only modify the ObservableList on the main thread.");
+        }
+    }
+
+
 
 
 }

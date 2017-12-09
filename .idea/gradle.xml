@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/extraModule" />
+            <option value="$PROJECT_DIR$/extraModule/couldutils" />
             <option value="$PROJECT_DIR$/extraModule/http" />
             <option value="$PROJECT_DIR$/extraModule/widget" />
           </set>
