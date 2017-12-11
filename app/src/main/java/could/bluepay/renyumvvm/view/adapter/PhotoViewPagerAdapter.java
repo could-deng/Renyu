@@ -19,10 +19,12 @@ import could.bluepay.renyumvvm.widget.photo.PhotoView;
 public class PhotoViewPagerAdapter extends PagerAdapter {
 
     private Context context;
-    List<PhotoInfo> photolist;
-    public PhotoViewPagerAdapter(Context context) {
+    private List<PhotoInfo> photolist;
+    private PhotoViewClick photoViewClick;
+    public PhotoViewPagerAdapter(Context context,PhotoViewClick photoViewClick) {
         this.context = context;
         photolist = new ArrayList<>();
+        this.photoViewClick = photoViewClick;
     }
 
 
@@ -53,6 +55,7 @@ public class PhotoViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         PhotoView view = new PhotoView(context);
         view.enable();
+
         view.setScaleType(ImageView.ScaleType.CENTER);
 
         Glide.with(context)
@@ -61,10 +64,19 @@ public class PhotoViewPagerAdapter extends PagerAdapter {
                 .error(R.drawable.img_default_meizi)
                 .into(view);
         container.addView(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                photoViewClick.onPhotoViewClick();
+            }
+        });
         return view;
     }
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
+    }
+    public interface PhotoViewClick{
+        void onPhotoViewClick();
     }
 }

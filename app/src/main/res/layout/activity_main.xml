@@ -1,128 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <!--状态栏-->
-        <View
-            android:id="@+id/view_status"
+        android:layout_height="match_parent">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:visibility="gone"
-            android:background="@color/colorTheme"
-            android:layout_alignParentTop="true"/>
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:layout_below="@id/view_status">
-            <TextView
-                android:id="@+id/tv_toolbar_title"
-                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--状态栏-->
+            <View
+                android:id="@+id/view_status"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:visibility="gone"
+                android:background="@color/colorTheme"
+                android:layout_alignParentTop="true"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:layout_below="@id/view_status">
+                <TextView
+                    android:id="@+id/tv_toolbar_title"
+                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/AppTitle"
+                    android:textSize="16sp"
+                    android:textColor="@color/textColorPrimary"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:visibility="visible"
+                    />
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/indicator"
+                    android:layout_width="240dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    app:tabGravity="center"
+                    app:tabMode="fixed"
+                    android:visibility="gone"
+                    app:tabBackground="@drawable/ripple_tab_bg"
+                    app:tabIndicatorColor="@color/colorTabLine"
+                    app:tabSelectedTextColor="@color/colorTabTextCheck"
+                    app:tabTextColor="@color/colorTabTextNormal"/>
+
+
+            </android.support.v7.widget.Toolbar>
+
+                <RadioGroup
+                    android:id="@+id/rg_outer_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@android:color/white"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <RadioButton
+                        android:id="@+id/rb_list"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/radio_button_list_selector"
+                        android:onClick="onClick"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_dynamic"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="30dp"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/radio_button_photo_selector"
+                        android:onClick="onClick"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_vip"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/radio_button_announcement_selector"
+                        android:onClick="onClick"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_my"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/radio_button_my_selector"
+                        android:onClick="onClick"/>
+                </RadioGroup>
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="49dp"
+                    android:background="@color/colorPrimaryLighter" />
+
+                <Button
+                    android:id="@+id/btn_public"
+                    android:layout_width="62dp"
+                    android:layout_height="62dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/button_live_selector"
+                    android:onClick="onClick"/>
+
+            <FrameLayout
+                android:id="@+id/fl_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/AppTitle"
-                android:textSize="16sp"
-                android:textColor="@color/textColorPrimary"
-                android:layout_gravity="center"
-                android:maxLines="1"
-                android:visibility="visible"
+                android:layout_below="@id/toolbar"
+                android:layout_above="@id/view"
                 />
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/indicator"
-                android:layout_width="240dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                app:tabGravity="center"
-                app:tabMode="fixed"
-                android:visibility="gone"
-                app:tabBackground="@drawable/ripple_tab_bg"
-                app:tabIndicatorColor="@color/colorTabLine"
-                app:tabSelectedTextColor="@color/colorTabTextCheck"
-                app:tabTextColor="@color/colorTabTextNormal"/>
 
-
-        </android.support.v7.widget.Toolbar>
-
-            <RadioGroup
-                android:id="@+id/rg_outer_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="49dp"
-                android:layout_alignParentBottom="true"
-                android:background="@android:color/white"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <RadioButton
-                    android:id="@+id/rb_list"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:drawableTop="@drawable/radio_button_list_selector"
-                    android:onClick="onClick"/>
-
-                <RadioButton
-                    android:id="@+id/rb_dynamic"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="30dp"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:drawableTop="@drawable/radio_button_photo_selector"
-                    android:onClick="onClick"/>
-
-                <RadioButton
-                    android:id="@+id/rb_vip"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:drawableTop="@drawable/radio_button_announcement_selector"
-                    android:onClick="onClick"/>
-
-                <RadioButton
-                    android:id="@+id/rb_my"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:drawableTop="@drawable/radio_button_my_selector"
-                    android:onClick="onClick"/>
-            </RadioGroup>
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="49dp"
-                android:background="@color/colorPrimaryLighter" />
-
-            <Button
-                android:id="@+id/btn_public"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_marginBottom="1dp"
-                android:background="@drawable/button_live_selector"
-                android:onClick="onClick"/>
-
-        <FrameLayout
-            android:id="@+id/fl_container"
+        </RelativeLayout>
+        <could.bluepay.renyumvvm.widget.imageWatcher.ImageWatcher
+            android:id="@+id/image_watcher"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
-            android:layout_above="@id/view"
-            />
-    </RelativeLayout>
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
 </layout>

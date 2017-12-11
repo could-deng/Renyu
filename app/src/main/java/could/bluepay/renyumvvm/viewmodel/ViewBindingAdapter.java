@@ -1,5 +1,11 @@
 package could.bluepay.renyumvvm.viewmodel;
 
+import android.databinding.BindingAdapter;
+import android.support.v4.view.ViewPager;
+
+import could.bluepay.renyumvvm.view.adapter.PhotoViewPagerAdapter;
+import could.bluepay.renyumvvm.view.adapter.bindingAdapter.DynamicBindingAdapter;
+import could.bluepay.widget.xrecyclerview.XRecyclerView;
 
 /**
  * Created by bluepay on 2017/12/5.
@@ -12,7 +18,24 @@ public class ViewBindingAdapter {
 //        recyclerView.setAdapter(adapter);
 //    }
 
+    //recyclerView
+    @BindingAdapter("layoutManager")
+    public static void setLayoutManager(XRecyclerView view, XRecyclerView.LayoutManager manager) {
+        view.setLayoutManager(manager);
+    }
 
+    @BindingAdapter("adapter")
+    public static void setAdapter(XRecyclerView view, DynamicBindingAdapter adapter) {
+        view.setAdapter(adapter);
+    }
+
+
+    //viewPager
+    @BindingAdapter(value = {"adapter","onPageChangeListener"},requireAll = false)
+    public static void setAdapter(ViewPager view, PhotoViewPagerAdapter adapter, ViewPager.OnPageChangeListener onPageChangeListener){
+        view.setAdapter(adapter);
+        view.addOnPageChangeListener(onPageChangeListener);
+    }
 
 //     ViewPager
 //    @SuppressWarnings("unchecked")

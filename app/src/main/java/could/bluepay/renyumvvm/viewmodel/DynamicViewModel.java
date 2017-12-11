@@ -8,24 +8,22 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import could.bluepay.couldutils.transAnim.ActivityTransitionLauncher;
 import could.bluepay.renyumvvm.Config;
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.common.PrefsHelper;
 import could.bluepay.renyumvvm.databinding.FragmentDynamicBinding;
 import could.bluepay.renyumvvm.http.RequestImpl;
-import could.bluepay.renyumvvm.http.bean.PhotoInfo;
 import could.bluepay.renyumvvm.http.bean.WeiboBean;
 import could.bluepay.renyumvvm.model.MainModel;
 import could.bluepay.renyumvvm.model.MemExchange;
 import could.bluepay.renyumvvm.utils.Logger;
-import could.bluepay.renyumvvm.view.Dynamic.PictureViewPagerActivity;
 import could.bluepay.renyumvvm.view.MainActivity;
 import could.bluepay.renyumvvm.view.adapter.bindingAdapter.DynamicBindingAdapter;
 import rx.Subscription;
@@ -105,26 +103,29 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
                 mModel.deleteDynamicLike(pid,request);
             }
 
+//            @Override
+//            public void clickPicture(int WeiboPosition, View view, String pictureUrl, int PhotoPosition) {
+//                Intent intent = new Intent();
+//                intent.setClass(context, PictureViewPagerActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putInt("WeiboPosition", WeiboPosition);
+//                bundle.putInt("PhotoPosition",PhotoPosition);
+//                intent.putExtras(bundle);
+////                context.startActivity(intent);
+//
+//                //
+//                ActivityTransitionLauncher.with((MainActivity)context)
+//                        .from(view)
+//                        .image(pictureUrl)
+//                        .launch(intent, true);//传入的是SimpleDraweeView所认可的路径字符串
+//            }
+
             @Override
-            public void clickPicture(int WeiboPosition, View view, String pictureUrl, int PhotoPosition) {
-
-                Intent intent = new Intent();
-                intent.setClass(context, PictureViewPagerActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("WeiboPosition", WeiboPosition);
-                bundle.putInt("PhotoPosition",PhotoPosition);
-                intent.putExtras(bundle);
-//                context.startActivity(intent);
-
-                //
-                ActivityTransitionLauncher.with((MainActivity)context)
-                        .from(view)
-                        .image(pictureUrl)
-                        .launch(intent, true);//传入的是SimpleDraweeView所认可的路径字符串
-
+            public void onImageItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList) {
+                if(context!=null) {
+                    ((MainActivity) (context)).showImageWatch(view,imagesList,imagesUrlList);
+                }
             }
-
-
         });
 
         ((FragmentDynamicBinding)(binding)).setAdapter(adapter);
@@ -218,7 +219,8 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
         void addSubscription(Subscription subscription);
         void doLike(String nickName,long pid,RequestImpl request);
         void doDeleteLike(long favoriteId,RequestImpl request);
-        void clickPicture(int weiboPosition,View view,String pictureUrl, int PhotoPosition);
+//        void clickPicture(int weiboPosition,View view,String pictureUrl, int PhotoPosition);
+        void onImageItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList);
     }
 
 }

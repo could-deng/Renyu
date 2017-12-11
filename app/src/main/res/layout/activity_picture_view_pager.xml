@@ -2,9 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable
-            name="adapter"
-            type="could.bluepay.renyumvvm.view.adapter.PhotoViewPagerAdapter"/>
+        <!--<variable-->
+            <!--name="adapter"-->
+            <!--type="could.bluepay.renyumvvm.view.adapter.PhotoViewPagerAdapter"/>-->
+        <!--<variable-->
+            <!--name="onPageChangeListener"-->
+            <!--type="android.support.v4.view.ViewPager.OnPageChangeListener"/>-->
     </data>
     <FrameLayout
         android:layout_width="match_parent"
@@ -12,8 +15,8 @@
         android:background="@android:color/black">
         <ImageView
             android:id="@+id/img_temp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:layout_gravity="center"/>
 
         <RelativeLayout
@@ -26,9 +29,10 @@
                 android:id="@+id/pic_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:adapter="@{adapter}"
                 android:background="@android:color/black"
                 />
+            <!--app:adapter="@{adapter}"-->
+            <!--app:onPageChangeListener="@{onPageChangeListener}"-->
             <LinearLayout
                 android:id="@+id/ll_dot_container"
                 android:layout_width="wrap_content"

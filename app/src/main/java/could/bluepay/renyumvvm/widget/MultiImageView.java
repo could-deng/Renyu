@@ -248,15 +248,15 @@ public class MultiImageView extends LinearLayout {
 		@Override
 		public void onClick(View view) {
 			if(mOnItemClickListener != null){
-//				mOnItemClickListener.onItemClick(view, position, mDynamicItem, imagesList, imagesUrlList);
-				mOnItemClickListener.onItemClick(view,imagesUrlList.get(position),position);
+				mOnItemClickListener.onItemClick(view, position, mDynamicItem, imagesList, imagesUrlList);
+//				mOnItemClickListener.onItemClick(view,imagesUrlList.get(position),position);
 			}
 		}
 	}
 
 	public interface OnItemClickListener{
-//		void onItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList);
-		void onItemClick(View view,String pictureUrl,int PhotoPosition);
+		void onItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList);
+//		void onItemClick(View view,String pictureUrl,int PhotoPosition);
 	}
 
 }

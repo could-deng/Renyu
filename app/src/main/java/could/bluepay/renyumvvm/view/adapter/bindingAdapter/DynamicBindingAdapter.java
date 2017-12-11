@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -253,9 +255,14 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
                 binding.multiImageview.setVisibility(View.VISIBLE);
                 binding.multiImageview.setList(photoInfos);
                 binding.multiImageview.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view,String pictureUrl,int PhotoPosition) {
+//                        click.clickPicture(position,view,pictureUrl,PhotoPosition);
+//                    }
+
                     @Override
-                    public void onItemClick(View view,String pictureUrl,int PhotoPosition) {
-                        click.clickPicture(position,view,pictureUrl,PhotoPosition);
+                    public void onItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList) {
+                        click.onImageItemClick(view,position,dynamicItem,imagesList,imagesUrlList);
                     }
                 });
             }else{

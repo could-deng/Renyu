@@ -65,13 +65,13 @@ public class TransitionAnimation {
         final View toView = moveData.toView;
         toView.setPivotX(0);
         toView.setPivotY(0);
-//        toView.setScaleX(moveData.widthScale);
-//        toView.setScaleY(moveData.heightScale);
+        toView.setScaleX(moveData.widthScale);
+        toView.setScaleY(moveData.heightScale);
         toView.setTranslationX(moveData.leftDelta);
-        toView.setTranslationY(moveData.topDelta);
+        toView.setTranslationY(moveData.topDelta);//设置起始的scale和位置
 
         toView.animate().setDuration(moveData.duration).
-//                scaleX(1).scaleY(1).
+                scaleX(1).scaleY(1).
                 translationX(0).translationY(0).
                 setInterpolator(interpolator);
 
@@ -86,12 +86,18 @@ public class TransitionAnimation {
 //            }
 //        }
         //Glide加载图片
-        if(toView instanceof ImageView){
-            Glide.with(toView.getContext())
-                    .load(imageFilePath)
-                    .crossFade(500)
-                    .into((ImageView) toView);
+        try {
+            if(toView instanceof ImageView){
+                Glide.with(toView.getContext())
+                        .load(imageFilePath)
+                        .crossFade(500)
+                        .into((ImageView) toView);
+//                ((ImageView)toView).setScaleType(ImageView.ScaleType.CENTER);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
 
 
         //加载SD卡的图片文件
@@ -111,6 +117,7 @@ public class TransitionAnimation {
 //            bitmapCache.clear();
 //        }
 //        setImageToView(toView, bitmap);
+
     }
 
 //    private static void setImageToView(View toView, Bitmap bitmap) {
@@ -131,11 +138,11 @@ public class TransitionAnimation {
         int duration = moveData.duration;
         int leftDelta = moveData.leftDelta;
         int topDelta = moveData.topDelta;
-//        float widthScale = moveData.widthScale;
-//        float heightScale = moveData.heightScale;
+        float widthScale = moveData.widthScale;
+        float heightScale = moveData.heightScale;
         view.animate()
                 .setDuration(duration)
-//                .scaleX(widthScale).scaleY(heightScale)
+                .scaleX(widthScale).scaleY(heightScale)
                 .setInterpolator(interpolator).
                 translationX(leftDelta).translationY(topDelta);
         view.postDelayed(endAction, duration);

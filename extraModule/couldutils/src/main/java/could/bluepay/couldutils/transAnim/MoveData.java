@@ -7,6 +7,6 @@ public class MoveData {
     public int topDelta;
     public float widthScale;
     public float heightScale;
-    public int duration = 600;//默认动画600毫秒
+    public int duration = 200;//默认动画600毫秒
     public View toView;
 }

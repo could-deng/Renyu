@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
-
 import could.bluepay.couldutils.transAnim.ActivityTransition;
 import could.bluepay.couldutils.transAnim.ExitActivityTransition;
 import could.bluepay.couldutils.util.ThreadManager;
@@ -47,12 +46,19 @@ public class PictureViewPagerActivity extends Activity{
 
         binding = DataBindingUtil.setContentView(this,R.layout.activity_picture_view_pager);
 
-        adapter = new PhotoViewPagerAdapter(this);
+        adapter = new PhotoViewPagerAdapter(this, new PhotoViewPagerAdapter.PhotoViewClick(){
+
+            @Override
+            public void onPhotoViewClick() {
+                onBackPressed();
+            }
+        });
+
         dotViewList = new ArrayList<>();
 
-        binding.setAdapter(adapter);
         binding.picViewPager.setAdapter(adapter);
         binding.picViewPager.addOnPageChangeListener(getPageChangeListener());
+
         getData();
         translateFinish(savedInstanceState);
     }
@@ -87,16 +93,18 @@ public class PictureViewPagerActivity extends Activity{
                 }
                 binding.llDotContainer.setGravity(Gravity.CENTER);
                 binding.picViewPager.setOffscreenPageLimit(photolist.size()-1);
-            }
 
-            if (PhotoPosition != 0) {
+                //如果通过在layout文件中设置viewpager的adapter，执行到这步时，viewpager的adapter仍然为空，因此设置currentItem失败
                 binding.picViewPager.setCurrentItem(PhotoPosition, false);
             }
+
+
         }catch (Exception e){
             e.printStackTrace();
         }
 
     }
+
 
     private void translateFinish(Bundle arg0){
         Intent intent = getIntent();
@@ -114,7 +122,7 @@ public class PictureViewPagerActivity extends Activity{
                     binding.imgTemp.setVisibility(View.GONE);
 
                 }
-            }, 1000);
+            }, 400);
         }
     }
     @Override

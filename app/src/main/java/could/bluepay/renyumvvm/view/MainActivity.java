@@ -13,9 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import java.util.List;
 
 import could.bluepay.renyumvvm.Config;
 import could.bluepay.renyumvvm.MixApp;
@@ -30,6 +33,7 @@ import could.bluepay.renyumvvm.view.Dynamic.DynamicFragment;
 import could.bluepay.renyumvvm.view.Total.TotalFragment;
 import could.bluepay.renyumvvm.view.Vip.VipFragment;
 import could.bluepay.renyumvvm.view.my.MyFragment;
+import could.bluepay.renyumvvm.widget.imageWatcher.ImageWatcher;
 import could.bluepay.renyumvvm.widget.statusbar.StatusBarUtil;
 import rx.functions.Action1;
 
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         initId();
         initToolbar();
         initRxBus();
+        initImageWatch();
 //        initContentFragment();
         startShowFragment();
     }
@@ -352,5 +357,30 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    //region================imageWatch相关==============
+
+    private void initImageWatch(){
+        binding.imageWatcher.setTranslucentStatus(StatusBarUtil.getStatusBarHeight(this));
+        // 配置error图标
+        binding.imageWatcher.setErrorImageRes(R.drawable.error_picture);
+        // 长按图片的回调，你可以显示一个框继续提供一些复制，发送等功能
+        binding.imageWatcher.setOnPictureLongPressListener(new ImageWatcher.OnPictureLongPressListener() {
+            @Override
+            public void onPictureLongPress(ImageView v, String url, int pos) {
+
+            }
+        });
+    }
+    /**
+     * 显示ImageWatch
+     */
+    public void showImageWatch(View view, List<ImageView> imagesList,List<String> imagesUrlList){
+        binding.imageWatcher.show((ImageView) view,imagesList,imagesUrlList);
+
+    }
+
+    //endregion================imageWatch相关==============
 
 }

@@ -26,10 +26,10 @@ public class ActivityTransition {
         return this;
     }
 
-    public ActivityTransition duration(int duration) {
-        this.duration = duration;
-        return this;
-    }
+//    public ActivityTransition duration(int duration) {
+//        this.duration = duration;
+//        return this;
+//    }
 
     public ActivityTransition interpolator(TimeInterpolator interpolator) {
         this.interpolator = interpolator;

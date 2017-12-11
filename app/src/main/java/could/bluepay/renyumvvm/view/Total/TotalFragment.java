@@ -15,7 +15,6 @@ import could.bluepay.renyumvvm.rx.RxBus;
 import could.bluepay.renyumvvm.rx.RxCodeConstants;
 import could.bluepay.renyumvvm.view.Total.child.FocusFragment;
 import could.bluepay.renyumvvm.view.Total.child.InviteFragment;
-import could.bluepay.renyumvvm.view.Total.child.PopularFragment;
 import could.bluepay.renyumvvm.utils.Logger;
 import rx.Subscription;
 import rx.functions.Action1;
