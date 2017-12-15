@@ -3,20 +3,11 @@ package could.bluepay.couldutils.transAnim;
 import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-
-//import com.facebook.drawee.view.SimpleDraweeView;
-
 import com.bumptech.glide.Glide;
-
 import java.lang.ref.WeakReference;
 
 public class TransitionAnimation {
@@ -69,6 +60,7 @@ public class TransitionAnimation {
         toView.setScaleY(moveData.heightScale);
         toView.setTranslationX(moveData.leftDelta);
         toView.setTranslationY(moveData.topDelta);//设置起始的scale和位置
+
 
         toView.animate().setDuration(moveData.duration).
                 scaleX(1).scaleY(1).

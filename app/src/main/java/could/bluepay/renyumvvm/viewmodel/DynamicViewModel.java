@@ -1,16 +1,12 @@
 package could.bluepay.renyumvvm.viewmodel;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
 import android.databinding.ViewDataBinding;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +20,7 @@ import could.bluepay.renyumvvm.http.bean.WeiboBean;
 import could.bluepay.renyumvvm.model.MainModel;
 import could.bluepay.renyumvvm.model.MemExchange;
 import could.bluepay.renyumvvm.utils.Logger;
-import could.bluepay.renyumvvm.view.MainActivity;
+import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.view.adapter.bindingAdapter.DynamicBindingAdapter;
 import rx.Subscription;
 
@@ -157,7 +153,6 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
                     return;
                 }
                 MemExchange.getInstance().setWeiboBeanList(dataList,page);
-
 
                 setData(page,MemExchange.getInstance().getWeiboBeanList());
 

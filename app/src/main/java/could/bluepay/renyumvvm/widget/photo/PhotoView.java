@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.OverScroller;
 import android.widget.Scroller;
 
+import could.bluepay.renyumvvm.utils.Logger;
+
 /**
  * Created by liuheng on 2015/6/21.
  * <p></p>
@@ -75,7 +77,8 @@ public class PhotoView extends ImageView {
     private float mHalfBaseRectHeight;
 
     private RectF mWidgetRect = new RectF();
-    private RectF mBaseRect = new RectF();
+    private RectF mBaseRect = new RectF();//原图片的矩形
+
     private RectF mImgRect = new RectF();
     private RectF mTmpRect = new RectF();
     private RectF mCommonRect = new RectF();
@@ -114,6 +117,7 @@ public class PhotoView extends ImageView {
         mRotateDetector = new RotateGestureDetector(mRotateListener);
         mDetector = new GestureDetector(getContext(), mGestureListener);
         mScaleDetector = new ScaleGestureDetector(getContext(), mScaleListener);
+
         float density = getResources().getDisplayMetrics().density;
         MAX_OVER_SCROLL = (int) (density * 30);
         MAX_FLING_OVER_SCROLL = (int) (density * 30);
@@ -314,9 +318,9 @@ public class PhotoView extends ImageView {
         float scale = sx < sy ? sx : sy;
 
         mBaseMatrix.reset();
-        mBaseMatrix.postTranslate(tx, ty);
-        mBaseMatrix.postScale(scale, scale, mScreenCenter.x, mScreenCenter.y);
-        mBaseMatrix.mapRect(mBaseRect);
+        mBaseMatrix.postTranslate(tx, ty);//矩阵移到图片中心点
+        mBaseMatrix.postScale(scale, scale, mScreenCenter.x, mScreenCenter.y);//后两参数为缩放的中心点
+        mBaseMatrix.mapRect(mBaseRect);//将该矩阵应用于该矩形rect
 
         mHalfBaseRectWidth = mBaseRect.width() / 2;
         mHalfBaseRectHeight = mBaseRect.height() / 2;
@@ -578,6 +582,7 @@ public class PhotoView extends ImageView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+        Logger.e(Logger.DEBUG_TAG,"PhotoView,dispatchTouchEvent()"+event.getAction());
         if (isEnable) {
             final int Action = event.getActionMasked();
             if (event.getPointerCount() >= 2) hasMultiTouch = true;

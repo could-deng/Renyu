@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import could.bluepay.renyumvvm.utils.Logger;
-import could.bluepay.renyumvvm.view.MainActivity;
+import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.view.base.BaseFragment;
 import could.bluepay.renyumvvm.databinding.FragmentDynamicBinding;

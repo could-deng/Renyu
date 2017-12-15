@@ -31,11 +31,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 import could.bluepay.renyumvvm.R;
 
+/**
+ * 1、点击图片时以一种无缝顺畅的动画切换到图片查看的界面，同样以一种无缝顺畅的动画退出图片查看界面
+ * 2、支持多图查看，快速翻页，双击放大，单击退出，双手缩放旋转图片
+ * 3、下拽退出查看图片的操作，以及效果是本View的最大卖点(仿微信)
+ */
 public class ImageWatcher extends FrameLayout implements GestureDetector.OnGestureListener, ViewPager.OnPageChangeListener {
     private static final int SINGLE_TAP_UP_CONFIRMED = 1;
     private final Handler mHandler;
@@ -924,4 +930,5 @@ public class ImageWatcher extends FrameLayout implements GestureDetector.OnGestu
     public void setOnPictureLongPressListener(OnPictureLongPressListener listener) {
         mPictureLongPressListener = listener;
     }
+
 }

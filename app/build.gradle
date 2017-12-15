@@ -1,12 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '25.0.0'
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "could.bluepay.renyumvvm"
-        minSdkVersion 15
-        targetSdkVersion 25
+//        minSdkVersion 15
+//        targetSdkVersion 23
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -19,6 +24,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
@@ -39,13 +47,24 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-v4:25.1.1'
-    compile 'com.android.support:cardview-v7:25.1.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
+//    compile 'com.android.support:appcompat-v7:23.4.0'
+//    compile 'com.android.support:design:23.4.0'
+//    compile 'com.android.support:cardview-v7:23.4.0'
+//    compile 'com.android.support:support-v4:23.4.0'
+
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     //在glide基础上增加图形转换功能
     compile 'com.contrarywind:Android-PickerView:3.2.5'
     compile 'com.google.code.gson:gson:2.6.2'
+
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
     compile project(':extraModule:widget')
     compile project(':extraModule:http')
     compile project(':extraModule:couldutils')

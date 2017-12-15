@@ -15,6 +15,7 @@ public class ViewState {
     static final int STATE_THUMB = R.id.state_thumb; // 缩略图居中
     static final int STATE_DEFAULT = R.id.state_default; // 高清图初始
     static final int STATE_CURRENT = R.id.state_current; // 当前状态
+
     static final int STATE_TEMP = R.id.state_temp; // 临时目标
     static final int STATE_DRAG = R.id.state_touch_drag; // 高清图拖拽起点
     static final int STATE_TOUCH_DOWN = R.id.state_touch_down; // 高清图按下起点
@@ -45,7 +46,7 @@ public class ViewState {
         vs.height = view.getHeight();
         vs.translationX = view.getTranslationX();
         vs.translationY = view.getTranslationY();
-        vs.scaleX = view.getScaleX();
+        vs.scaleX = view.getScaleX();//X轴缩放比例
         vs.scaleY = view.getScaleY();
         vs.rotation = view.getRotation();
         vs.alpha = view.getAlpha();
@@ -92,6 +93,13 @@ public class ViewState {
         }
     }
 
+    /**
+     * 首先将目前ImageView的状态保存为Tag= Current。然后设置view变化(从ViewState.STATE_CURRENT到指定的Tag)
+     * 这样的好处在于多个动画时，上一动画取消的同时，保存停止前的位置，在前一动画停止的时刻开始下一动画
+     * @param view
+     * @param tag
+     * @return
+     */
     static ValueAnimatorBuilder restoreByAnim(final View view, int tag) {
         ValueAnimator animator = null;
         if (view != null) {

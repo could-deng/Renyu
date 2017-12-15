@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.MainActivity"
+        <activity android:name=".view.activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,11 +26,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.base.BaseActivity"/>
-        <activity android:name=".view.my.MyActivity"
-            android:screenOrientation="portrait"
-            />
         <activity android:name=".view.Dynamic.PictureViewPagerActivity"
             android:screenOrientation="portrait"/>
+
+        <activity android:name=".view.activity.ActivityListViewRecyclerView"/>
+
     </application>
 
 </manifest>
