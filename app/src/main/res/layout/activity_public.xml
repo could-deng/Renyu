@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="adapter"
+            type="could.bluepay.renyumvvm.view.adapter.GridImageAdapter"/>
+    </data>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar"/>
+    <EditText
+        android:id="@+id/et_public_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="4"
+        android:gravity="left"
+        android:padding="10dp"
+        android:hint="@string/publish_text_hint"
+        android:background="@null"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_activity_publish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:overScrollMode="never"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/color_69"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"/>
+</LinearLayout>
+</layout>

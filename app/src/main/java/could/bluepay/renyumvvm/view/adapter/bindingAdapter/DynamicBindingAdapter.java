@@ -2,14 +2,13 @@ package could.bluepay.renyumvvm.view.adapter.bindingAdapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
+import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +30,8 @@ import could.bluepay.renyumvvm.widget.ExpandTextView;
 import could.bluepay.renyumvvm.widget.MultiImageView;
 import could.bluepay.renyumvvm.widget.PraiseListView;
 import could.bluepay.renyumvvm.widget.SnsPopupWindow;
-import rx.Subscription;
+import could.bluepay.widget.jiaozivideoplayer.JZVideoPlayer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by bluepay on 2017/12/5.
@@ -375,8 +375,15 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
                     snsPopupWindow.showPopupWindow(binding.snsBtn);
                 }
             });
+            // TODO: 2017/12/18 更替数据源
+            binding.videoView.setUp(
+                    "http://jzvd.nathen.cn/384d341e000145fb82295bdc54ecef88/103eab5afca34baebc970378dd484942-5287d2089db37e62345123a1be272f8b.mp4", JZVideoPlayer.SCREEN_WINDOW_LIST,
+                    object.getPcontent());
 
 
+            Glide.with(binding.videoView.getContext())
+                    .load("http://jzvd-pic.nathen.cn/jzvd-pic/2adde364-9be1-4864-b4b9-0b0bcc81ef2e.jpg")
+                    .into(binding.videoView.thumbImageView);
 
 
 
@@ -438,8 +445,8 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
                         }
 
                         @Override
-                        public void addSubscription(Subscription subscription) {
-                            click.addSubscription(subscription);
+                        public void addSubscription(Disposable disposable) {
+                            click.addSubscription(disposable);
                         }
                     });
                 }else if(item.getType() == ActionItem.ACTION_TYPE_CANCEL){//取消点赞
@@ -465,8 +472,8 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
                             }
 
                             @Override
-                            public void addSubscription(Subscription subscription) {
-                                click.addSubscription(subscription);
+                            public void addSubscription(Disposable disposable) {
+                                click.addSubscription(disposable);
                             }
                         });
                     }

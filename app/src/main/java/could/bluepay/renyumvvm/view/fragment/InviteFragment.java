@@ -8,6 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
+import com.squareup.leakcanary.RefWatcher;
+
+import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.http.HttpClient;
 import could.bluepay.renyumvvm.http.bean.UserListBean;
@@ -16,10 +19,10 @@ import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.view.adapter.UserListInviteAdapter;
 import could.bluepay.renyumvvm.view.base.BaseFragment;
 import could.bluepay.renyumvvm.databinding.FragmentInviteBinding;
-import rx.Observer;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by bluepay on 2017/11/22.
@@ -139,20 +142,15 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding> {
     public void onDestroy() {
         super.onDestroy();
         mIsFirst = true;//销毁时，重新加载数据时，认为第一次请求
+        RefWatcher refWatcher = MixApp.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 
     private void loadCustomData(long uid, int page){
-        Subscription get = HttpClient.Builder.getAppServer().getInvite(HttpClient.Builder.getHeader(),uid,page, TextUtils.isEmpty(city)?"全国":city)
+        HttpClient.Builder.getAppServer().getInvite(HttpClient.Builder.getHeader(),uid,page, TextUtils.isEmpty(city)?"全国":city)
                 .subscribeOn(Schedulers.io())//请求在主线程中执行
                 .observeOn(AndroidSchedulers.mainThread())//请求完成后在主线程处理
                 .subscribe(new Observer<UserListBean>() {
-                    @Override
-                    public void onCompleted() {
-                        showContentView();
-                        if(bindingView.srlInvite.isRefreshing()){
-                            bindingView.srlInvite.setRefreshing(false);
-                        }
-                    }
 
                     @Override
                     public void onError(Throwable e) {
@@ -166,6 +164,19 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding> {
                             return;
                         }
                         mStart --;
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        showContentView();
+                        if(bindingView.srlInvite.isRefreshing()){
+                            bindingView.srlInvite.setRefreshing(false);
+                        }
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addSubscription(d);
                     }
 
                     @Override
@@ -202,7 +213,7 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding> {
                         }
                     }
                 });
-        addSubscription(get);
+
     }
 
     /**
@@ -258,5 +269,9 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding> {
         });
     }
 
+    @Override
+    protected void onRefresh() {
+        loadData();
+    }
 
 }

@@ -1,8 +1,6 @@
 package could.bluepay.widget.xrecyclerview;
 
-/**
- * Created by jianghejie on 15/11/22.
- */
+
 interface BaseRefreshHeader {
     int STATE_NORMAL = 0;
     int STATE_RELEASE_TO_REFRESH = 1;

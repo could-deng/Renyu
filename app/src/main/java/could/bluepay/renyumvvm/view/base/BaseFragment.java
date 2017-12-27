@@ -13,8 +13,8 @@ import android.widget.RelativeLayout;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.utils.PerfectClickListener;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by bluepay on 2017/11/20.
@@ -39,7 +39,8 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
     //内容布局
     protected RelativeLayout mContainer;
 
-    private CompositeSubscription mCompositeSubscription;
+//    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeDisposable;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -171,18 +172,22 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
 
 
 
-    public void addSubscription(Subscription s){
-        if(this.mCompositeSubscription == null){
-            mCompositeSubscription = new CompositeSubscription();
+    public void addSubscription(Disposable s){
+//        if(this.mCompositeSubscription == null){
+//            mCompositeSubscription = new CompositeSubscription();
+//        }
+//        this.mCompositeSubscription.add(s);
+        if(this.mCompositeDisposable == null){
+            mCompositeDisposable = new CompositeDisposable();
         }
-        this.mCompositeSubscription.add(s);
+        mCompositeDisposable.add(s);
     }
     @Override
     public void onDestroy() {
         Logger.e(Logger.DEBUG_TAG,"onDestroy,"+setFragmentName());
         super.onDestroy();
-//        if(this.mCompositeSubscription!=null && mCompositeSubscription.hasSubscriptions()){
-//            this.mCompositeSubscription.unsubscribe();
-//        }
+        if(this.mCompositeDisposable!=null && mCompositeDisposable.size()>0){
+            this.mCompositeDisposable.clear();
+        }
     }
 }

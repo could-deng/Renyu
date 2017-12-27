@@ -7,7 +7,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-
+import com.squareup.leakcanary.RefWatcher;
+import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.view.adapter.UserListAdapter;
@@ -18,11 +19,11 @@ import could.bluepay.renyumvvm.databinding.FragmentForcusBinding;
 import could.bluepay.renyumvvm.http.HttpClient;
 import could.bluepay.renyumvvm.http.bean.UserListBean;
 import could.bluepay.renyumvvm.utils.Logger;
-import rx.Observable;
-import rx.Observer;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by bluepay on 2017/11/20.
@@ -155,6 +156,8 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
     public void onDestroy() {
         super.onDestroy();
         mIsFirst = true;//销毁时，重新加载数据时，认为第一次请求
+        RefWatcher refWatcher = MixApp.getRefWatcher(getActivity());
+		refWatcher.watch(this);
     }
 
     private void loadCustomData(long uid, int page){
@@ -166,18 +169,10 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
         }else{
             totalData = HttpClient.Builder.getAppServer().getInvite(HttpClient.Builder.getHeader(),uid,page, TextUtils.isEmpty(city)?"全国":city);
         }
-        Subscription get = totalData
+        totalData
                 .subscribeOn(Schedulers.io())//请求在主线程中执行
                 .observeOn(AndroidSchedulers.mainThread())//请求完成后在主线程处理
                 .subscribe(new Observer<UserListBean>() {
-                    @Override
-                    public void onCompleted() {
-                        showContentView();
-                        if(bindingView.srlFocus.isRefreshing()){
-                            bindingView.srlFocus.setRefreshing(false);
-                        }
-                    }
-
                     @Override
                     public void onError(Throwable e) {
                         showContentView();
@@ -189,6 +184,19 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
                             return;
                         }
                         mStart --;
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        showContentView();
+                        if(bindingView.srlFocus.isRefreshing()){
+                            bindingView.srlFocus.setRefreshing(false);
+                        }
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addSubscription(d);
                     }
 
                     @Override
@@ -227,7 +235,34 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
                         }
                     }
                 });
-        addSubscription(get);
+
+        //region====网络慢️测试==========
+//        Observable<String> aa = HttpClient.Builder.getDouBanService().getHotMovie().subscribeOn(Schedulers.io());
+//        aa.subscribeOn(Schedulers.io())//请求在主线程中执行
+//                .observeOn(AndroidSchedulers.mainThread())//请求完成后在主线程处理
+//                .subscribe(new Observer<String>() {
+//
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+        //endregion====网络慢️测试==========
     }
 
     /**
@@ -282,9 +317,10 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
         });
     }
 
-
-
-
+    @Override
+    protected void onRefresh() {
+        loadData();
+    }
 
     //region=======约拍特定布局相关====================
 

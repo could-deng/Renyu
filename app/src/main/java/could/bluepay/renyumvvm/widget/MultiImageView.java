@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -230,10 +231,16 @@ public class MultiImageView extends LinearLayout {
 		imageView.setId(photoInfo.url.hashCode());
 		imageView.setOnClickListener(new ImageOnClickListener(position));
 		imageView.setBackgroundColor(getResources().getColor(R.color.colorTextLighter));
+
+		RequestOptions options = new RequestOptions();
+		options.diskCacheStrategy(DiskCacheStrategy.ALL);
 //		if(mDynamicItem.isMoneyPicture()){
 //			Glide.with(getContext()).load(photoInfo.url).diskCacheStrategy(DiskCacheStrategy.ALL).bitmapTransform(new BlurTransformation(getContext(),23,4)).into(imageView);
 //		}else{
-			Glide.with(getContext()).load(photoInfo.url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+			Glide.with(getContext())
+					.load(photoInfo.url)
+					.apply(options)
+					.into(imageView);
 //		}
 		return imageView;
 	}

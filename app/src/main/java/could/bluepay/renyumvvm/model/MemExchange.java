@@ -28,9 +28,9 @@ public class MemExchange {
         }
         return weiboBeanList;
     }
-    public void setWeiboBeanList(ObservableArrayList<WeiboBean> list,int page){
+    public void setWeiboBeanList(ObservableArrayList<WeiboBean> list,boolean ifFirst){
 
-        if(page == 1){
+        if(ifFirst){
             getWeiboBeanList().clear();
             getWeiboBeanList().addAll(list);
         }else{

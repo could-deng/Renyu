@@ -3,6 +3,9 @@ package could.bluepay.renyumvvm.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.squareup.leakcanary.RefWatcher;
+
+import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.view.base.BaseFragment;
@@ -33,5 +36,12 @@ public class VipFragment extends BaseFragment<FragmentVipBinding> {
         ((MainActivity)getActivity()).setToolbarTitle(getString(R.string.ui_title_vip));
         //
         showContentView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MixApp.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 }

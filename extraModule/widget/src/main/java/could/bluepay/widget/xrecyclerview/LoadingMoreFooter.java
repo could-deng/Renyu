@@ -1,8 +1,10 @@
 package could.bluepay.widget.xrecyclerview;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import could.bluepay.widget.R;
-
 public class LoadingMoreFooter extends LinearLayout {
 
     public final static int STATE_LOADING = 0;

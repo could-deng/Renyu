@@ -4,12 +4,11 @@ import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import could.bluepay.renyumvvm.Config;
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.R;
@@ -22,7 +21,10 @@ import could.bluepay.renyumvvm.model.MemExchange;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.view.adapter.bindingAdapter.DynamicBindingAdapter;
-import rx.Subscription;
+import could.bluepay.widget.jiaozivideoplayer.JZMediaManager;
+import could.bluepay.widget.jiaozivideoplayer.JZUtils;
+import could.bluepay.widget.jiaozivideoplayer.JZVideoPlayer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * DynamicFragment的viewModel
@@ -83,7 +85,7 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
             }
 
             @Override
-            public void addSubscription(Subscription subscription) {
+            public void addSubscription(Disposable subscription) {
                 if (updateView!=null){
                     updateView.fragmentAddSubscription(subscription);
                 }
@@ -127,7 +129,19 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
         ((FragmentDynamicBinding)(binding)).setAdapter(adapter);
         linearLayoutManager = new LinearLayoutManager(context);
         ((FragmentDynamicBinding)(binding)).setLayoutManager(linearLayoutManager);
+        ((FragmentDynamicBinding)(binding)).xrvDynamic.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+            }
 
+            @Override
+            public void onChildViewDetachedFromWindow(View view) {
+                JZVideoPlayer videoVideo = (JZVideoPlayer) view.findViewById(R.id.video_view);
+                if(videoVideo!=null && JZUtils.dataSourceObjectsContainsUri(videoVideo.dataSourceObjects, JZMediaManager.getCurrentDataSource())){
+                    JZVideoPlayer.releaseAllVideos();
+                }
+            }
+        });
     }
 
     /**
@@ -138,45 +152,59 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
         if(ifFirstPage) {
             page = 1;
             mModel.setData(((MainActivity) context).getUid(), page);
+        }else{
+            page++;
         }
 
         //todo 请求下一页时，接口需要定义每页长度。
 
 
-        mModel.getHotDynamicsData(new RequestImpl() {
+        mModel.getHotDynamicsData(page,new RequestImpl() {
 
             @Override
             public void loadSuccess(Object object) {
                 ObservableArrayList<WeiboBean> dataList = (ObservableArrayList<WeiboBean>)object;
-                updateView.showFragmentContentView();
+                updateView.showFragmentContentView(true);
                 if(null == dataList || dataList.size() == 0){
+                    if(page>1) {
+                        page--;
+                    }
+                    ((FragmentDynamicBinding)(binding)).xrvDynamic.noMoreLoading();
                     return;
                 }
-                MemExchange.getInstance().setWeiboBeanList(dataList,page);
+                MemExchange.getInstance().setWeiboBeanList(dataList,page == 1);
 
-                setData(page,MemExchange.getInstance().getWeiboBeanList());
+                setData(page == 1,MemExchange.getInstance().getWeiboBeanList());
 
                 ((FragmentDynamicBinding)(binding)).xrvDynamic.refreshComplete();
             }
 
             @Override
             public void loadFailed() {
-                updateView.showFragmentContentView();
+                if(page>1){
+                    page--;
+                }
+                if(page == 1) {
+                    updateView.showFragmentContentView(false);
+                }else{
+                    updateView.showFragmentContentView(true);
+                }
+
                 ((FragmentDynamicBinding)(binding)).xrvDynamic.refreshComplete();
                 Logger.e(Logger.DEBUG_TAG,"loadFailed()");
             }
 
             @Override
-            public void addSubscription(Subscription subscription) {
-                updateView.fragmentAddSubscription(subscription);
+            public void addSubscription(Disposable disposable) {
+                updateView.fragmentAddSubscription(disposable);
             }
         });
 
     }
 
 
-    public void setData(int page,ArrayList<WeiboBean> dataList){
-        if(page == 1){
+    public void setData(boolean ifFirst,ArrayList<WeiboBean> dataList){
+        if(ifFirst){
             adapter.removeAll();
             adapter.addAll(dataList, DynamicBindingAdapter.RECYCLER_VIEW_DYNAMIC_TYPE);
         }else{
@@ -194,8 +222,8 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
         this.updateView = updateView;
     }
     public interface UpdateView{
-        void showFragmentContentView();
-        void fragmentAddSubscription(Subscription subscription);
+        void showFragmentContentView(boolean ifSuccess);
+        void fragmentAddSubscription(Disposable disposable);
         //通知已经设置了数据
         void haveSetData();
     }
@@ -211,7 +239,7 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
      */
     public interface poupWindowClick{
         void updateRecycleView(int index);
-        void addSubscription(Subscription subscription);
+        void addSubscription(Disposable disposable);
         void doLike(String nickName,long pid,RequestImpl request);
         void doDeleteLike(long favoriteId,RequestImpl request);
 //        void clickPicture(int weiboPosition,View view,String pictureUrl, int PhotoPosition);

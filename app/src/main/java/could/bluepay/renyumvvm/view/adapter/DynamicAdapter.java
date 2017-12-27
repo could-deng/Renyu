@@ -24,7 +24,7 @@ import could.bluepay.renyumvvm.widget.ExpandTextView;
 import could.bluepay.renyumvvm.widget.MultiImageView;
 import could.bluepay.renyumvvm.widget.PraiseListView;
 import could.bluepay.renyumvvm.widget.SnsPopupWindow;
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by bluepay on 2017/11/27.
@@ -292,8 +292,8 @@ public class DynamicAdapter extends BaseRecyclerViewAdapter<WeiboBean> {
                         }
 
                         @Override
-                        public void addSubscription(Subscription subscription) {
-                            click.addSubscription(subscription);
+                        public void addSubscription(Disposable disposable) {
+                            click.addDisposable(disposable);
                         }
                     });
                 }else if(item.getType() == ActionItem.ACTION_TYPE_CANCEL){//取消点赞
@@ -319,8 +319,8 @@ public class DynamicAdapter extends BaseRecyclerViewAdapter<WeiboBean> {
                             }
 
                             @Override
-                            public void addSubscription(Subscription subscription) {
-                                click.addSubscription(subscription);
+                            public void addSubscription(Disposable subscription) {
+                                click.addDisposable(subscription);
                             }
                         });
                     }
@@ -334,7 +334,7 @@ public class DynamicAdapter extends BaseRecyclerViewAdapter<WeiboBean> {
      */
     public interface poupWindowClick{
         void updateRecycleView(int index);
-        void addSubscription(Subscription subscription);
+        void addDisposable(Disposable subscription);
     }
 
 }

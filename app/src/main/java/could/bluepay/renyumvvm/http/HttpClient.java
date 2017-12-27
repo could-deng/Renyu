@@ -14,17 +14,13 @@ import could.bluepay.renyumvvm.http.bean.HotDynamicBean;
 import could.bluepay.renyumvvm.http.bean.UserListBean;
 import could.bluepay.renyumvvm.utils.AppUtils;
 import could.yuanqiang.http.HttpUtils;
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by bluepay on 2017/11/23.
@@ -33,6 +29,10 @@ import rx.Observable;
 public interface HttpClient {
 
     class Builder{
+        public static HttpClient getDouBanService() {
+            return HttpUtils.getInstance().getDouBanServer(HttpClient.class);
+        }
+
         public static HttpClient getAppServer(){
             return HttpUtils.getInstance().getAPPServer(HttpClient.class,Config.API_HOST_BLUEPAY);
         }
@@ -49,6 +49,11 @@ public interface HttpClient {
         }
     }
 
+    /**
+     * 豆瓣热映电影，每日更新
+     */
+    @GET("v2/movie/in_theaters")
+    Observable<String> getHotMovie();
 
     @GET("/higirls/getMyFocusUsers")
     Observable<UserListBean> getFocusList(@HeaderMap Map<String, String> headers, @Query("uid")long uid, @Query("page")int page);

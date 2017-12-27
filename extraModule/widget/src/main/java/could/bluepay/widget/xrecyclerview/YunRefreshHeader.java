@@ -14,9 +14,7 @@ import android.widget.TextView;
 
 import could.bluepay.widget.R;
 
-/**
- * Created by yangcai on 2016/1/27.
- */
+
 public class YunRefreshHeader extends LinearLayout implements BaseRefreshHeader {
     private Context mContext;
     private AnimationDrawable animationDrawable;
@@ -154,7 +152,6 @@ public class YunRefreshHeader extends LinearLayout implements BaseRefreshHeader 
     private void setVisiableHeight(int height) {
         if (height < 0)
             height = 0;
-//       `
         LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
         lp.height = height;
         mContainer.setLayoutParams(lp);

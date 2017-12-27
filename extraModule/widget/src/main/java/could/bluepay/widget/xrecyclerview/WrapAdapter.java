@@ -57,6 +57,7 @@ public class WrapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+
     public boolean isHeader(int position) {
         return position >= 0 && position < mHeaderViews.size();
     }
@@ -68,6 +69,8 @@ public class WrapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public boolean isRefreshHeader(int position) {
         return position == 0;
     }
+
+
 
     public int getHeadersCount() {
         return mHeaderViews.size();

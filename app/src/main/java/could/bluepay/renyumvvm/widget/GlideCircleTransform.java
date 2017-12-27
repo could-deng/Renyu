@@ -10,12 +10,18 @@ import android.graphics.Shader;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+
 /**
  * Glide的Bitmap转化方法
  * 将图片转为圆形图片
  */
 
 public class GlideCircleTransform extends BitmapTransformation {
+
+//    private static final String ID = "com.bumptech.glide.transformations.FillSpace";
+//    private static final String ID_BYTES = ID.getBytes(STRING_CHARSET_NAME);
 
     public GlideCircleTransform(Context context) {
         super(context);
@@ -55,8 +61,30 @@ public class GlideCircleTransform extends BitmapTransformation {
         return b_resource;
     }
 
+//    @Override
+//    public String getId() {
+//        return getClass().getName();
+//    }
+
+
     @Override
-    public String getId() {
-        return getClass().getName();
+    public boolean equals(Object obj) {
+        return obj instanceof GlideCircleTransform;
+//        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().getName().hashCode();
+
+    }
+
+    @Override
+    public void updateDiskCacheKey(MessageDigest messageDigest){
+        try {
+            messageDigest.update(getClass().getName().getBytes(STRING_CHARSET_NAME));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

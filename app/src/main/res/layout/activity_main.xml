@@ -16,41 +16,45 @@
                 android:visibility="gone"
                 android:background="@color/colorTheme"
                 android:layout_alignParentTop="true"/>
-            <android.support.v7.widget.Toolbar
+            <include
                 android:id="@+id/toolbar"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                android:layout_below="@id/view_status">
-                <TextView
-                    android:id="@+id/tv_toolbar_title"
-                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/AppTitle"
-                    android:textSize="16sp"
-                    android:textColor="@color/textColorPrimary"
-                    android:layout_gravity="center"
-                    android:maxLines="1"
-                    android:visibility="visible"
-                    />
+                layout="@layout/layout_toolbar"/>
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/indicator"
-                    android:layout_width="240dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    app:tabGravity="center"
-                    app:tabMode="fixed"
-                    android:visibility="gone"
-                    app:tabBackground="@drawable/ripple_tab_bg"
-                    app:tabIndicatorColor="@color/colorTabLine"
-                    app:tabSelectedTextColor="@color/colorTabTextCheck"
-                    app:tabTextColor="@color/colorTabTextNormal"/>
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/toolbar"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?attr/actionBarSize"-->
+                <!--android:background="@color/colorPrimary"-->
+                <!--android:layout_below="@id/view_status">-->
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_toolbar_title"-->
+                    <!--style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/AppTitle"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:textColor="@color/textColorPrimary"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:maxLines="1"-->
+                    <!--android:visibility="visible"-->
+                    <!--/>-->
+
+                <!--<android.support.design.widget.TabLayout-->
+                    <!--android:id="@+id/indicator"-->
+                    <!--android:layout_width="240dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--app:tabGravity="center"-->
+                    <!--app:tabMode="fixed"-->
+                    <!--android:visibility="gone"-->
+                    <!--app:tabBackground="@drawable/ripple_tab_bg"-->
+                    <!--app:tabIndicatorColor="@color/colorTabLine"-->
+                    <!--app:tabSelectedTextColor="@color/colorTabTextCheck"-->
+                    <!--app:tabTextColor="@color/colorTabTextNormal"/>-->
 
 
-            </android.support.v7.widget.Toolbar>
+            <!--</android.support.v7.widget.Toolbar>-->
 
                 <RadioGroup
                     android:id="@+id/rg_outer_fragment"
@@ -69,6 +73,7 @@
                         android:button="@null"
                         android:drawableTop="@drawable/radio_button_list_selector"
                         android:onClick="onClick"/>
+
 
                     <RadioButton
                         android:id="@+id/rb_dynamic"

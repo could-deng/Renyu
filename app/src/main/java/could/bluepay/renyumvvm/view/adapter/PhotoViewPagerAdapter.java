@@ -6,11 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.http.bean.PhotoInfo;
 import could.bluepay.renyumvvm.widget.photo.PhotoView;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 /**
  * Created by bluepay on 2017/12/8.
@@ -57,11 +61,15 @@ public class PhotoViewPagerAdapter extends PagerAdapter {
         view.enable();
 
         view.setScaleType(ImageView.ScaleType.CENTER);
-
+        RequestOptions options = new RequestOptions()
+                .error(R.drawable.img_default_meizi);
         Glide.with(context)
                 .load(getPhotolist().get(position).url)
-                .crossFade(500)
-                .error(R.drawable.img_default_meizi)
+                .transition(withCrossFade(500))
+//                .crossFade(500)
+//                .error(R.drawable.img_default_meizi)
+                .apply(options)
+
                 .into(view);
         container.addView(view);
         view.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +80,9 @@ public class PhotoViewPagerAdapter extends PagerAdapter {
         });
         return view;
     }
+
+
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);

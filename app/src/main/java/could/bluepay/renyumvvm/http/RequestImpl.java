@@ -1,6 +1,6 @@
 package could.bluepay.renyumvvm.http;
 
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 用于数据请求的回调
@@ -11,5 +11,5 @@ public interface RequestImpl {
 
     void loadFailed();
 
-    void addSubscription(Subscription subscription);
+    void addSubscription(Disposable disposable);
 }

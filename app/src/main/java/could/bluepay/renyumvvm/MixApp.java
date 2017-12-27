@@ -7,6 +7,11 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
+import com.github.moduth.blockcanary.BlockCanary;
+import com.github.moduth.blockcanary.BlockCanaryContext;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
+
 import could.yuanqiang.http.HttpUtils;
 
 /**
@@ -16,12 +21,20 @@ import could.yuanqiang.http.HttpUtils;
 public class MixApp extends Application {
 
     private static Context APPLICATION_CONTEXT;
+    private RefWatcher refWatcher;
+
+    public static RefWatcher getRefWatcher(Context context){
+        MixApp application = (MixApp) context.getApplicationContext();
+        return application.refWatcher;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         APPLICATION_CONTEXT = this;
 
+        refWatcher = LeakCanary.install(this);
+        BlockCanary.install(this,new BlockCanaryContext()).start();
         HttpUtils.getInstance().init(this, BuildConfig.DEBUG);
         initTextSize();
     }

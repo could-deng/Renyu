@@ -15,12 +15,12 @@ import could.bluepay.renyumvvm.http.bean.BaseBean;
 import could.bluepay.renyumvvm.http.bean.FavortResultBean;
 import could.bluepay.renyumvvm.http.bean.HotDynamicBean;
 import could.bluepay.renyumvvm.utils.Logger;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import rx.Observer;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by bluepay on 2017/11/28.
@@ -29,12 +29,12 @@ import rx.schedulers.Schedulers;
 public class MainModel {
 
     private long uid;
-    private int page;
+//    private int page;
 //    private LinearLayoutManager layoutManager;
 
     public void setData(long uid,int page){
         this.uid = uid;
-        this.page = page;
+//        this.page = page;
     }
 //    public void setLayoutManager(LinearLayoutManager manager){
 //        layoutManager = manager;
@@ -53,18 +53,29 @@ public class MainModel {
      * 获取写真集合
      * @param listener
      */
-    public void getHotDynamicsData(final RequestImpl listener){
-        Subscription subscription = HttpClient.Builder.getAppServer().getHotDynamics(HttpClient.Builder.getHeader(),uid,page)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    public void getHotDynamicsData(int page,final RequestImpl listener){
+         HttpClient.Builder.getAppServer().getHotDynamics(HttpClient.Builder.getHeader(),uid,page)
+                .subscribeOn(Schedulers.io())//上游。在IO线程进行网络请求
+                .observeOn(AndroidSchedulers.mainThread())//下游。回到主线程去处理请求结果
                 .subscribe(new Observer<HotDynamicBean>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+//                    @Override
+//                    public void onCompleted() {
+//                    }
 
                     @Override
                     public void onError(Throwable e) {
                         listener.loadFailed();
                         e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        listener.addSubscription(d);
                     }
 
                     @Override
@@ -75,8 +86,9 @@ public class MainModel {
                             listener.loadFailed();
                         }
                     }
+
                 });
-        listener.addSubscription(subscription);
+//        listener.addDisposable(subscription);
     }
 
     /**
@@ -94,13 +106,9 @@ public class MainModel {
         map.put("pid",pid);
 
         RequestBody body = RequestBody.create(MediaType.parse("Content-Type, application/json"),(new JSONObject(map)).toString());
-        Subscription subscription = HttpClient.Builder.getAppServer().dynamicLike(HttpClient.Builder.getHeader(),body)
+        HttpClient.Builder.getAppServer().dynamicLike(HttpClient.Builder.getHeader(),body)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<FavortResultBean>(){
-                    @Override
-                    public void onCompleted() {
-
-                    }
 
                     @Override
                     public void onError(Throwable e) {
@@ -109,11 +117,21 @@ public class MainModel {
                     }
 
                     @Override
+                    public void onComplete() {
+                        Logger.e(Logger.DEBUG_TAG,"doDynamicLike,onComplete()");
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        listener.addSubscription(d);
+                    }
+
+                    @Override
                     public void onNext(FavortResultBean favortResultBean) {
                         listener.loadSuccess(favortResultBean.getData());
                     }
                 });
-        listener.addSubscription(subscription);
+
     }
 
     /**
@@ -127,13 +145,9 @@ public class MainModel {
         map.put("lid",favouriteId);
         RequestBody body = RequestBody.create(MediaType.parse("Content-Type, application/json"),(new JSONObject(map)).toString());
 
-        Subscription subscription = HttpClient.Builder.getAppServer().deleteDynamicLike(HttpClient.Builder.getHeader(),body)
+        HttpClient.Builder.getAppServer().deleteDynamicLike(HttpClient.Builder.getHeader(),body)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<BaseBean>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
 
                     @Override
                     public void onError(Throwable e) {
@@ -142,11 +156,21 @@ public class MainModel {
                     }
 
                     @Override
+                    public void onComplete() {
+                        Logger.e(Logger.DEBUG_TAG,"deleteDynamicLike,onComplete()");
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        listener.addSubscription(d);
+                    }
+
+                    @Override
                     public void onNext(BaseBean baseBean) {
                         listener.loadSuccess(baseBean);
                     }
                 });
-        listener.addSubscription(subscription);
+
     }
 
 

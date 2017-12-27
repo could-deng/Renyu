@@ -4,21 +4,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.squareup.leakcanary.RefWatcher;
+
 import java.util.ArrayList;
 
+import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.view.adapter.MyFragmentPagerAdapter;
 import could.bluepay.renyumvvm.view.base.BaseFragment;
 import could.bluepay.renyumvvm.databinding.FragmentTotalBinding;
-import could.bluepay.renyumvvm.rx.RxBus;
-import could.bluepay.renyumvvm.rx.RxCodeConstants;
 import could.bluepay.renyumvvm.utils.Logger;
-import rx.Subscription;
-import rx.functions.Action1;
 
 /**
- * Created by bluepay on 2017/11/20.
+ * MainActivity底部第一个tab内容
  */
 
 public class TotalFragment extends BaseFragment<FragmentTotalBinding>{
@@ -90,16 +89,32 @@ public class TotalFragment extends BaseFragment<FragmentTotalBinding>{
     }
 
     /**
+     *
      * 注册事件
      */
     private void initRxBus(){
-        Subscription subscription = RxBus.getDefault().toObservable(RxCodeConstants.JUMP_TYPE, Integer.class)
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
+        // TODO: 2017/12/25
+//        Subscription subscription = RxBus.getDefault().toObservable(RxCodeConstants.JUMP_TYPE, Integer.class)
+//                .subscribe(new Action1<Integer>() {
+//                    @Override
+//                    public void call(Integer integer) {
+//
+//                    }
+//                });
+//        addSubscription(subscription);
+    }
 
-                    }
-                });
-        addSubscription(subscription);
+    private void clear(){
+        mTitles.clear();
+        mTitles = null;
+        mFragments.clear();
+        mFragments = null;
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        clear();
+        RefWatcher refWatcher = MixApp.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 }

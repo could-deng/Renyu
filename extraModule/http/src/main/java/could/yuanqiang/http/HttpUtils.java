@@ -8,6 +8,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.FieldNamingStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -29,7 +30,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -140,7 +140,7 @@ public class HttpUtils {
         builder.baseUrl(apiUrl);//设置远程地址
         builder.addConverterFactory(new NullOnEmptyConverterFactory());
         builder.addConverterFactory(GsonConverterFactory.create(getGson()));//该convert是对Call<T>中T的转换。。。使得:接受的回复Call<ResponseBody>,枚举类型不再是ResponseBody，可以接收自定义的Gson，当然也可以不传
-        builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());//该CallAdapter是对Call的转换。。。（retrofit与Rxjava结合）这样一来返回的对象就不是Call，而是Observable
+        builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());//该CallAdapter是对Call的转换。。。（retrofit与Rxjava结合）这样一来返回的对象就不是Call，而是Observable
         return builder;
     }
 
@@ -187,9 +187,9 @@ public class HttpUtils {
             // Create an ssl socket factory with our all-trusting manager
             SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
             OkHttpClient.Builder okBuilder = new OkHttpClient.Builder();
-            okBuilder.readTimeout(20, TimeUnit.SECONDS);
-            okBuilder.connectTimeout(10, TimeUnit.SECONDS);
-            okBuilder.writeTimeout(20, TimeUnit.SECONDS);
+            okBuilder.readTimeout(30, TimeUnit.SECONDS);//20
+            okBuilder.connectTimeout(20, TimeUnit.SECONDS);//10
+            okBuilder.writeTimeout(30, TimeUnit.SECONDS);//20
 //            okBuilder.cache()//设置缓存
             okBuilder.addInterceptor(new HttpHeadInterceptor());//请求头拦截器
             okBuilder.addInterceptor(getInterceptor());//log拦截器

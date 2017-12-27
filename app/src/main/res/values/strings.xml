@@ -2,7 +2,6 @@
     <string name="app_name">RenyuMVVM</string>
     <string name="AppTitle">RenyuMVVM</string>
 
-    <string name="ui_title_total">Total</string>
     <string name="ui_title_dynamic">Dynamic</string>
     <string name="ui_title_vip">Vip</string>
     <string name="ui_title_my">My</string>
@@ -20,4 +19,55 @@
     <string name="dig">赞</string>
     <string name="cancel">取消</string>
     <string name="comment">评论</string>
+
+    <string name="deliver_title">你想发表</string>
+    <string name="photo_normal">普通照片</string>
+    <string name="photo_red_package">红包照片</string>
+    <string name="video_normal">普通视频</string>
+    <string name="video_red_package">红包视频</string>
+
+    <string name="publish_text_hint">在此输入文字描述</string>
+    <string name="publish">发布</string>
+
+
+
+    <string name="picture_camera_roll">CameraRoll</string>
+    <string name="picture_cancel">Cancel</string>
+    <string name="picture_take_picture">Shot</string>
+    <string name="picture_rule">not pictures or video</string>
+    <string name="picture_min_video_num">Video Selection Cannot%1$sNumber</string>
+    <string name="picture_message_max_num">You can choose the most%1$s Number Pictures</string>
+    <string name="picture_preview">Preview</string>
+    <string name="picture_please">Please later...</string>
+    <string name="picture_done_front_num">%1$s/%2$s Ok</string>
+    <string name="picture_completed">Completed</string>
+    <string name="picture_done">Ok</string>
+    <string name="picture_please_select">Please Select</string>
+    <string name="picture_empty_title">No video or photos\n</string>
+    <string name="picture_empty_audio_title">No audio file\n</string>
+    <string name="picture_audio_empty">You can use system recordings to record audio</string>
+    <string name="picture_empty">you can use your camera to take photos or videos</string>
+    <string name="picture_min_img_num">Picture Selection Cannot%1$sNumber</string>
+    <string name="gif_tag">gif</string>
+    <string name="picture_audio">Access to system recording permission denied</string>
+    <string name="picture_jurisdiction">Read memory card access denied</string>
+    <string name="picture_camera">Get system camera permission denied</string>
+    <string name="picture_video_toast">Video not Preview</string>
+    <string name="picture_record_video">Record Video</string>
+    <string name="picture_photograph">Photograph</string>
+    <string name="picture_long_chart">Long</string>
+    <string name="picture_warning">Media files！</string>
+    <string name="picture_prompt">Prompt</string>
+    <string name="picture_prompt_content">Do you want to save pictures to your phone?</string>
+    <string name="picture_save_error">Picture save failed</string>
+    <string name="picture_save_success">Save picture successfully until</string>
+    <string name="picture_all_audio">All audio</string>
+    <string name="picture_tape">Tape</string>
+    <string name="picture_play_audio">Play</string>
+    <string name="picture_stop_audio">Stop</string>
+    <string name="picture_quit_audio">Quit</string>
+    <string name="picture_pause_audio">Pause</string>
+    <string name="picture_error">The picture is corrupted</string>
+
+
 </resources>

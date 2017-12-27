@@ -8,7 +8,11 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.lang.ref.WeakReference;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class TransitionAnimation {
     public static final Object lock = new Object();
@@ -80,9 +84,11 @@ public class TransitionAnimation {
         //Glide加载图片
         try {
             if(toView instanceof ImageView){
+//                RequestOptions options = new RequestOptions();
                 Glide.with(toView.getContext())
                         .load(imageFilePath)
-                        .crossFade(500)
+                        .transition(withCrossFade(500))
+//                        .apply(options)
                         .into((ImageView) toView);
 //                ((ImageView)toView).setScaleType(ImageView.ScaleType.CENTER);
             }
