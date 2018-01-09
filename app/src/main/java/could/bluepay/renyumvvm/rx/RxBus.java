@@ -21,6 +21,8 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 /**
+ * 使用Flowable与consumer(或者subscriber)实现上下游关系进行事件的订阅
+ *
  * Created by yuanqiang on 16/5/17.
  */
 public class RxBus {
@@ -34,12 +36,14 @@ public class RxBus {
     private static final String LOG_BUS = "RXBUS_log";
     private static volatile RxBus mDefaultInstance;
 
-    private Map<Class, List<Disposable>> subscriptionsByEventType = new HashMap<>();
+    private Map<Class, List<Disposable>> subscriptionsByEventType = new HashMap<>();//存放key:activity+value:List<Disposable>,用于取消订阅时用
 
-    private Map<Object, List<Class>> eventTypesBySubscriber = new HashMap<>();
+    private Map<Object, List<Class>> eventTypesBySubscriber = new HashMap<>();//存放key:activity+value:EventEntity键值对
 
-    private Map<Class, List<SubscriberMethod>> subscriberMethodByEventType = new HashMap<>();
+    private Map<Class, List<SubscriberMethod>> subscriberMethodByEventType = new HashMap<>();//存放key:EventEntity+value:List<SubscriberMethod>键值对
 
+
+    //region=======构建Subject=========================
 
     /**
      * rxjava2.0
@@ -57,7 +61,7 @@ public class RxBus {
     }
 
     public static RxBus getDefault() {
-        RxBus rxBus = mDefaultInstance;
+        RxBus rxBus = mDefaultInstance;//指针引用
         if (mDefaultInstance == null) {
             synchronized (RxBus.class) {
                 rxBus = mDefaultInstance;
@@ -73,13 +77,13 @@ public class RxBus {
 
 
     /**
-     * 根据传递的 eventType 类型返回特定类型(eventType)的 被观察者
+     * 通过过滤指定的eventType构建flowable
      *
      * @param eventType 事件类型
      * @return return
      */
     public  <T> Flowable<T> toObservable(Class<T> eventType) {
-        return _bus.toFlowable(BackpressureStrategy.BUFFER).ofType(eventType);
+        return _bus.toFlowable(BackpressureStrategy.BUFFER).ofType(eventType);//BackpressureStrategy.BUFFER)使得缓存水缸大小不再是128，无上限大小。根据传递的 eventType 类型返回特定类型(eventType)的 被观察者
     }
 
     /**
@@ -102,10 +106,16 @@ public class RxBus {
                     }
                 }).cast(eventType);
     }
+
+
+
+    //endregion=======构建Subject=========================
+
     /**
-     * 注册
+     * 注册（创建Flowable，构建Consumer，实现订阅）
+     * 提供给外部调用
      *
-     * @param subscriber 订阅者
+     * @param subscriber 订阅者 为activity
      */
     public void register(Object subscriber) {
         Class<?> subClass = subscriber.getClass();
@@ -114,10 +124,9 @@ public class RxBus {
             if (method.isAnnotationPresent(Subscribe.class)) {
                 //获得参数类型
                 Class[] parameterType = method.getParameterTypes();
-                //参数不为空 且参数个数为1
-                if (parameterType != null && parameterType.length == 1) {
+                if (parameterType != null && parameterType.length == 1) {//参数不为空 且参数个数为1
 
-                    Class eventType = parameterType[0];
+                    Class eventType = parameterType[0];//EventEntity
 
                     addEventTypeToMap(subscriber, eventType);
                     Subscribe sub = method.getAnnotation(Subscribe.class);
@@ -149,7 +158,7 @@ public class RxBus {
 
 
     /**
-     * 将event的类型以订阅中subscriber为key保存到map里
+     * 存放key:activity+value:EventEntity键值对
      *
      * @param subscriber 订阅者
      * @param eventType  event类型
@@ -167,7 +176,7 @@ public class RxBus {
     }
 
     /**
-     * 将注解方法信息以event类型为key保存到map中
+     * 存放key:EventEntity+value:List<SubscriberMethod>键值对
      *
      * @param eventType        event类型
      * @param subscriberMethod 注解方法信息
@@ -185,7 +194,7 @@ public class RxBus {
     }
 
     /**
-     * 将订阅事件以event类型为key保存到map,用于取消订阅时用
+     * 存放key:activity+value:List<Disposable>,用于取消订阅时用
      *
      * @param eventType  event类型
      * @param disposable 订阅事件
@@ -202,8 +211,11 @@ public class RxBus {
         }
     }
 
+
+    //region========订阅===================
+
     /**
-     * 用RxJava添加订阅者
+     * 上下游实现订阅
      *
      * @param subscriberMethod d
      */
@@ -216,7 +228,7 @@ public class RxBus {
             flowable = toObservable(subscriberMethod.code, subscriberMethod.eventType);
         }
         Disposable subscription = postToObservable(flowable, subscriberMethod)
-                .subscribe(new Consumer<Object>() {
+                .subscribe(new Consumer<Object>() {//上下游传递的是注册了的方法的参数
                     @Override
                     public void accept(Object o) throws Exception {
                         callEvent(subscriberMethod, o);
@@ -227,7 +239,7 @@ public class RxBus {
     }
 
     /**
-     * 用于处理订阅事件在那个线程中执行
+     * 用于上游Flowable那个线程中执行
      *
      * @param observable       d
      * @param subscriberMethod d
@@ -253,11 +265,17 @@ public class RxBus {
         return observable.observeOn(scheduler);
     }
 
+    //endregion========订阅===================
+
+
+
+    //region=========下游事件==============
+
     /**
-     * 回调到订阅者的方法中
+     * 回调订阅者的注册的方法
      *
      * @param method code
-     * @param object obj
+     * @param object obj    注册了的方法参数
      */
     private void callEvent(SubscriberMethod method, Object object) {
         Class eventClass = object.getClass();
@@ -274,6 +292,8 @@ public class RxBus {
         }
     }
 
+    //endregion=========下游事件==============
+
 
     /**
      * 是否注册
@@ -285,6 +305,8 @@ public class RxBus {
         return eventTypesBySubscriber.containsKey(subscriber);
     }
 
+
+    //region====取消注册===========
     /**
      * 取消注册
      *
@@ -340,6 +362,9 @@ public class RxBus {
     }
 
 
+    //endregion====取消注册===========
+
+
 
 
 
@@ -359,6 +384,10 @@ public class RxBus {
         _bus.onNext(new Message(code, o));
     }
 
+    /**
+     * 上游Flowable发送事件
+     * @param o
+     */
     public void post(Object o) {
         _bus.onNext(o);
     }

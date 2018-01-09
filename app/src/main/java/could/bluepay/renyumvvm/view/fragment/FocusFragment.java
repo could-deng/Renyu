@@ -14,7 +14,6 @@ import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.view.adapter.UserListAdapter;
 import could.bluepay.renyumvvm.view.adapter.UserListFocusAdapter;
 import could.bluepay.renyumvvm.view.adapter.UserListPopularAdapter;
-import could.bluepay.renyumvvm.view.base.BaseFragment;
 import could.bluepay.renyumvvm.databinding.FragmentForcusBinding;
 import could.bluepay.renyumvvm.http.HttpClient;
 import could.bluepay.renyumvvm.http.bean.UserListBean;
@@ -29,7 +28,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by bluepay on 2017/11/20.
  */
 
-public class FocusFragment <T extends UserListAdapter>extends BaseFragment<FragmentForcusBinding> {
+public class FocusFragment <T extends UserListAdapter> extends BaseFragment<FragmentForcusBinding> {
 
     public static final String TAG = "FocusFragment";
     public String setFragmentName(){
@@ -41,7 +40,7 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
     public static final int ContentTypeInvite = 3;
 
     //内容类型
-    private int mType ;
+    private int mType;
     private static final String TYPE = "param1";
     private String city = "全国";
 
@@ -147,7 +146,7 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
         bindingView.srlFocus.postDelayed(new Runnable() {
             @Override
             public void run() {
-                loadCustomData(((MainActivity)getActivity()).getUid(),mStart);
+                loadCustomData(activity.getUid(),mStart);
             }
         },500);
     }
@@ -207,9 +206,9 @@ public class FocusFragment <T extends UserListAdapter>extends BaseFragment<Fragm
                                     &&userListBean.getData().getUser().size()>0){
                                 if(adapter == null){
                                     if(mType == ContentTypeFocus) {
-                                        adapter = (T) new UserListPopularAdapter(getActivity());
+                                        adapter = (T) new UserListPopularAdapter(activity);
                                     }else if(mType == ContentTYpePopular){
-                                        adapter = (T) new UserListFocusAdapter(getActivity());
+                                        adapter = (T) new UserListFocusAdapter(activity);
                                     }
                                 }
                                 adapter.setList(userListBean.getData().getUser());

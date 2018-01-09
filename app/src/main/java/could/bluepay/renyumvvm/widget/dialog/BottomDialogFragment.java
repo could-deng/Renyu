@@ -47,7 +47,7 @@ public class BottomDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.BottomDialog);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.BottomDialog);//theme+style
 
         if(savedInstanceState!=null){
             layoutRes = savedInstanceState.getInt(KEY_LAYOUT_RES);

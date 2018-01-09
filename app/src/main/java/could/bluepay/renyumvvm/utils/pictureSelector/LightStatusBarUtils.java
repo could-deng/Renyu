@@ -11,11 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.tool
- * email：893855882@qq.com
- * data：2017/5/25
+ * 设置顶部的状态栏的
  */
 public class LightStatusBarUtils {
 
@@ -66,7 +62,7 @@ public class LightStatusBarUtils {
     private static boolean setFlymeLightStatusBar(Activity activity, boolean dark) {
         boolean result = false;
         if (activity != null) {
-            try {
+            try {//通过反射设置魅族手机顶部toolbar亮度
                 WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
                 Field darkFlag = WindowManager.LayoutParams.class
                         .getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
@@ -103,7 +99,7 @@ public class LightStatusBarUtils {
             // We want to change tint color to white again.
             // You can also record the flags in advance so that you can turn UI back completely if
             // you have set other flags before, such as translucent or full screen.
-            decor.setSystemUiVisibility(0);
+            decor.setSystemUiVisibility(0);//0表示visible
         }
     }
 

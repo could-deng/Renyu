@@ -17,7 +17,6 @@ import could.bluepay.renyumvvm.http.bean.UserListBean;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.view.adapter.UserListInviteAdapter;
-import could.bluepay.renyumvvm.view.base.BaseFragment;
 import could.bluepay.renyumvvm.databinding.FragmentInviteBinding;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

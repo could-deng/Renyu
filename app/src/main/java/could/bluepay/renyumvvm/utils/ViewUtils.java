@@ -9,6 +9,11 @@ import android.content.Context;
 public class ViewUtils {
     public static int dp2px(Context context, int dp){
         float density = context.getResources().getDisplayMetrics().density;
-         return Math.round(dp*density);
+        return Math.round(dp*density);
+    }
+
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }

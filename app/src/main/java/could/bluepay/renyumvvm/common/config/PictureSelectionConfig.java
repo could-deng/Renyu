@@ -11,6 +11,7 @@ import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.utils.pictureSelector.PictureFileUtils;
 
 /**
+ * 图片选择的配置参数类
  * author：luck
  * project：PictureSelector
  * package：com.luck.picture.lib.config
@@ -19,13 +20,13 @@ import could.bluepay.renyumvvm.utils.pictureSelector.PictureFileUtils;
  */
 
 public final class PictureSelectionConfig implements Parcelable {
-    public int mimeType;
-    public boolean camera;
+    public int mimeType;//进行选择的多媒体类型（PictureConfig.TYPE_ALL、PictureConfig.TYPE_IMAGE等）
+    public boolean camera;//是否直接拍照就返回
     public String outputCameraPath;
     public String compressSavePath;
     public String suffixType;
-    @StyleRes
-    public int themeStyleId;
+    @StyleRes//@StyleRes标示该变量是style资源，让编译器编译阶段做个检查
+    public int themeStyleId;//PictureBaseActivity的主题
     public int selectionMode;
     public int maxSelectNum;
     public int minSelectNum;
@@ -35,7 +36,7 @@ public final class PictureSelectionConfig implements Parcelable {
     public int videoMinSecond;
     public int recordVideoSecond;
     public int minimumCompressSize;
-    public int imageSpanCount;
+    public int imageSpanCount;//gridLayoutManager每行的item个数
     public int overrideWidth;
     public int overrideHeight;
     public int aspect_ratio_x;
@@ -117,7 +118,7 @@ public final class PictureSelectionConfig implements Parcelable {
     }
 
     public static PictureSelectionConfig getCleanInstance() {
-        PictureSelectionConfig selectionSpec = getInstance();
+        PictureSelectionConfig selectionSpec = getInstance();//操作的对象非基础类型，因此对象为栈中的指针，指针指向着存储在堆中的InstanceHolder.INSTANCE
         selectionSpec.reset();
         return selectionSpec;
     }

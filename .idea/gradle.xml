@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/extraModule" />
             <option value="$PROJECT_DIR$/extraModule/couldutils" />
             <option value="$PROJECT_DIR$/extraModule/http" />
+            <option value="$PROJECT_DIR$/extraModule/ucrop" />
             <option value="$PROJECT_DIR$/extraModule/widget" />
           </set>
         </option>

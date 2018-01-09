@@ -22,11 +22,13 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import could.bluepay.renyumvvm.R;
 
-
+/**
+ * 菊花转圈ImageView
+ */
 public class PictureSpinView extends AppCompatImageView implements PictureIndeterminate {
 
-    private float mRotateDegrees;
-    private int mFrameTime;
+    private float mRotateDegrees;//菊花旋转的角度
+    private int mFrameTime;//invalidate时间间隔（毫秒）
     private boolean mNeedToUpdateView;
     private Runnable mUpdateViewRunnable;
 
@@ -63,6 +65,7 @@ public class PictureSpinView extends AppCompatImageView implements PictureIndete
 
     @Override
     protected void onDraw(Canvas canvas) {
+        //画布一直旋转
         canvas.rotate(mRotateDegrees, getWidth() / 2, getHeight() / 2);
         super.onDraw(canvas);
     }

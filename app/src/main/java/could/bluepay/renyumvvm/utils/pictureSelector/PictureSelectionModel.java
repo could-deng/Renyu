@@ -16,12 +16,7 @@ import could.bluepay.renyumvvm.common.config.PictureSelectionConfig;
 import could.bluepay.renyumvvm.view.activity.pictureSelector.PictureSelectorActivity;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib
- * describe：PictureSelector selection configuration.
- * email：893855882@qq.com
- * data：2017/5/24
+ * PictureSelector配置Config设置
  */
 
 public class PictureSelectionModel {

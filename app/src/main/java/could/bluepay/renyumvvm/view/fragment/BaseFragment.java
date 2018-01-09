@@ -1,4 +1,4 @@
-package could.bluepay.renyumvvm.view.base;
+package could.bluepay.renyumvvm.view.fragment;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -182,10 +182,15 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
         }
         mCompositeDisposable.add(s);
     }
+
+    private void clear(){
+
+    }
     @Override
     public void onDestroy() {
         Logger.e(Logger.DEBUG_TAG,"onDestroy,"+setFragmentName());
         super.onDestroy();
+        clear();
         if(this.mCompositeDisposable!=null && mCompositeDisposable.size()>0){
             this.mCompositeDisposable.clear();
         }

@@ -22,14 +22,10 @@ import could.bluepay.renyumvvm.common.entity.LocalMediaFolder;
 import could.bluepay.renyumvvm.common.config.PictureMimeType;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.adapter
- * email：893855882@qq.com
- * data：16/12/31
+ * 图片文件夹Adapter
  */
 public class PictureAlbumDirectoryAdapter extends RecyclerView.Adapter<PictureAlbumDirectoryAdapter.ViewHolder> {
-    private Context mContext;
+    private Context mContext;//activity的context仅仅用来提供控件的创建相关作用
     private List<LocalMediaFolder> folders = new ArrayList<>();
     private int mimeType;
 
@@ -76,15 +72,15 @@ public class PictureAlbumDirectoryAdapter extends RecyclerView.Adapter<PictureAl
             RequestOptions options = new RequestOptions()
                     .placeholder(R.drawable.ic_placeholder)
                     .centerCrop()
-                    .sizeMultiplier(0.5f)
+                    .sizeMultiplier(0.5f)//thumbnails相对于原url大小的几分之几
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .override(160, 160);
+                    .override(160, 160);//对应thumbnails缩略图大小
             Glide.with(holder.itemView.getContext())
                     .asBitmap()
                     .load(imagePath)
                     .apply(options)
 
-                    .into(new BitmapImageViewTarget(holder.first_image) {
+                    .into(new BitmapImageViewTarget(holder.first_image) {//对控件imageview进行加工
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =

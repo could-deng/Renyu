@@ -1,14 +1,11 @@
 package could.bluepay.renyumvvm.model;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.HashMap;
+import could.bluepay.renyumvvm.Config;
+import could.bluepay.renyumvvm.MixApp;
+import could.bluepay.renyumvvm.common.PrefsHelper;
 import could.bluepay.renyumvvm.http.HttpClient;
 import could.bluepay.renyumvvm.http.RequestImpl;
 import could.bluepay.renyumvvm.http.bean.BaseBean;
@@ -23,19 +20,38 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 /**
- * Created by bluepay on 2017/11/28.
+ * Model层
  */
 
 public class MainModel {
 
-    private long uid;
-//    private int page;
+    public static MainModel mInstance;
+    private static long uid = Config.ANONYMOUS_UID;
+
 //    private LinearLayoutManager layoutManager;
 
-    public void setData(long uid,int page){
+    public void setData(long uid){
         this.uid = uid;
-//        this.page = page;
     }
+    public static MainModel getmInstance(){
+        if(mInstance==null){
+            mInstance = new MainModel();
+        }
+        return mInstance;
+    }
+
+    public long getUid(){
+        if(uid == Config.ANONYMOUS_UID){
+            PrefsHelper.with(MixApp.getContext(), Config.PREFS_USER).readLong(Config.SP_KEY_UID,1);
+        }
+        return uid;
+    }
+    public void setUid(long uid){
+        this.uid = uid;
+        PrefsHelper.with(MixApp.getContext(),Config.PREFS_USER).writeLong(Config.SP_KEY_UID,uid);
+
+    }
+
 //    public void setLayoutManager(LinearLayoutManager manager){
 //        layoutManager = manager;
 //    }

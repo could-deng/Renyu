@@ -45,6 +45,11 @@ public class PraiseListView extends android.support.v7.widget.AppCompatTextView{
         initAttrs(attrs);
     }
 
+    /**
+     * 获取attr样式中的值
+     * @param attrs
+     */
+
     private void initAttrs(AttributeSet attrs) {
         TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.PraiseListView, 0, 0);
         try {

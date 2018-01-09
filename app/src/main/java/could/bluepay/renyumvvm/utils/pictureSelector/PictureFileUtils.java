@@ -50,7 +50,7 @@ public class PictureFileUtils {
     public static final String POSTFIX = ".JPEG";
     public static final String POST_VIDEO = ".mp4";
     public static final String POST_AUDIO = ".mp3";
-    public static final String APP_NAME = "PictureSelector";
+    public static final String APP_NAME = "RenyuMVVM";
     public static final String CAMERA_PATH = "/" + APP_NAME + "/CameraImage/";
     public static final String CAMERA_AUDIO_PATH = "/" + APP_NAME + "/CameraAudio/";
     public static final String CROP_PATH = "/" + APP_NAME + "/CropImage/";
@@ -544,7 +544,7 @@ public class PictureFileUtils {
     }
 
     /**
-     * set empty PictureSelector Cache
+     * 清空裁剪、压缩的文件
      *
      * @param mContext
      */

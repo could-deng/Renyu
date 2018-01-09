@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import could.bluepay.renyumvvm.R;
-import could.bluepay.renyumvvm.view.base.BaseFragment;
 import could.bluepay.renyumvvm.databinding.FragmentPopularBinding;
 
 /**

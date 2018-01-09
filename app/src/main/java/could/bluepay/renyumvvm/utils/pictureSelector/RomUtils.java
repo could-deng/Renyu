@@ -8,19 +8,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.tool
- * email：893855882@qq.com
- * data：2017/5/25
+ * 获取android操作系统
  */
 public class RomUtils {
 
     class AvailableRomType {
-        public static final int MIUI = 1;
-        public static final int FLYME = 2;
-        public static final int ANDROID_NATIVE = 3;
-        public static final int NA = 4;
+        public static final int MIUI = 1;//小米系统
+        public static final int FLYME = 2;//魅族系统
+        public static final int ANDROID_NATIVE = 3;//android原生6.0以上
+        public static final int NA = 4;//其他
     }
 
     public static boolean isLightStatusBarAvailable () {

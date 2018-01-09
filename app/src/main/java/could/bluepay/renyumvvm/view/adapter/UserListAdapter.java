@@ -162,16 +162,19 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private void bindItem(){
             switch (status){
                 case LOAD_MORE:
-                    mBinding.progress.setVisibility(View.VISIBLE);
+                    mBinding.rlContainer.setVisibility(View.VISIBLE);
+                    mBinding.rlFootNoMore.setVisibility(View.GONE);
                     mBinding.tvLoadPrompt.setText(context.getResources().getString(R.string.load_more));
 
                     break;
                 case LOAD_PULL_TO:
-                    mBinding.progress.setVisibility(View.VISIBLE);
+                    mBinding.rlContainer.setVisibility(View.VISIBLE);
+                    mBinding.rlFootNoMore.setVisibility(View.GONE);
                     mBinding.tvLoadPrompt.setText(context.getResources().getString(R.string.load_pull_to));
                     break;
                 case LOAD_END:
-                    mBinding.progress.setVisibility(View.VISIBLE);
+                    mBinding.rlContainer.setVisibility(View.GONE);
+                    mBinding.rlFootNoMore.setVisibility(View.VISIBLE);
                     mBinding.tvLoadPrompt.setText(context.getResources().getString(R.string.load_none));
                     break;
                 case LOAD_NONE:

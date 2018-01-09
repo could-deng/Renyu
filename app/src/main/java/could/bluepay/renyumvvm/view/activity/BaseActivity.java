@@ -1,4 +1,4 @@
-package could.bluepay.renyumvvm.view.base;
+package could.bluepay.renyumvvm.view.activity;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -9,8 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import com.squareup.leakcanary.RefWatcher;
-import could.bluepay.renyumvvm.MixApp;
+
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.common.memoryleak.LeakHandler;
 
@@ -81,7 +80,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     protected void showBackTab() {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.nav_icon_return_default);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.nav_back);
         }
     }
 
@@ -89,7 +88,5 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     protected void onDestroy() {
         super.onDestroy();
         LeakHandler.fixInputMethodManagerLeak(this);
-        RefWatcher refWatcher = MixApp.getRefWatcher(this);
-        refWatcher.watch(this);
     }
 }

@@ -8,7 +8,6 @@ import java.lang.annotation.Target;
 
 /**
  * Rxbus
- * Created by gorden on 2016/7/23.
  */
 @Documented
 @Target(ElementType.METHOD)

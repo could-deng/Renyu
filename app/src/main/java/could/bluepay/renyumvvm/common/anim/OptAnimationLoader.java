@@ -17,6 +17,9 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+/**
+ * 加载anim动画文件（动画集或单个动画）
+ */
 public class OptAnimationLoader {
 
     public static Animation loadAnimation(Context context, int id)

@@ -34,15 +34,11 @@ import could.bluepay.renyumvvm.utils.pictureSelector.DateUtils;
 import could.bluepay.renyumvvm.utils.pictureSelector.StringUtils;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.adapter
- * email：893855882@qq.com
- * data：2016/12/30
+ * PictureSelectorActivity中RecycleView图片的adapter
  */
 public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final static int DURATION = 450;
-    private Context context;
+    private Context context;//activity的context仅仅用来提供控件的创建相关作用
     private boolean showCamera = true;
     private OnPhotoSelectChangedListener imageSelectChangedListener;
     private int maxSelectNum;
@@ -194,7 +190,7 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
                         .asBitmap()
                         .load(path)
                         .apply(options)
-                        .into(contentHolder.iv_picture);
+                        .into(contentHolder.iv_picture);//.asBitmap()保证了如果path是视频路径或者gif可以动的资源时,返回的还是bitmap
             }
             if (enablePreview || enablePreviewVideo || enablePreviewAudio) {
                 contentHolder.ll_check.setOnClickListener(new View.OnClickListener() {
@@ -246,6 +242,9 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
         return showCamera ? images.size() + 1 : images.size();
     }
 
+    /**
+     * 摄像头ViewHolder
+     */
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
         View headerView;
         TextView tv_title_camera;
@@ -261,6 +260,10 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+
+    /**
+     * 第一个以外的ViewHolder
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_picture;
         TextView check;
@@ -378,7 +381,7 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             }
             holder.iv_picture.setColorFilter(ContextCompat.getColor
-                    (context, R.color.image_overlay_true), PorterDuff.Mode.SRC_ATOP);
+                    (context, R.color.image_overlay_true), PorterDuff.Mode.SRC_ATOP);//滤镜效果，PorterDuff.Mode.SRC_ATOP显示上层绘制图片
         } else {
             holder.iv_picture.setColorFilter(ContextCompat.getColor
                     (context, R.color.image_overlay_false), PorterDuff.Mode.SRC_ATOP);
@@ -399,6 +402,10 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.imageSelectChangedListener = imageSelectChangedListener;
     }
 
+    /**
+     * （放大）x、y都从1到1.12比例动画开启
+     * @param iv_img
+     */
     private void zoom(ImageView iv_img) {
         if (zoomAnim) {
             AnimatorSet set = new AnimatorSet();
@@ -411,6 +418,10 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    /**
+     * （缩小）x、y都从1.12到1比例动画开启
+     * @param iv_img
+     */
     private void disZoom(ImageView iv_img) {
         if (zoomAnim) {
             AnimatorSet set = new AnimatorSet();

@@ -14,11 +14,7 @@ import java.util.Map;
 import io.reactivex.subjects.PublishSubject;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.permissions
- * email：893855882@qq.com
- * data：2017/5/31
+ * 提示授权的Fragment
  */
 
 public class RxPermissionsFragment extends Fragment {
@@ -27,7 +23,7 @@ public class RxPermissionsFragment extends Fragment {
 
     // Contains all the current permission requests.
     // Once granted or denied, they are removed from it.
-    private Map<String, PublishSubject<Permission>> mSubjects = new HashMap<>();
+    private Map<String, PublishSubject<Permission>> mSubjects = new HashMap<>();//PublishSubject继承自Subject,又能当Observable或者Observer。PublishSubject的observer只会接收到订阅之后PublishSubject发送的数据
     private boolean mLogging;
 
     public RxPermissionsFragment() {
@@ -44,6 +40,8 @@ public class RxPermissionsFragment extends Fragment {
         requestPermissions(permissions, PERMISSIONS_REQUEST_CODE);
     }
 
+
+    //权限申请的回调
     @TargetApi(Build.VERSION_CODES.M)
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

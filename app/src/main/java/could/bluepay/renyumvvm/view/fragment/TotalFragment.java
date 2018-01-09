@@ -3,16 +3,12 @@ package could.bluepay.renyumvvm.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
 import com.squareup.leakcanary.RefWatcher;
-
 import java.util.ArrayList;
-
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.view.adapter.MyFragmentPagerAdapter;
-import could.bluepay.renyumvvm.view.base.BaseFragment;
 import could.bluepay.renyumvvm.databinding.FragmentTotalBinding;
 import could.bluepay.renyumvvm.utils.Logger;
 

@@ -25,6 +25,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!--解决android7.0文件权限问题所需,实现文件共享-->
+        <provider
+            android:name=".common.provider.PictureFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <activity android:name=".view.activity.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait">
@@ -37,7 +49,10 @@
         <activity android:name=".view.activity.PictureViewPagerActivity"
             android:screenOrientation="portrait"/>
 
+        <!--视屏播放测试activity-->
         <activity android:name=".view.activity.ActivityListViewRecyclerView"/>
+
+
         <activity android:name=".view.activity.PublishActivity"
             android:screenOrientation="portrait" />
 
@@ -53,27 +68,28 @@
             android:name=".view.activity.pictureSelector.PictureBaseActivity"
             android:screenOrientation="portrait" />
 
-        <!--<activity-->
-            <!--android:name=".PicturePreviewActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/activity.Theme" />-->
-        <!--<activity-->
-            <!--android:name=".PictureVideoPlayActivity"-->
-            <!--android:configChanges="orientation|keyboardHidden|screenSize"-->
-            <!--android:screenOrientation="sensor"-->
-            <!--android:theme="@style/activity.Theme" />-->
+        <activity
+            android:name=".view.activity.pictureSelector.PicturePreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/activity.Theme" />
+        <activity
+            android:name=".view.activity.pictureSelector.PictureVideoPlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="sensor"
+            android:theme="@style/activity.Theme" />
+
         <!--<activity-->
             <!--android:name=".PictureExternalPreviewActivity"-->
             <!--android:screenOrientation="portrait"-->
             <!--android:theme="@style/activity.Theme" />-->
-        <!--<activity-->
-            <!--android:name="com.yalantis.ucrop.UCropActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar" />-->
-        <!--<activity-->
-            <!--android:name="com.yalantis.ucrop.PictureMultiCuttingActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar" />-->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="com.yalantis.ucrop.PictureMultiCuttingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!--<activity-->
             <!--android:name=".PicturePlayAudioActivity"-->
             <!--android:screenOrientation="portrait"-->

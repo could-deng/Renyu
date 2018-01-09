@@ -5,21 +5,21 @@ import java.lang.reflect.Method;
 
 /**
  *
- * Created by gorden on 2016/7/23.
+ * 订阅了对象
  */
 public class SubscriberMethod {
-    public Method method;
-    public ThreadMode threadMode;
-    public Class<?> eventType;
-    public Object subscriber;
+    public Object subscriber;//订阅者activity
+    public Method method;//订阅的方法（在activity中声明了@Subscibe()的方法）
+    public ThreadMode threadMode;//flowable上游执行的线程
+    public Class<?> eventType;//订阅的方法
     public int code;
 
     public SubscriberMethod(Object subscriber, Method method, Class<?> eventType, int code, ThreadMode threadMode) {
-        this.method = method;
-        this.threadMode = threadMode;
-        this.eventType = eventType;
         this.subscriber = subscriber;
+        this.method = method;
+        this.eventType = eventType;
         this.code = code;
+        this.threadMode = threadMode;
     }
 
 

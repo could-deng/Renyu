@@ -17,11 +17,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.permissions
- * email：893855882@qq.com
- * data：2017/5/31
+ * 使用Rxjava的授权控制
  */
 
 public class RxPermissions {
@@ -76,7 +72,7 @@ public class RxPermissions {
             public ObservableSource<Boolean> apply(Observable<T> o) {
                 return request(o, permissions)
                         // Transform Observable<Permission> to Observable<Boolean>
-                        .buffer(permissions.length)
+                        .buffer(permissions.length)//将数据按照规定的大小做一下缓存，然后将缓存的数据作为一个集合发射出去(Observable<Permission> to Observable<List<Permission>>)
                         .flatMap(new Function<List<Permission>, ObservableSource<Boolean>>() {
                             @Override
                             public ObservableSource<Boolean> apply(List<Permission> permissions) throws Exception {
@@ -147,6 +143,11 @@ public class RxPermissions {
                 });
     }
 
+    /**
+     * 根据RxPermissionsFragment权限请求列表有无该权限，生成 决定是否发射TRIGGER的Observable
+     * @param permissions
+     * @return
+     */
     private Observable<?> pending(final String... permissions) {
         for (String p : permissions) {
             if (!mRxPermissionsFragment.containsByPermission(p)) {
@@ -165,8 +166,8 @@ public class RxPermissions {
 
     @TargetApi(Build.VERSION_CODES.M)
     private Observable<Permission> requestImplementation(final String... permissions) {
-        List<Observable<Permission>> list = new ArrayList<>(permissions.length);
-        List<String> unrequestedPermissions = new ArrayList<>();
+        List<Observable<Permission>> list = new ArrayList<>(permissions.length);//创建出一个存放Observable<Permission>的list
+        List<String> unrequestedPermissions = new ArrayList<>();//还没有决定是否授权的列表
 
         // In case of multiple permissions, we create an Observable for each of them.
         // At the end, the observables are combined to have a unique response.
@@ -179,12 +180,14 @@ public class RxPermissions {
                 continue;
             }
 
-            if (isRevoked(permission)) {
+
+            if (isRevoked(permission)) {// 如果是已经拒绝的权限
                 // Revoked by a policy, return a denied Permission object.
                 list.add(Observable.just(new Permission(permission, false, false)));
                 continue;
             }
 
+            //将还没请求的权限赋值到unrequestedPermissions和RxPermissionFragment的mSubjects中
             PublishSubject<Permission> subject = mRxPermissionsFragment.getSubjectByPermission(permission);
             // Create a new subject if not exists
             if (subject == null) {
@@ -198,9 +201,9 @@ public class RxPermissions {
 
         if (!unrequestedPermissions.isEmpty()) {
             String[] unrequestedPermissionsArray = unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]);
-            requestPermissionsFromFragment(unrequestedPermissionsArray);
+            requestPermissionsFromFragment(unrequestedPermissionsArray);//弹出申请权限框
         }
-        return Observable.concat(Observable.fromIterable(list));
+        return Observable.concat(Observable.fromIterable(list));//Observable.concat()将多个Observable结合成一个Observable并发射数据，并且严格按照先后顺序，前一个Observable的数据还没发射完，是不能发射Observable后面的数据
     }
 
     /**
@@ -250,6 +253,8 @@ public class RxPermissions {
     }
 
     /**
+     * 判断该权限是否已经被拒绝
+     * <p>
      * Returns true if the permission has been revoked by a policy.
      * <p>
      * Always false if SDK &lt; 23.

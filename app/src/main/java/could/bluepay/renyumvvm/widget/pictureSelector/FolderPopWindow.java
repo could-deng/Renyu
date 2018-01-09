@@ -30,11 +30,7 @@ import could.bluepay.renyumvvm.utils.pictureSelector.StringUtils;
 import could.bluepay.renyumvvm.view.adapter.PictureAlbumDirectoryAdapter;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.widget
- * email：893855882@qq.com
- * data：2017/5/25
+ *  选择图片文件夹的PoupWindow
  */
 
 public class FolderPopWindow extends PopupWindow implements View.OnClickListener {
@@ -92,7 +88,7 @@ public class FolderPopWindow extends PopupWindow implements View.OnClickListener
     @Override
     public void showAsDropDown(View anchor) {
         try {
-            if (Build.VERSION.SDK_INT >= 24) {
+            if (Build.VERSION.SDK_INT >= 24) {//7.0以上
                 Rect rect = new Rect();
                 anchor.getGlobalVisibleRect(rect);
                 int h = anchor.getResources().getDisplayMetrics().heightPixels - rect.bottom;

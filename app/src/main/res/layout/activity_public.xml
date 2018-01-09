@@ -8,7 +8,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/activity_backgroup">
     <include
         android:id="@+id/toolbar"
         layout="@layout/layout_toolbar"/>
@@ -17,11 +18,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lines="4"
+        android:textSize="15sp"
         android:gravity="left"
-        android:padding="10dp"
+        android:layout_margin="10dp"
         android:hint="@string/publish_text_hint"
-        android:background="@null"/>
-
+        android:background="@null" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"
+        />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_activity_publish"
         android:layout_width="match_parent"
@@ -30,10 +36,12 @@
         android:overScrollMode="never"
         />
     <TextView
+        android:id="@+id/tv_publish_divider"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/color_69"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"/>
 </LinearLayout>
 </layout>

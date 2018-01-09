@@ -1,12 +1,7 @@
 package could.bluepay.renyumvvm.common.config;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.config
- * describe：PictureSelector Final Class
- * email：893855882@qq.com
- * data：2017/5/24
+ * 图片配置相关的参数
  */
 
 public final class PictureConfig {
@@ -29,7 +24,8 @@ public final class PictureConfig {
     public final static int UPDATE_FLAG = 2774;// 预览界面更新选中数据 标识
     public final static int CLOSE_PREVIEW_FLAG = 2770;// 关闭预览界面 标识
     public final static int PREVIEW_DATA_FLAG = 2771;// 预览界面图片 标识
-    public final static int TYPE_ALL = 0;
+
+    public final static int TYPE_ALL = 0;// 选择的多媒体类型 全部（图片+视屏+音频）
     public final static int TYPE_IMAGE = 1;
     public final static int TYPE_VIDEO = 2;
     public final static int TYPE_AUDIO = 3;

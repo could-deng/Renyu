@@ -7,10 +7,15 @@
     <string name="ui_title_my">My</string>
 
 
+    <string name="ui_title_portray">portray</string>
+
     <string name="title_focus">Focus</string>
     <string name="title_popular">Popular</string>
     <string name="title_invite">Invite</string>
 
+
+    
+    
 
     <string name="load_more">正在加载更多</string>
     <string name="load_pull_to">上拉加载更多</string>

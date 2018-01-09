@@ -3,14 +3,15 @@
     <string name="app_name" >RenyuMVVM</string>
     <string name="AppTitle" >RenyuMVVM</string>
 
-    <string name="ui_title_dynamic">Dynamic</string>
-    <string name="ui_title_vip">Vip</string>
-    <string name="ui_title_my">My</string>
+    <string name="ui_title_dynamic">动态</string>
+    <string name="ui_title_vip">公告</string>
+    <string name="ui_title_my">我的</string>
 
 
-    <string name="title_focus">Focus</string>
-    <string name="title_popular">Popular</string>
-    <string name="title_invite">Invite</string>
+    <string name="ui_title_portray">写真</string>
+    <string name="title_focus">关注</string>
+    <string name="title_popular">流行</string>
+    <string name="title_invite">约拍</string>
 
 
     <string name="load_more">正在加载更多</string>

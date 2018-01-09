@@ -17,11 +17,7 @@ import android.widget.TextView;
 import could.bluepay.renyumvvm.R;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.widget
- * email：893855882@qq.com
- * data：2017/6/2
+ * 点击摄像（弹出拍照或者录像的window）
  */
 
 public class PhotoPopupWindow extends PopupWindow implements View.OnClickListener {
@@ -61,8 +57,8 @@ public class PhotoPopupWindow extends PopupWindow implements View.OnClickListene
             if (Build.VERSION.SDK_INT >= 24) {
                 int[] location = new int[2];
                 parent.getLocationOnScreen(location);
-                int x = location[0];
-                int y = location[1] + parent.getHeight();
+                int x = location[0];//left
+                int y = location[1] + parent.getHeight();//top
                 this.showAtLocation(parent, Gravity.BOTTOM, x, y);
             } else {
                 this.showAtLocation(parent, Gravity.BOTTOM, 0, 0);

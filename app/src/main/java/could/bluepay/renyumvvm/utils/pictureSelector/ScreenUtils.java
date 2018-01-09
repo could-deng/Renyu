@@ -22,11 +22,23 @@ public class ScreenUtils {
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
         return localDisplayMetrics.widthPixels;
     }
+
+    /**
+     * 获取屏幕高度（减去了状态栏的高度）
+     * @param context
+     * @return
+     */
     public static int getScreenHeight(Context context) {
         DisplayMetrics localDisplayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
         return localDisplayMetrics.heightPixels - getStatusBarHeight(context);
     }
+
+    /**
+     * 获取上方状态栏的高度
+     * @param context
+     * @return
+     */
     public static int getStatusBarHeight(Context context){
         Class<?> c = null;
         Object obj = null;

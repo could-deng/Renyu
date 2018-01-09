@@ -16,15 +16,20 @@
     <color name="colorPageBg">#f2f4f5</color>
 
     <!--recycleView底部view文字-->
-    <color name="colorBlackTitle">#999</color>
+    <color name="colorBlackTitle">#333333</color>
 
 
 
 
-    <!--主页tab背景-->
+    <!--主页上方tab背景-->
     <color name="colorTabTextCheck">#ffffffff</color>
     <color name="colorTabTextNormal">#ffffffff</color>
     <color name="colorTabLine">#ffffffff</color>
+
+    <!--mainActivity下方四个tab-->
+    <color name="colorBottomTabTextCheck">#00B4AA</color>
+    <color name="colorBottomTabTextNormal">#777D7D7D</color>
+
 
     <!--水波纹或5.0以上选择器颜色-->
     <color name="tabBackground">#777D7D7D</color>
@@ -45,7 +50,7 @@
     <color name="color_aeaeae">#aeaeae</color>
     <color name="colorText_abb2c8">#abb2c8</color>
     <color name="im_social_dig_name_bg">#DDDDDD</color>
-    <color name="line_color">#dadada</color>
+    <color name="line_color">#dadada</color><!--分隔线颜色-->
 
     <color name="transparent">#00ffffff</color><!-- Transparent white -->
 
@@ -66,21 +71,25 @@
 
     <!--pictureSelector-->
     <color name="color_f6">#f6f6f6</color>
-    <color name="bar_grey">#393a3e</color>
+    <color name="bar_grey">#00B4AA</color><!--#393a3e-->
     <color name="black">#000000</color>
     <color name="blue">#7D7DFF</color>
     <color name="color_69">#999999</color>
     <color name="image_overlay_true">#80000000</color>
     <color name="image_overlay_false">#20000000</color>
     <color name="color_fa">#FAFAFA</color>
-    <color name="tab_color_true">#FA632D</color>
+
+    <color name="tab_color_true">#00B4AA</color>
     <color name="tab_color_false">#9b9b9b</color>
+
     <color name="color_f2">#F2F2F2</color>
-    <color name="transparent_white">#F0FFFFFF</color>
+
+    <color name="transparent_white">#F0FFFFFF</color><!--图片文件夹选择框item背景-->
     <color name="transparent_db">#E0DBDBDB</color>
+
     <color name="color_53">#53575e</color>
     <color name="color_f0">#F0F0F0</color>
     <color name="bar_grey_90">#dd393a3e</color>
     <color name="color_4d">#4d4d4d</color>
-    <color name="color_orange">#E0FF6100</color>
+    <color name="color_red">#DC143C</color>
 </resources>

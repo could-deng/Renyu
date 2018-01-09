@@ -8,7 +8,6 @@ import com.squareup.leakcanary.RefWatcher;
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.R;
-import could.bluepay.renyumvvm.view.base.BaseFragment;
 import could.bluepay.renyumvvm.databinding.FragmentVipBinding;
 
 /**

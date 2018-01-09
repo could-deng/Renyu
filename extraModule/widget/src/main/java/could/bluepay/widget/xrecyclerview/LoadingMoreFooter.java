@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import could.bluepay.widget.R;
@@ -18,9 +19,14 @@ public class LoadingMoreFooter extends LinearLayout {
     public final static int STATE_LOADING = 0;
     public final static int STATE_COMPLETE = 1;
     public final static int STATE_NOMORE = 2;
+
+    private LinearLayout llContainer;
     private TextView mText;
     private AnimationDrawable mAnimationDrawable;
     private ImageView mIvProgress;
+
+
+    private RelativeLayout rlFootNoMore;
 
     public LoadingMoreFooter(Context context) {
         super(context);
@@ -41,6 +47,10 @@ public class LoadingMoreFooter extends LinearLayout {
         mText = (TextView) findViewById(R.id.msg);
         mIvProgress = (ImageView) findViewById(R.id.iv_progress);
         mAnimationDrawable = (AnimationDrawable) mIvProgress.getDrawable();
+        llContainer = (LinearLayout) findViewById(R.id.ll_container);
+
+        rlFootNoMore = (RelativeLayout) findViewById(R.id.rl_foot_no_more);
+
         if (!mAnimationDrawable.isRunning()) {
             mAnimationDrawable.start();
         }
@@ -55,6 +65,10 @@ public class LoadingMoreFooter extends LinearLayout {
                 }
                 mIvProgress.setVisibility(View.VISIBLE);
                 mText.setText(getContext().getText(R.string.listview_loading));
+
+                llContainer.setVisibility(View.VISIBLE);
+                rlFootNoMore.setVisibility(View.GONE);
+
                 this.setVisibility(View.VISIBLE);
                 break;
             case STATE_COMPLETE:
@@ -62,14 +76,20 @@ public class LoadingMoreFooter extends LinearLayout {
                     mAnimationDrawable.stop();
                 }
                 mText.setText(getContext().getText(R.string.listview_loading));
+                llContainer.setVisibility(View.VISIBLE);
+                rlFootNoMore.setVisibility(View.GONE);
+
                 this.setVisibility(View.GONE);
+
                 break;
             case STATE_NOMORE:
                 if (mAnimationDrawable.isRunning()) {
                     mAnimationDrawable.stop();
                 }
-                mText.setText(getContext().getText(R.string.nomore_loading));
-                mIvProgress.setVisibility(View.GONE);
+//                mText.setText(getContext().getText(R.string.nomore_loading));
+//                mIvProgress.setVisibility(View.GONE);
+                llContainer.setVisibility(View.GONE);
+                rlFootNoMore.setVisibility(View.VISIBLE);
                 this.setVisibility(View.VISIBLE);
                 break;
         }

@@ -14,6 +14,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropMulti;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,7 @@ import could.bluepay.renyumvvm.common.config.PictureConfig;
 import could.bluepay.renyumvvm.common.config.PictureMimeType;
 import could.bluepay.renyumvvm.common.config.PictureSelectionConfig;
 import could.bluepay.renyumvvm.rx.RxBus;
+import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.utils.pictureSelector.AttrsUtils;
 import could.bluepay.renyumvvm.utils.pictureSelector.DateUtils;
 import could.bluepay.renyumvvm.utils.pictureSelector.DoubleUtils;
@@ -82,10 +87,10 @@ public class PictureBaseActivity extends FragmentActivity {
                 (this, R.attr.picture_style_checkNumMode);
         selectionMedias = config.selectionMedias;
         if (selectionMedias == null) {
-            selectionMedias = new ArrayList<>();
+            selectionMedias = new ArrayList<>();//根据指针应用操作config.selectionMedias
         }
         if (config.selectionMode == PictureConfig.SINGLE) {
-            selectionMedias = new ArrayList<>();
+            selectionMedias = new ArrayList<>();//根据指针应用操作config.selectionMedias
         }
     }
 
@@ -173,6 +178,9 @@ public class PictureBaseActivity extends FragmentActivity {
 
     /**
      * compressImage
+     * 应用场景：1.PictureSelectorActivity选完图片后回到PublishActivity
+     *          2.PictureSelctorActivity点击拍照，拍完照片后，重新回到PictureSelectorActivity
+     *
      */
     protected void compressImage(final List<LocalMedia> result) {
         showCompressDialog();
@@ -252,28 +260,29 @@ public class PictureBaseActivity extends FragmentActivity {
      * @param originalPath
      */
     protected void startCrop(String originalPath) {
-//        UCrop.Options options = new UCrop.Options();
-//        int toolbarColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_toolbar_bg);
-//        int statusColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_status_color);
-//        int titleColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_title_color);
-//        options.setToolbarColor(toolbarColor);
-//        options.setStatusBarColor(statusColor);
-//        options.setToolbarWidgetColor(titleColor);
-//        options.setCircleDimmedLayer(config.circleDimmedLayer);
-//        options.setShowCropFrame(config.showCropFrame);
-//        options.setShowCropGrid(config.showCropGrid);
-//        options.setCompressionQuality(config.cropCompressQuality);
-//        options.setHideBottomControls(config.hideBottomControls);
-//        options.setFreeStyleCropEnabled(config.freeStyleCropEnabled);
-//        boolean isHttp = PictureMimeType.isHttp(originalPath);
-//        String imgType = PictureMimeType.getLastImgType(originalPath);
-//        Uri uri = isHttp ? Uri.parse(originalPath) : Uri.fromFile(new File(originalPath));
-//        UCrop.of(uri, Uri.fromFile(new File(PictureFileUtils.getDiskCacheDir(this),
-//                System.currentTimeMillis() + imgType)))
-//                .withAspectRatio(config.aspect_ratio_x, config.aspect_ratio_y)
-//                .withMaxResultSize(config.cropWidth, config.cropHeight)
-//                .withOptions(options)
-//                .start(this);
+        Logger.e(Logger.DEBUG_TAG,"PictureBaseActivity,startCrop(),去裁剪");
+        UCrop.Options options = new UCrop.Options();
+        int toolbarColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_toolbar_bg);
+        int statusColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_status_color);
+        int titleColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_title_color);
+        options.setToolbarColor(toolbarColor);
+        options.setStatusBarColor(statusColor);
+        options.setToolbarWidgetColor(titleColor);
+        options.setCircleDimmedLayer(config.circleDimmedLayer);
+        options.setShowCropFrame(config.showCropFrame);
+        options.setShowCropGrid(config.showCropGrid);
+        options.setCompressionQuality(config.cropCompressQuality);
+        options.setHideBottomControls(config.hideBottomControls);
+        options.setFreeStyleCropEnabled(config.freeStyleCropEnabled);
+        boolean isHttp = PictureMimeType.isHttp(originalPath);
+        String imgType = PictureMimeType.getLastImgType(originalPath);
+        Uri uri = isHttp ? Uri.parse(originalPath) : Uri.fromFile(new File(originalPath));
+        UCrop.of(uri, Uri.fromFile(new File(PictureFileUtils.getDiskCacheDir(this),
+                System.currentTimeMillis() + imgType)))
+                .withAspectRatio(config.aspect_ratio_x, config.aspect_ratio_y)
+                .withMaxResultSize(config.cropWidth, config.cropHeight)
+                .withOptions(options)
+                .start(this);
     }
 
     /**
@@ -282,32 +291,32 @@ public class PictureBaseActivity extends FragmentActivity {
      * @param list
      */
     protected void startCrop(ArrayList<String> list) {
-//        UCropMulti.Options options = new UCropMulti.Options();
-//        int toolbarColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_toolbar_bg);
-//        int statusColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_status_color);
-//        int titleColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_title_color);
-//        options.setToolbarColor(toolbarColor);
-//        options.setStatusBarColor(statusColor);
-//        options.setToolbarWidgetColor(titleColor);
-//        options.setCircleDimmedLayer(config.circleDimmedLayer);
-//        options.setShowCropFrame(config.showCropFrame);
-//        options.setShowCropGrid(config.showCropGrid);
-//        options.setScaleEnabled(config.scaleEnabled);
-//        options.setRotateEnabled(config.rotateEnabled);
-//        options.setHideBottomControls(true);
-//        options.setCompressionQuality(config.cropCompressQuality);
-//        options.setCutListData(list);
-//        options.setFreeStyleCropEnabled(config.freeStyleCropEnabled);
-//        String path = list.size() > 0 ? list.get(0) : "";
-//        boolean isHttp = PictureMimeType.isHttp(path);
-//        String imgType = PictureMimeType.getLastImgType(path);
-//        Uri uri = isHttp ? Uri.parse(path) : Uri.fromFile(new File(path));
-//        UCropMulti.of(uri, Uri.fromFile(new File(PictureFileUtils.getDiskCacheDir(this),
-//                System.currentTimeMillis() + imgType)))
-//                .withAspectRatio(config.aspect_ratio_x, config.aspect_ratio_y)
-//                .withMaxResultSize(config.cropWidth, config.cropHeight)
-//                .withOptions(options)
-//                .start(this);
+        UCropMulti.Options options = new UCropMulti.Options();
+        int toolbarColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_toolbar_bg);
+        int statusColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_status_color);
+        int titleColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_title_color);
+        options.setToolbarColor(toolbarColor);
+        options.setStatusBarColor(statusColor);
+        options.setToolbarWidgetColor(titleColor);
+        options.setCircleDimmedLayer(config.circleDimmedLayer);
+        options.setShowCropFrame(config.showCropFrame);
+        options.setShowCropGrid(config.showCropGrid);
+        options.setScaleEnabled(config.scaleEnabled);
+        options.setRotateEnabled(config.rotateEnabled);
+        options.setHideBottomControls(true);
+        options.setCompressionQuality(config.cropCompressQuality);
+        options.setCutListData(list);
+        options.setFreeStyleCropEnabled(config.freeStyleCropEnabled);
+        String path = list.size() > 0 ? list.get(0) : "";
+        boolean isHttp = PictureMimeType.isHttp(path);
+        String imgType = PictureMimeType.getLastImgType(path);
+        Uri uri = isHttp ? Uri.parse(path) : Uri.fromFile(new File(path));
+        UCropMulti.of(uri, Uri.fromFile(new File(PictureFileUtils.getDiskCacheDir(this),
+                System.currentTimeMillis() + imgType)))
+                .withAspectRatio(config.aspect_ratio_x, config.aspect_ratio_y)
+                .withMaxResultSize(config.cropWidth, config.cropHeight)
+                .withOptions(options)
+                .start(this);
     }
 
 
@@ -334,7 +343,7 @@ public class PictureBaseActivity extends FragmentActivity {
 
 
     /**
-     * compress or callback
+     * 压缩图片再返回，或者不压缩直接返回
      *
      * @param result
      */
@@ -366,7 +375,7 @@ public class PictureBaseActivity extends FragmentActivity {
     }
 
     /**
-     * 将图片插入到相机文件夹中
+     * 获取存储图片的文件夹（如果已经有就返回，没有就创建）
      *
      * @param path
      * @param imageFolders

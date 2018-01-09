@@ -181,7 +181,7 @@ public class NewVPIndicator extends LinearLayout implements ViewPager.OnPageChan
 //            final int index = i;
 //            itemTab.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                @Override
-//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                public void onCheckedChanged(CompoundButton buttonView, boolean ismChecked) {
 //
 //                    if(tabClickListener!=null) {
 //                        tabClickListener.onViewClick(index);
@@ -259,13 +259,13 @@ public class NewVPIndicator extends LinearLayout implements ViewPager.OnPageChan
 //                    if(i == position) {
 //                        final RadioButton rb = (RadioButton) tabGroup.getChildAt(position);
 //                        rb.setOnCheckedChangeListener(null);
-//                        if(rb.isChecked() != true){
-//                            rb.setChecked(true);
+//                        if(rb.ismChecked() != true){
+//                            rb.setmChecked(true);
 //                        }
 //                        rb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                            @Override
-//                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                                if(!isChecked) return;
+//                            public void onCheckedChanged(CompoundButton buttonView, boolean ismChecked) {
+//                                if(!ismChecked) return;
 //                                if(mViewpager.get()!=null){
 //                                    mViewpager.get().setCurrentItem(position,false);
 //                                }
@@ -274,8 +274,8 @@ public class NewVPIndicator extends LinearLayout implements ViewPager.OnPageChan
 //                    }
 //                    else{
 //                        RadioButton rb = (RadioButton) tabGroup.getChildAt(position);
-//                        if(rb.isChecked()!=false){
-//                            rb.setChecked(false);
+//                        if(rb.ismChecked()!=false){
+//                            rb.setmChecked(false);
 //                        }
 //                    }
 //                }

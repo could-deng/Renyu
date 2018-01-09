@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--将app拍照所得的照片共享给手机系统媒体库-->
+    <paths>
+        <!--分享app外部的目录-->
+        <external-path
+            name="camera_photos"
+            path="" />
+        <!--path=“images/” 就是你所要共享的文件路径。-->
+        <!--name="myimages" 就是告诉FileProvider 用 myimages 添加进URIs 内容字段去访问 files/images/ 的子目录。-->
+    </paths>
+</resources>

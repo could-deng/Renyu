@@ -11,11 +11,7 @@ import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.common.config.PictureMimeType;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.tool
- * email：893855882@qq.com
- * data：2017/5/25
+ *
  */
 
 public class StringUtils {
@@ -42,9 +38,15 @@ public class StringUtils {
         tv.setText(placeSpan);
     }
 
+    /**
+     * 设置Drawable位于TextView的相对位置
+     * @param v
+     * @param drawable
+     * @param index 0:左 1：上 2：右 3：下
+     */
     public static void modifyTextViewDrawable(TextView v, Drawable drawable, int index) {
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        //index 0:左 1：上 2：右 3：下
+
         if (index == 0) {
             v.setCompoundDrawables(drawable, null, null, null);
         } else if (index == 1) {

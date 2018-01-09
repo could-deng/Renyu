@@ -11,13 +11,14 @@
     android:background="@color/colorPrimary">
     <!--android:id="@+id/toolbar"-->
 
+
     <TextView
         android:id="@+id/tv_toolbar_title"
         style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/AppTitle"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textColor="@color/textColorPrimary"
         android:layout_gravity="center"
         android:maxLines="1"

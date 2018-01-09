@@ -1,7 +1,5 @@
 package could.bluepay.renyumvvm.utils.pictureSelector;
 
-import android.util.Log;
-
 /**
  * author：luck
  * project：PictureSelector

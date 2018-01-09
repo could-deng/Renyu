@@ -1,6 +1,8 @@
 package could.bluepay.renyumvvm.view.activity;
 
 
+import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -17,20 +19,21 @@ import could.bluepay.renyumvvm.common.entity.LocalMedia;
 import could.bluepay.renyumvvm.common.config.PictureConfig;
 import could.bluepay.renyumvvm.common.config.PictureMimeType;
 import could.bluepay.renyumvvm.common.manager.FullyGridLayoutManager;
+import could.bluepay.renyumvvm.common.permissions.RxPermissions;
 import could.bluepay.renyumvvm.databinding.ActivityPublicBinding;
+import could.bluepay.renyumvvm.utils.Logger;
+import could.bluepay.renyumvvm.utils.ViewUtils;
+import could.bluepay.renyumvvm.utils.pictureSelector.PictureFileUtils;
 import could.bluepay.renyumvvm.utils.pictureSelector.PictureSelector;
 import could.bluepay.renyumvvm.view.adapter.GridImageAdapter;
-import could.bluepay.renyumvvm.view.base.BaseActivity;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 发布朋友圈
  */
 
 public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
-    public static final int PublishTypePicture = 1;
-    public static final int PublishTypeVideo = 2;
-
-
     public static final int PublishTypeNormalPicture = 1;
     public static final int PublishTypeRedPackagePicture = 2;
     public static final int PublishTypeNormalVideo = 3;
@@ -40,7 +43,6 @@ public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
     public static final String PUBLISHTYPETAG = "publishType";
 
     private int maxSelectSize = 1;
-    private int selectType = PublishTypePicture;
 
     private List<LocalMedia> selectList = new ArrayList<>();
     private GridImageAdapter imageAdapter;
@@ -51,6 +53,10 @@ public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
         initToolbar();
         showBackTab();
         initView();
+        if(savedInstanceState!=null){
+            publishType = savedInstanceState.getInt("publishType");
+            maxSelectSize = savedInstanceState.getInt("maxSelectSize");
+        }
         permissionAllow();
     }
 
@@ -71,13 +77,13 @@ public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
 
     private void initView(){
 
-        publishType = getIntent().getIntExtra(PUBLISHTYPETAG,PublishTypeNormalPicture);
-        if(publishType == PublishTypeNormalPicture || publishType == PublishTypeRedPackagePicture){
-            maxSelectSize = 9;
-            selectType = PublishTypePicture;
-        }else if(publishType == PublishTypeNormalVideo || publishType == PublishTypeRedPackageVideo){
-            maxSelectSize = 1;
-            selectType = PublishTypeVideo;
+        if(getIntent()!=null) {
+            publishType = getIntent().getIntExtra(PUBLISHTYPETAG, PublishTypeNormalPicture);
+            if (publishType == PublishTypeNormalPicture || publishType == PublishTypeRedPackagePicture) {
+                maxSelectSize = 9;
+            } else if (publishType == PublishTypeNormalVideo || publishType == PublishTypeRedPackageVideo) {
+                maxSelectSize = 1;
+            }
         }
 
         imageAdapter = new GridImageAdapter(PublishActivity.this,onAddPicClickListener)
@@ -88,34 +94,35 @@ public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
         (binding).rvActivityPublish.setLayoutManager(manager);
 
         (binding).rvActivityPublish.setAdapter(imageAdapter);
-
+        binding.tvPublishDivider.setHeight(ViewUtils.dp2px(this,1));
     }
+
     private void permissionAllow(){
         // 清空图片缓存，包括裁剪、压缩后的图片 注意:必须要在上传完成后调用 必须要获取权限
-//        RxPermissions permissions = new RxPermissions(this);
-//        permissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Observer<Boolean>() {
-//            @Override
-//            public void onSubscribe(Disposable d) {
-//            }
-//
-//            @Override
-//            public void onNext(Boolean aBoolean) {
-//                if (aBoolean) {
-//                    PictureFileUtils.deleteCacheDirFile(MainActivity.this);
-//                } else {
-//                    Toast.makeText(MainActivity.this,
-//                            getString(R.string.picture_jurisdiction), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//            }
-//        });
+        RxPermissions permissions = new RxPermissions(this);
+        permissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Observer<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                if (aBoolean) {
+                    PictureFileUtils.deleteCacheDirFile(PublishActivity.this);
+                } else {
+                    Toast.makeText(PublishActivity.this,
+                            getString(R.string.picture_jurisdiction), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
     }
 
     private GridImageAdapter.OnAddPicClickListener onAddPicClickListener = new GridImageAdapter.OnAddPicClickListener() {
@@ -123,7 +130,7 @@ public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
         public void onAddPicClick() {
 // 进入相册 以下是例子：不需要的api可以不写
             PictureSelector.create(PublishActivity.this)
-                    .openGallery(PictureMimeType.ofAll())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                    .openGallery(getPictureSelectorType(publishType))// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                     .theme(R.style.picture_default_style)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style
                     .maxSelectNum(maxSelectSize)// 最大图片选择数量
                     .minSelectNum(1)// 最小选择数量
@@ -136,19 +143,19 @@ public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
                     .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
                     //.imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
                     //.setOutputCameraPath("/CustomPath")// 自定义拍照保存路径
-                    .enableCrop(false)// 是否裁剪
+                    .enableCrop(true)// 是否裁剪
                     .compress(true)// 是否压缩
                     .synOrAsy(true)//同步true或异步false 压缩 默认同步
-                    //.compressSavePath(getPath())//压缩图片保存地址
+//                    .compressSavePath(getPath())//压缩图片保存地址
                     //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
                     .glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
-                    .withAspectRatio(16, 9)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
+                    .withAspectRatio(0, 0)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                     .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示
                     .isGif(true)// 是否显示gif图片
-                    .freeStyleCropEnabled(true)// 裁剪框是否可拖拽
+                    .freeStyleCropEnabled(false)// 裁剪框是否可拖拽
                     .circleDimmedLayer(false)// 是否圆形裁剪
-                    .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false
-                    .showCropGrid(false)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false
+                    .showCropFrame(true)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false
+                    .showCropGrid(true)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false
                     .openClickSound(false)// 是否开启点击声音
                     .selectionMedia(selectList)// 是否传入已选图片
 //                        .videoMaxSecond(15)
@@ -166,8 +173,59 @@ public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
         }
     };
 
+//    /**
+//     * 自定义压缩存储地址
+//     * @return
+//     */
+//    private String getPath() {
+//        String path = Environment.getExternalStorageDirectory() + "/" + Config.AppName+ "/Luban/image/";
+//        File file = new File(path);
+//        if (file.mkdirs()) {
+//            return path;
+//        }
+//        return path;
+//    }
 
+    private int getPictureSelectorType(int type){
+        int selectorType;//默认是全部
+        switch (type){
+            case PublishActivity.PublishTypeNormalPicture:
+            case PublishActivity.PublishTypeRedPackagePicture:
+                selectorType = PictureMimeType.ofImage();
+                break;
+            case PublishActivity.PublishTypeNormalVideo:
+            case PublishActivity.PublishTypeRedPackageVideo:
+                selectorType = PictureMimeType.ofVideo();
+                break;
+            default:
+                selectorType = PictureMimeType.ofAll();
+        }
+        return selectorType;
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            switch (requestCode){
+                case PictureConfig.CHOOSE_REQUEST:
+                    selectList = PictureSelector.obtainMultipleResult(data);
+                    for(LocalMedia media:selectList){
+                        Logger.e(Logger.DEBUG_TAG,"PublishActivity,选择图片结束->"+media.getPath());
+                    }
+                    imageAdapter.setDataList(selectList);
+                    imageAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("publishType",publishType);
+        outState.putInt("maxSelectSize",maxSelectSize);
+    }
 
     public void onMenuTabFirstClick(){
         Toast.makeText(this,"发布",Toast.LENGTH_SHORT).show();

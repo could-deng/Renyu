@@ -24,11 +24,7 @@ import could.bluepay.renyumvvm.common.entity.LocalMediaFolder;
 
 
 /**
- * author：luck
- * project：LocalMediaLoader
- * package：com.luck.picture.ui
- * email：893855882@qq.com
- * data：16/12/31
+ * 本地媒体库加载类
  */
 
 public class LocalMediaLoader {
@@ -147,14 +143,14 @@ public class LocalMediaLoader {
                         try {
                             List<LocalMediaFolder> imageFolders = new ArrayList<>();
                             LocalMediaFolder allImageFolder = new LocalMediaFolder();
-                            List<LocalMedia> latelyImages = new ArrayList<>();
+                            List<LocalMedia> latelyImages = new ArrayList<>();//全部图片
                             if (data != null) {
                                 int count = data.getCount();
                                 if (count > 0) {
                                     data.moveToFirst();
                                     do {
                                         String path = data.getString
-                                                (data.getColumnIndexOrThrow(PROJECTION[1]));
+                                                (data.getColumnIndexOrThrow(PROJECTION[1]));///storage/emulated/0/PictureSelector/CameraImage/PictureSelector_20180102_102706.JPEG
 
                                         String pictureType = data.getString
                                                 (data.getColumnIndexOrThrow(PROJECTION[2]));
@@ -172,7 +168,7 @@ public class LocalMediaLoader {
                                                 (path, duration, type, pictureType, w, h);
 
                                         LocalMediaFolder folder = getImageFolder(path, imageFolders);
-                                        List<LocalMedia> images = folder.getImages();
+                                        List<LocalMedia> images = folder.getImages();//指针引用
                                         images.add(image);
                                         folder.setImageNum(folder.getImageNum() + 1);
                                         latelyImages.add(image);

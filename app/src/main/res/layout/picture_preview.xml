@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="?attr/picture.ac_preview.title.bg">
 
         <ImageView

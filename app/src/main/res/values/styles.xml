@@ -1,5 +1,6 @@
 <resources>
 
+    <!--application的Theme-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -13,7 +14,7 @@
         <item name="android:windowExitAnimation">@anim/pop_exit_anim</item>
     </style>
 
-    <!--BottomDialog主题-->
+    <!--BottomDialog的style-->
     <style name="BottomDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowTitleStyle">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -35,6 +36,7 @@
         <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
+    <!--菊花转圈等待dialog的样式-->
     <style name="DialogWindowStyle">
         <item name="android:windowEnterAnimation">@anim/modal_in</item>
         <item name="android:windowExitAnimation">@anim/modal_out</item>
@@ -45,6 +47,7 @@
         <item name="android:windowExitAnimation">@anim/a3</item>
     </style>
 
+    <!--设计到pictureSelector的Activity的theme-->
     <style name="activity.Theme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
@@ -98,10 +101,12 @@
         <item name="colorPrimary">@color/bar_grey</item>
         <!--状态栏背景色-->
         <item name="colorPrimaryDark">@color/bar_grey</item>
+
+
         <!--是否改变图片列表界面状态栏字体颜色为黑色-->
         <item name="picture.statusFontColor">false</item>
         <!--返回键图标-->
-        <item name="picture.leftBack.icon">@drawable/picture_back</item>
+        <item name="picture.leftBack.icon">@drawable/nav_back</item>
         <!--标题下拉箭头-->
         <item name="picture.arrow_down.icon">@drawable/arrow_down</item>
         <!--标题上拉箭头-->
@@ -124,6 +129,8 @@
         <item name="picture.complete.textColor">@color/picture_list_text_color</item>
         <!--图片已选数量圆点背景色-->
         <item name="picture.num.style">@drawable/num_oval</item>
+
+
         <!--预览界面标题文字颜色-->
         <item name="picture.ac_preview.title.textColor">@color/white</item>
         <!--预览界面已完成文字颜色-->
@@ -132,12 +139,16 @@
         <item name="picture.ac_preview.title.bg">@color/bar_grey</item>
         <!--预览界面底部背景色-->
         <item name="picture.ac_preview.bottom.bg">@color/bar_grey_90</item>
-        <!--预览界面状态栏颜色-->
-        <item name="picture.status.color">@color/bar_grey_90</item>
+
+        <!--全选浏览界面和单个预览界面状态栏颜色-->
+        <item name="picture.status.color">@color/bar_grey</item>
+
         <!--预览界面返回箭头-->
-        <item name="picture.preview.leftBack.icon">@drawable/picture_back</item>
+        <item name="picture.preview.leftBack.icon">@drawable/nav_back</item>
         <!--是否改变预览界面状态栏字体颜色为黑色-->
         <item name="picture.preview.statusFontColor">false</item>
+
+
         <!--裁剪页面标题背景色-->
         <item name="picture.crop.toolbar.bg">@color/bar_grey</item>
         <!--裁剪页面状态栏颜色-->

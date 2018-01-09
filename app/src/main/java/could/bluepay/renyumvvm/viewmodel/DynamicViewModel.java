@@ -151,7 +151,7 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
     public void loadDynamicData(boolean ifFirstPage){
         if(ifFirstPage) {
             page = 1;
-            mModel.setData(((MainActivity) context).getUid(), page);
+            mModel.setData(((MainActivity) context).getUid());
         }else{
             page++;
         }

@@ -8,7 +8,9 @@ import android.view.Window;
 
 import could.bluepay.renyumvvm.R;
 
-
+/**
+ * 菊花等待框
+ */
 public class PictureDialog extends Dialog {
     public Context context;
 

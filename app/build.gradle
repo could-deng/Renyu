@@ -48,30 +48,34 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-//    compile 'com.android.support:appcompat-v7:23.4.0'
-//    compile 'com.android.support:design:23.4.0'
-//    compile 'com.android.support:cardview-v7:23.4.0'
-//    compile 'com.android.support:support-v4:23.4.0'
 
-//    compile 'io.reactivex:rxandroid:1.2.0'
+    //    compile 'com.android.support:appcompat-v7:23.4.0'
+    //    compile 'com.android.support:design:23.4.0'
+    //    compile 'com.android.support:cardview-v7:23.4.0'
+    //    compile 'com.android.support:support-v4:23.4.0'
+    //    compile 'io.reactivex:rxandroid:1.2.0'
+
+    //rxjava、rxAndroid、glide、gson
     compile 'io.reactivex.rxjava2:rxjava:2.0.5'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-//    compile 'jp.wasabeef:glide-transformations:2.0.1'//在glide基础上增加图形转换功能
+    //    compile 'jp.wasabeef:glide-transformations:2.0.1'//在glide基础上增加图形转换功能
     compile 'com.github.bumptech.glide:glide:4.0.0'
-
-
-    compile 'com.contrarywind:Android-PickerView:3.2.5'
     compile 'com.google.code.gson:gson:2.6.2'
 
+    //控件
+    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.contrarywind:Android-PickerView:3.2.5'
 
+    //优化工具
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     compile 'com.github.moduth:blockcanary-ui:1.2.0'
 
 
+    //本地库
     compile project(':extraModule:widget')
     compile project(':extraModule:http')
     compile project(':extraModule:couldutils')
+    compile project(':extraModule:ucrop')
 }

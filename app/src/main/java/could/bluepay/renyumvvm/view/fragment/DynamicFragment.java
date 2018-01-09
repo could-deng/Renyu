@@ -10,7 +10,6 @@ import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.R;
-import could.bluepay.renyumvvm.view.base.BaseFragment;
 import could.bluepay.renyumvvm.databinding.FragmentDynamicBinding;
 import could.bluepay.renyumvvm.viewmodel.DynamicViewModel;
 import could.bluepay.widget.xrecyclerview.XRecyclerView;

@@ -7,11 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.entity
- * email：893855882@qq.com
- * data：16/12/31
+ * LocalMedia所存储的文件夹
  */
 public class LocalMediaFolder implements Parcelable {
     private String name;

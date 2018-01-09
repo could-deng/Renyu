@@ -5,12 +5,7 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.entity
- * describe：for PictureSelector media entity.
- * email：893855882@qq.com
- * data：2017/5/24
+ * 资源对象
  */
 
 public class LocalMedia implements Parcelable {
@@ -21,8 +16,8 @@ public class LocalMedia implements Parcelable {
     private boolean isChecked;
     private boolean isCut;
     public int position;
-    private int num;
-    private int mimeType;
+    private int num;//编号，如果LocalMedia在集合中,编号代表选中的序号
+    private int mimeType;//对应PictureConfig.TYPE_ALL等
     private String pictureType;
     private boolean compressed;
     private int width;
@@ -39,6 +34,15 @@ public class LocalMedia implements Parcelable {
         this.pictureType = pictureType;
     }
 
+    /**
+     * 由LoaderManager查询媒体库文件得到的参数构建而得LocalMedia类
+     * @param path
+     * @param duration
+     * @param mimeType
+     * @param pictureType
+     * @param width
+     * @param height
+     */
     public LocalMedia(String path, long duration, int mimeType, String pictureType, int width, int height) {
         this.path = path;
         this.duration = duration;
@@ -48,6 +52,15 @@ public class LocalMedia implements Parcelable {
         this.height = height;
     }
 
+    /**
+     * 裁剪单个图片后构建的LocalMedia
+     * @param path
+     * @param duration
+     * @param isChecked
+     * @param position
+     * @param num
+     * @param mimeType
+     */
     public LocalMedia(String path, long duration,
                       boolean isChecked, int position, int num, int mimeType) {
         this.path = path;

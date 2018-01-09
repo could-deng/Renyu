@@ -2,7 +2,7 @@ package could.bluepay.renyumvvm.rx;
 
 /**
  *
- * Created by gorden on 2016/7/23.
+ * Flowable上游执行的线程枚举
  */
 public enum ThreadMode {
     /**

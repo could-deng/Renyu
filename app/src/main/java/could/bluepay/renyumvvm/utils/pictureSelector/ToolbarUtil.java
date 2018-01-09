@@ -9,15 +9,14 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.tool
- * email：893855882@qq.com
- * data：2017/5/25
+ * 顶部状态栏工具
  */
 
 public class ToolbarUtil {
 
+    /**
+     * 默认状态栏透明度
+     */
     private static final int DEFAULT_STATUS_BAR_ALPHA = 15;
 
     /**

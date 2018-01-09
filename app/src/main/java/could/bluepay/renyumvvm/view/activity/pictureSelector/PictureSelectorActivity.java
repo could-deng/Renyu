@@ -23,6 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropMulti;
+import com.yalantis.ucrop.model.CutInfo;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,11 +38,13 @@ import could.bluepay.renyumvvm.common.entity.LocalMediaFolder;
 import could.bluepay.renyumvvm.common.config.PictureConfig;
 import could.bluepay.renyumvvm.common.config.PictureMimeType;
 import could.bluepay.renyumvvm.common.model.LocalMediaLoader;
+import could.bluepay.renyumvvm.common.observable.ImagesObservable;
 import could.bluepay.renyumvvm.common.permissions.RxPermissions;
 import could.bluepay.renyumvvm.rx.RxBus;
 import could.bluepay.renyumvvm.rx.Subscribe;
 import could.bluepay.renyumvvm.rx.ThreadMode;
 import could.bluepay.renyumvvm.utils.Logger;
+import could.bluepay.renyumvvm.utils.pictureSelector.AttrsUtils;
 import could.bluepay.renyumvvm.utils.pictureSelector.DateUtils;
 import could.bluepay.renyumvvm.utils.pictureSelector.DoubleUtils;
 import could.bluepay.renyumvvm.utils.pictureSelector.LightStatusBarUtils;
@@ -47,6 +52,7 @@ import could.bluepay.renyumvvm.utils.pictureSelector.PictureFileUtils;
 import could.bluepay.renyumvvm.utils.pictureSelector.PictureSelector;
 import could.bluepay.renyumvvm.utils.pictureSelector.ScreenUtils;
 import could.bluepay.renyumvvm.utils.pictureSelector.StringUtils;
+import could.bluepay.renyumvvm.utils.pictureSelector.ToolbarUtil;
 import could.bluepay.renyumvvm.view.adapter.PictureAlbumDirectoryAdapter;
 import could.bluepay.renyumvvm.view.adapter.PictureImageGridAdapter;
 import could.bluepay.renyumvvm.widget.dialog.CustomDialog;
@@ -55,7 +61,9 @@ import could.bluepay.renyumvvm.widget.pictureSelector.PhotoPopupWindow;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-
+/**
+ * sd卡图片GridView浏览Activity
+ */
 public class PictureSelectorActivity extends PictureBaseActivity implements View.OnClickListener,
         PictureAlbumDirectoryAdapter.OnItemClickListener,
         PictureImageGridAdapter.OnPhotoSelectChangedListener, PhotoPopupWindow.OnItemClickListener {
@@ -89,27 +97,27 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case SHOW_DIALOG:
+                case SHOW_DIALOG://展示loading框
                     showPleaseDialog();
                     break;
-                case DISMISS_DIALOG:
+                case DISMISS_DIALOG://取消loading框
                     dismissDialog();
                     break;
-                case STATUSBAR:
+                case STATUSBAR://设置顶部状态栏
                     LightStatusBarUtils.setLightStatusBar(PictureSelectorActivity.this, statusFont);
                     break;
             }
         }
     };
 
-    //EventBus 3.0 回调
+    //仿照EventBus 3.0 回调，在RxBus，register()使用
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventBus(EventEntity obj) {
         switch (obj.what) {
             case PictureConfig.UPDATE_FLAG:
                 // 预览时勾选图片更新回调
                 List<LocalMedia> selectImages = obj.medias;
-                anim = selectImages.size() > 0 ? true : false;
+                anim = true;//selectImages.size() >= 0 ? true : false
                 int position = obj.position;
                 adapter.bindSelectImages(selectImages);
                 adapter.notifyItemChanged(position);
@@ -133,11 +141,16 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //rxjava注册
         if (!RxBus.getDefault().isRegistered(this)) {
             RxBus.getDefault().register(this);
         }
         rxPermissions = new RxPermissions(this);
+        //状态栏
         mHandler.sendEmptyMessage(STATUSBAR);
+        int status_color = AttrsUtils.getTypeValueColor(this, R.attr.picture_status_color);
+        ToolbarUtil.setColorNoTranslucent(this, status_color);
+
         if (config.camera) {
             setTheme(R.style.activity_Theme_Transparent);
             if (savedInstanceState == null) {
@@ -218,6 +231,9 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         folderWindow = new FolderPopWindow(this, config.mimeType);
         folderWindow.setPictureTitleView(picture_title);
         folderWindow.setOnItemClickListener(this);
+
+        //  setHasFixedSize 的作用就是确保尺寸是通过用户输入从而确保RecyclerView的尺寸是一个常数。RecyclerView 的Item宽或者高不会变。每一个Item添加或者删除都不会变。
+        //  如果你没有设置setHasFixedSized没有设置的代价将会是非常昂贵的。因为RecyclerView会需要而外计算每个item的size
         picture_recycler.setHasFixedSize(true);
         picture_recycler.addItemDecoration(new GridSpacingItemDecoration(config.imageSpanCount,
                 ScreenUtils.dip2px(this, 2), false));
@@ -290,7 +306,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     }
 
     /**
-     * get LocalMedia s
+     * 搜索本地媒体库
      */
     protected void readLocalMedia() {
         mediaLoader.loadAllMedia(new LocalMediaLoader.LocalMediaLoadListener() {
@@ -324,7 +340,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     }
 
     /**
-     * open camera
+     * 启动相机
      */
     public void startCamera() {
         // 防止快速点击，但是单独拍照不管
@@ -358,7 +374,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     }
 
     /**
-     * start to camera、preview、crop
+     * 拍照
      */
     public void startOpenCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -375,7 +391,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     }
 
     /**
-     * start to camera、video
+     * 录视频
      */
     public void startOpenCameraVideo() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -394,7 +410,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     }
 
     /**
-     * start to camera audio
+     * 录音
      */
     public void startOpenCameraAudio() {
         rxPermissions.request(Manifest.permission.RECORD_AUDIO).subscribe(new Observer<Boolean>() {
@@ -438,17 +454,18 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
      */
     private Uri parUri(File cameraFile) {
         Uri imageUri;
-        String authority = getPackageName() + ".provider";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        String authority = getPackageName() + ".provider";//要和Manifest中Provider声明的authorities一致
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//android7.0获取图片权限问题解决
             //通过FileProvider创建一个content类型的Uri
-            imageUri = FileProvider.getUriForFile(mContext, authority, cameraFile);
+            //FileProvider 是一个特殊的 ContentProvider 的子类，它使用 content:// Uri 代替了 file:/// Uri. ，更便利而且安全的为另一个app分享文件
+            imageUri = FileProvider.getUriForFile(mContext, authority, cameraFile);//uri生成方式改为FileProvider提供临时授权路径
         } else {
             imageUri = Uri.fromFile(cameraFile);
         }
         return imageUri;
     }
 
-
+    //region===========点击事件==============
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -459,7 +476,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 closeActivity();
             }
         }
-        if (id == R.id.picture_title) {
+        if (id == R.id.picture_title) {//点击文件夹标题
             if (folderWindow.isShowing()) {
                 folderWindow.dismiss();
             } else {
@@ -471,23 +488,23 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             }
         }
 
-        if (id == R.id.picture_id_preview) {
-//            List<LocalMedia> selectedImages = adapter.getSelectedImages();
-//
-//            List<LocalMedia> medias = new ArrayList<>();
-//            for (LocalMedia media : selectedImages) {
-//                medias.add(media);
-//            }
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable(PictureConfig.EXTRA_PREVIEW_SELECT_LIST, (Serializable) medias);
-//            bundle.putSerializable(PictureConfig.EXTRA_SELECT_LIST, (Serializable) selectedImages);
-//            bundle.putBoolean(PictureConfig.EXTRA_BOTTOM_PREVIEW, true);
-//            startActivity(PicturePreviewActivity.class, bundle, UCropMulti.REQUEST_MULTI_CROP);
-//            overridePendingTransition(R.anim.a5, 0);
+        if (id == R.id.picture_id_preview) {//图片预览
+            List<LocalMedia> selectedImages = adapter.getSelectedImages();
+
+            List<LocalMedia> medias = new ArrayList<>();
+            for (LocalMedia media : selectedImages) {
+                medias.add(media);
+            }
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(PictureConfig.EXTRA_PREVIEW_SELECT_LIST, (Serializable) medias);
+            bundle.putSerializable(PictureConfig.EXTRA_SELECT_LIST, (Serializable) selectedImages);
+            bundle.putBoolean(PictureConfig.EXTRA_BOTTOM_PREVIEW, true);
+            startActivity(PicturePreviewActivity.class, bundle, UCropMulti.REQUEST_MULTI_CROP);
+            overridePendingTransition(R.anim.a5, 0);
         }
 
         if (id == R.id.id_ll_ok) {
-            List<LocalMedia> images = adapter.getSelectedImages();
+            List<LocalMedia> images = adapter.getSelectedImages();//以adapter的selectedImages为准
             String pictureType = images.size() > 0 ? images.get(0).getPictureType() : "";
             // 如果设置了图片最小选择数量，则判断是否满足条件
             int size = images.size();
@@ -516,72 +533,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
     }
 
-    /**
-     * 播放音频
-     *
-     * @param path
-     */
-    private void audioDialog(final String path) {
-        audioDialog = new CustomDialog(mContext,
-                LinearLayout.LayoutParams.MATCH_PARENT, audioH
-                ,
-                R.layout.picture_audio_dialog, R.style.Theme_dialog);
-        audioDialog.getWindow().setWindowAnimations(R.style.Dialog_Audio_StyleAnim);
-        tv_musicStatus = (TextView) audioDialog.findViewById(R.id.tv_musicStatus);
-        tv_musicTime = (TextView) audioDialog.findViewById(R.id.tv_musicTime);
-        musicSeekBar = (SeekBar) audioDialog.findViewById(R.id.musicSeekBar);
-        tv_musicTotal = (TextView) audioDialog.findViewById(R.id.tv_musicTotal);
-        tv_PlayPause = (TextView) audioDialog.findViewById(R.id.tv_PlayPause);
-        tv_Stop = (TextView) audioDialog.findViewById(R.id.tv_Stop);
-        tv_Quit = (TextView) audioDialog.findViewById(R.id.tv_Quit);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                initPlayer(path);
-            }
-        }, 30);
-        tv_PlayPause.setOnClickListener(new audioOnClick(path));
-        tv_Stop.setOnClickListener(new audioOnClick(path));
-        tv_Quit.setOnClickListener(new audioOnClick(path));
-        musicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser == true) {
-                    mediaPlayer.seekTo(progress);
-                }
-            }
+    //endregion===========点击事件==============
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-        audioDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                handler.removeCallbacks(runnable);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        stop(path);
-                    }
-                }, 30);
-                try {
-                    if (audioDialog != null
-                            && audioDialog.isShowing()) {
-                        audioDialog.dismiss();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        handler.post(runnable);
-        audioDialog.show();
-    }
 
     //  通过 Handler 更新 UI 上的组件状态
     public Handler handler = new Handler();
@@ -602,6 +555,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
     };
 
+    //region========音频相关=======================
     /**
      * 初始化音频播放组件
      *
@@ -721,6 +675,9 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
     }
 
+    //endregion========音频相关=======================
+
+
     @Override
     public void onItemClick(String folderName, List<LocalMedia> images) {
         boolean camera = StringUtils.isCamera(folderName);
@@ -731,6 +688,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         folderWindow.dismiss();
     }
 
+
+    //region======PictureImageGridAdapter回调====================
     @Override
     public void onTakePhoto() {
         // 启动相机拍照,先判断手机是否有拍照权限
@@ -775,72 +734,74 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         startPreview(images, position);
     }
 
+
+
+
+
     /**
-     * preview image and video
-     *
+     * 开启图片浏览或者视频播放
      * @param previewImages
      * @param position
      */
     public void startPreview(List<LocalMedia> previewImages, int position) {
-        // TODO: 2017/12/26 暂时注释
-//        LocalMedia media = previewImages.get(position);
-//        String pictureType = media.getPictureType();
-//        Bundle bundle = new Bundle();
-//        List<LocalMedia> result = new ArrayList<>();
-//        int mediaType = PictureMimeType.isPictureType(pictureType);
-////        DebugUtil.i(TAG, "mediaType:" + mediaType);
-//        Logger.i(TAG,"mediaType:" + mediaType);
-//        switch (mediaType) {
-//            case PictureConfig.TYPE_IMAGE:
-//                // image
-//                if (config.selectionMode == PictureConfig.SINGLE) {
-//                    if (config.enableCrop) {
-//                        originalPath = media.getPath();
-//                        boolean gif = PictureMimeType.isGif(pictureType);
-//                        if (gif) {
-//                            result.add(media);
-//                            handlerResult(result);
-//                        } else {
-//                            startCrop(originalPath);
-//                        }
-//                    } else {
-//                        result.add(media);
-//                        handlerResult(result);
-//                    }
-//                } else {
-//                    List<LocalMedia> selectedImages = adapter.getSelectedImages();
-//                    ImagesObservable.getInstance().saveLocalMedia(previewImages);
-//                    bundle.putSerializable(PictureConfig.EXTRA_SELECT_LIST, (Serializable) selectedImages);
-//                    bundle.putInt(PictureConfig.EXTRA_POSITION, position);
-//                    startActivity(PicturePreviewActivity.class, bundle, UCropMulti.REQUEST_MULTI_CROP);
-//                    overridePendingTransition(R.anim.a5, 0);
-//                }
-//                break;
-//            case PictureConfig.TYPE_VIDEO:
-//                // video
-//                if (config.selectionMode == PictureConfig.SINGLE) {
-//                    result.add(media);
-//                    onResult(result);
-//                } else {
-//                    bundle.putString("video_path", media.getPath());
-//                    startActivity(PictureVideoPlayActivity.class, bundle);
-//                }
-//                break;
-//            case PictureConfig.TYPE_AUDIO:
-//                // audio
-//                if (config.selectionMode == PictureConfig.SINGLE) {
-//                    result.add(media);
-//                    onResult(result);
-//                } else {
-//                    audioDialog(media.getPath());
-//                }
-//                break;
-//        }
+        LocalMedia media = previewImages.get(position);
+        String pictureType = media.getPictureType();
+        Bundle bundle = new Bundle();
+        List<LocalMedia> result = new ArrayList<>();
+        int mediaType = PictureMimeType.isPictureType(pictureType);
+//        DebugUtil.i(TAG, "mediaType:" + mediaType);
+        Logger.i(TAG,"mediaType:" + mediaType);
+        switch (mediaType) {
+            case PictureConfig.TYPE_IMAGE:
+                // image
+                if (config.selectionMode == PictureConfig.SINGLE) {
+                    if (config.enableCrop) {
+                        originalPath = media.getPath();
+                        boolean gif = PictureMimeType.isGif(pictureType);
+                        if (gif) {
+                            result.add(media);
+                            handlerResult(result);
+                        } else {
+                            startCrop(originalPath);
+                        }
+                    } else {
+                        result.add(media);
+                        handlerResult(result);
+                    }
+                } else {
+                    List<LocalMedia> selectedImages = adapter.getSelectedImages();
+                    ImagesObservable.getInstance().saveLocalMedia(previewImages);
+                    bundle.putSerializable(PictureConfig.EXTRA_SELECT_LIST, (Serializable) selectedImages);
+                    bundle.putInt(PictureConfig.EXTRA_POSITION, position);
+                    startActivity(PicturePreviewActivity.class, bundle, UCropMulti.REQUEST_MULTI_CROP);
+                    overridePendingTransition(R.anim.a5, 0);
+                }
+                break;
+            case PictureConfig.TYPE_VIDEO:
+                // video
+                if (config.selectionMode == PictureConfig.SINGLE) {
+                    result.add(media);
+                    onResult(result);
+                } else {
+                    bundle.putString("video_path", media.getPath());
+                    startActivity(PictureVideoPlayActivity.class, bundle);
+                }
+                break;
+            case PictureConfig.TYPE_AUDIO:
+                // audio
+                if (config.selectionMode == PictureConfig.SINGLE) {
+                    result.add(media);
+                    onResult(result);
+                } else {
+                    audioDialog(media.getPath());
+                }
+                break;
+        }
     }
 
 
     /**
-     * change image selector state
+     *  更新底部栏信息
      *
      * @param selectImages
      */
@@ -888,6 +849,76 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     }
 
 
+    /**
+     * 播放音频
+     *
+     * @param path
+     */
+    private void audioDialog(final String path) {
+        audioDialog = new CustomDialog(mContext,
+                LinearLayout.LayoutParams.MATCH_PARENT, audioH
+                ,
+                R.layout.picture_audio_dialog, R.style.Theme_dialog);
+        audioDialog.getWindow().setWindowAnimations(R.style.Dialog_Audio_StyleAnim);
+        tv_musicStatus = (TextView) audioDialog.findViewById(R.id.tv_musicStatus);
+        tv_musicTime = (TextView) audioDialog.findViewById(R.id.tv_musicTime);
+        musicSeekBar = (SeekBar) audioDialog.findViewById(R.id.musicSeekBar);
+        tv_musicTotal = (TextView) audioDialog.findViewById(R.id.tv_musicTotal);
+        tv_PlayPause = (TextView) audioDialog.findViewById(R.id.tv_PlayPause);
+        tv_Stop = (TextView) audioDialog.findViewById(R.id.tv_Stop);
+        tv_Quit = (TextView) audioDialog.findViewById(R.id.tv_Quit);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initPlayer(path);
+            }
+        }, 30);
+        tv_PlayPause.setOnClickListener(new audioOnClick(path));
+        tv_Stop.setOnClickListener(new audioOnClick(path));
+        tv_Quit.setOnClickListener(new audioOnClick(path));
+        musicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser == true) {
+                    mediaPlayer.seekTo(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        audioDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handler.removeCallbacks(runnable);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        stop(path);
+                    }
+                }, 30);
+                try {
+                    if (audioDialog != null
+                            && audioDialog.isShowing()) {
+                        audioDialog.dismiss();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        handler.post(runnable);
+        audioDialog.show();
+    }
+
+    //endregion======PictureImageGridAdapter回调====================
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -895,38 +926,37 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             LocalMedia media;
             String imageType;
             switch (requestCode) {
-                // TODO: 2017/12/26 暂时注释
-//                case UCrop.REQUEST_CROP:
-//                    Uri resultUri = UCrop.getOutput(data);
-//                    String cutPath = resultUri.getPath();
-//                    media = new LocalMedia(originalPath, 0, false, 0, 0, config.mimeType);
-//                    media.setCutPath(cutPath);
-//                    media.setCut(true);
-//                    imageType = PictureMimeType.createImageType(cutPath);
-//                    media.setPictureType(imageType);
-//                    medias.add(media);
-//                    Logger.i(TAG, "cut createImageType:" + imageType);
-//                    handlerResult(medias);
-//                    break;
-//                case UCropMulti.REQUEST_MULTI_CROP:
-//                    List<CutInfo> cuts = UCropMulti.getOutput(data);
-//                    for (CutInfo c : cuts) {
-//                        media = new LocalMedia();
-//                        imageType = PictureMimeType.createImageType(c.getPath());
-//                        media.setCut(true);
-//                        media.setPath(c.getPath());
-//                        media.setCutPath(c.getCutPath());
-//                        media.setPictureType(imageType);
-//                        media.setMimeType(config.mimeType);
-//                        medias.add(media);
-//                    }
-//                    handlerResult(medias);
-//                    break;
+                case UCrop.REQUEST_CROP:
+                    Uri resultUri = UCrop.getOutput(data);
+                    String cutPath = resultUri.getPath();
+                    media = new LocalMedia(originalPath, 0, false, 0, 0, config.mimeType);
+                    media.setCutPath(cutPath);
+                    media.setCut(true);
+                    imageType = PictureMimeType.createImageType(cutPath);
+                    media.setPictureType(imageType);
+                    medias.add(media);
+                    Logger.i(TAG, "cut createImageType:" + imageType);
+                    handlerResult(medias);
+                    break;
+                case UCropMulti.REQUEST_MULTI_CROP:
+                    List<CutInfo> cuts = UCropMulti.getOutput(data);
+                    for (CutInfo c : cuts) {
+                        media = new LocalMedia();
+                        imageType = PictureMimeType.createImageType(c.getPath());
+                        media.setCut(true);
+                        media.setPath(c.getPath());
+                        media.setCutPath(c.getCutPath());
+                        media.setPictureType(imageType);
+                        media.setMimeType(config.mimeType);
+                        medias.add(media);
+                    }
+                    handlerResult(medias);
+                    break;
                 case PictureConfig.REQUEST_CAMERA:
                     isAudio(data);
                     // on take photo success
                     final File file = new File(cameraPath);
-                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));//作用,因为设置了FileProvider，共享拍照所得的照片，发送重新扫描资源库的广播，使的媒体库刷新
                     String toType = PictureMimeType.fileToType(file);
                     Logger.i(TAG, "camera result:" + toType);
                     if (config.mimeType != PictureMimeType.ofAudio()) {
@@ -1008,16 +1038,16 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     }
                     break;
             }
-        } else if (resultCode == RESULT_CANCELED) {
+        }
+        else if (resultCode == RESULT_CANCELED) {
             if (config.camera) {
                 closeActivity();
             }
         }
-        // TODO: 2017/12/26 暂时注释
-//        else if (resultCode == UCrop.RESULT_ERROR) {
-//            Throwable throwable = (Throwable) data.getSerializableExtra(UCrop.EXTRA_ERROR);
-//            showToast(throwable.getMessage());
-//        }
+        else if (resultCode == UCrop.RESULT_ERROR) {
+            Throwable throwable = (Throwable) data.getSerializableExtra(UCrop.EXTRA_ERROR);
+            showToast(throwable.getMessage());
+        }
     }
 
 
@@ -1036,7 +1066,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 cameraFolder.setFirstImagePath(media.getPath());
                 cameraFolder.setImages(images);
                 cameraFolder.setImageNum(cameraFolder.getImageNum() + 1);
-                // 拍照相册
+                // 存储新拍照图片的文件夹
                 int num = folder.getImageNum() + 1;
                 folder.setImageNum(num);
                 folder.getImages().add(0, media);
@@ -1061,8 +1091,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         if (RxBus.getDefault().isRegistered(this)) {
             RxBus.getDefault().unregister(this);
         }
-        // TODO: 2017/12/26 暂时注释
-//        ImagesObservable.getInstance().clearLocalMedia();
+        ImagesObservable.getInstance().clearLocalMedia();
         if (animation != null) {
             animation.cancel();
             animation = null;

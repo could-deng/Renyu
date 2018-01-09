@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -25,7 +26,7 @@ import could.bluepay.renyumvvm.utils.Logger;
  * Created by liuheng on 2015/6/21.
  * <p></p>
  */
-public class PhotoView extends ImageView {
+public class PhotoView extends AppCompatImageView {
 
     private final static int MIN_ROTATE = 35;
     private final static int ANIMA_DURING = 340;

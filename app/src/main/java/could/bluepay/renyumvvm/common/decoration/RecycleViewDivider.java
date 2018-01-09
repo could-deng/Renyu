@@ -12,11 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.adapter
- * email：893855882@qq.com
- * data：16/12/31
+ * RecycleView分割
  */
 
 public class RecycleViewDivider extends RecyclerView.ItemDecoration {
@@ -25,7 +21,7 @@ public class RecycleViewDivider extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
     private int mDividerHeight = 2;//分割线高度，默认为1px
     private int mOrientation;//列表的方向：LinearLayoutManager.VERTICAL或LinearLayoutManager.HORIZONTAL
-    private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
+    private static final int[] ATTRS = new int[]{android.R.attr.listDivider};//默认的divider样式
 
     /**
      * 默认分割线：高度为2px，颜色为灰色
@@ -39,7 +35,7 @@ public class RecycleViewDivider extends RecyclerView.ItemDecoration {
         }
         mOrientation = orientation;
 
-        final TypedArray a = context.obtainStyledAttributes(ATTRS);
+        final TypedArray a = context.obtainStyledAttributes(ATTRS);//获取attr的值
         mDivider = a.getDrawable(0);
         a.recycle();
     }
@@ -104,7 +100,7 @@ public class RecycleViewDivider extends RecyclerView.ItemDecoration {
             final int bottom = top + mDividerHeight;
             if (mDivider != null) {
                 mDivider.setBounds(left, top, right, bottom);
-                mDivider.draw(canvas);
+                mDivider.draw(canvas);//往画布上画Drawable
             }
             if (mPaint != null) {
                 canvas.drawRect(left, top, right, bottom, mPaint);

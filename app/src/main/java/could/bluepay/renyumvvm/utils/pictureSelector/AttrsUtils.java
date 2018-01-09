@@ -6,11 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.tools
- * email：893855882@qq.com
- * data：2017/5/27
+ * 在代码中获取attr的值
  */
 
 public class AttrsUtils {

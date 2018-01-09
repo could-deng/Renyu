@@ -7,15 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.model
- * email：893855882@qq.com
- * data：2017/4/28
+ * 上下游传递的对象
+ * 事件对象
  */
 
 public class EventEntity implements Parcelable {
-    public int what;
+    public int what;//事件类型
     public int position;
     public List<LocalMedia> medias = new ArrayList<>();
 

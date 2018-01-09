@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--attr样式-->
     <declare-styleable name="ExpandTextView">
         <attr name="showLines" format="integer"/>
     </declare-styleable>
@@ -10,7 +12,8 @@
     </declare-styleable>
 
 
-
+    <!--attr的值-->
+    <!--主题切换可实现-->
     <attr name="picture.title.textColor" format="reference|color" />
     <attr name="picture.right.textColor" format="reference|color" />
     <attr name="picture.leftBack.icon" format="reference" />
@@ -27,7 +30,7 @@
     <attr name="picture.ac_preview.bottom.bg" format="reference|color" />
     <attr name="picture.status.color" format="reference|color" />
     <attr name="picture.preview.leftBack.icon" format="reference" />
-    <attr name="picture.statusFontColor" format="boolean" />
+    <attr name="picture.statusFontColor" format="boolean" /><!--顶部的状态栏颜色是否暗色-->
     <attr name="picture.preview.statusFontColor" format="boolean" />
     <attr name="picture.style.numComplete" format="boolean" />
     <attr name="picture.style.checkNumMode" format="boolean" />
