@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/picture.ac_preview.title.bg">
@@ -59,7 +58,6 @@
         android:layout_weight="1" />
 
     <RelativeLayout
-        android:id="@+id/select_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="?attr/picture.ac_preview.bottom.bg"

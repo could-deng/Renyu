@@ -14,15 +14,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
-import could.bluepay.couldutils.transAnim.ActivityTransition;
-import could.bluepay.couldutils.transAnim.ExitActivityTransition;
-import could.bluepay.couldutils.util.ThreadManager;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.databinding.ActivityPictureViewPagerBinding;
 import could.bluepay.renyumvvm.http.bean.PhotoInfo;
 import could.bluepay.renyumvvm.model.MemExchange;
 import could.bluepay.renyumvvm.utils.ViewUtils;
 import could.bluepay.renyumvvm.view.adapter.PhotoViewPagerAdapter;
+import could.bluepay.widget.transAnim.ActivityTransition;
+import could.bluepay.widget.transAnim.ExitActivityTransition;
+import could.bluepay.widget.util.ThreadManager;
 
 /**
  * Created by bluepay on 2017/12/8.

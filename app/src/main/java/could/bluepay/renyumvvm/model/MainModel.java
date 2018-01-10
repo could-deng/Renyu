@@ -3,6 +3,8 @@ package could.bluepay.renyumvvm.model;
 import android.text.TextUtils;
 import org.json.JSONObject;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
+
 import could.bluepay.renyumvvm.Config;
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.common.PrefsHelper;
@@ -15,6 +17,8 @@ import could.bluepay.renyumvvm.utils.Logger;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
