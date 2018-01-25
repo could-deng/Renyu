@@ -3,12 +3,13 @@ package could.bluepay.renyumvvm.view.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
 /**
- * Created by bluepay on 2017/11/22.
+ * TotalFragment上的三个Fragment适配器
  */
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -37,10 +38,17 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         return mFragment.size();
     }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        super.destroyItem(container, position, object);
-    }
+
+//    @Override
+//    public void destroyItem(ViewGroup container, int position, Object object) {
+//        super.destroyItem(container, position, object);
+//        try {
+//            container.removeView((View) object);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+
 
     @Override
     public CharSequence getPageTitle(int position) {
@@ -50,4 +58,34 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
             return "";
         }
     }
+
+
+//    public List<? extends Fragment> getViews(){
+//        return mFragment;
+//    }
+
+//    /**
+//     *
+//     * @param index 指定位置
+//     * @return 获取指定位置视图
+//     */
+//    public Fragment getViewOfIndex(int index){
+//        if(getViews() == null)return null;
+//        if(index < 0 || index >= getCount())return null;
+//        return getViews().get(index);
+//    }
+
+    public void clear() {
+        if(mFragment==null){
+            return;
+        }
+        for (Fragment fragment : mFragment) {
+            if (fragment != null && fragment.isAdded()) {
+                fragment.onDestroy();
+            }
+        }
+        mFragment.clear();
+    }
+
+
 }

@@ -1,9 +1,7 @@
 package could.bluepay.renyumvvm.view.adapter;
 
-import android.app.Activity;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.ClipDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -27,7 +25,7 @@ import could.bluepay.renyumvvm.utils.PerfectClickListener;
 
 public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private Activity context;
+    private Context context;
 
     private int status = 1;//footview状态标示位
     public static final int LOAD_MORE = 0;//正在加载更多
@@ -43,7 +41,7 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private List<UserBeanItem> userData;
 
-    public UserListAdapter(Activity context) {
+    public UserListAdapter(Context context) {
         this.context = context;
         this.userData = new ArrayList<>();
     }
@@ -55,6 +53,9 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void addList(List<UserBeanItem> userData){
         this.userData.addAll(userData);
         notifyDataSetChanged();
+    }
+    public boolean haveData(){
+        return userData!=null && userData.size()>0;
     }
 
     @Override

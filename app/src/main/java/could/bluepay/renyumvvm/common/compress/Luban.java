@@ -10,8 +10,6 @@ import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
 import android.util.Log;
-
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

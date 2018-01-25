@@ -41,7 +41,7 @@ public class NewVPIndicator extends LinearLayout implements ViewPager.OnPageChan
 
     private String[] mTitles;
 
-    public void setmTitles(String[] titles){
+    public void setTitles(String[] titles){
         mTitles = titles;
     }
 
@@ -87,7 +87,7 @@ public class NewVPIndicator extends LinearLayout implements ViewPager.OnPageChan
 
         mPaint = new Paint();
         mPaint.setColor(mIndicatorColor);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.BUTT);
         mPaint.setStrokeWidth(2 * mIndicatorHeight);
     }
 

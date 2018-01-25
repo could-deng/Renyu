@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewModel"
-            type="could.bluepay.renyumvvm.view.fragment.MyFragment"/>
+            type="could.bluepay.renyumvvm.viewmodel.MyFragmentViewModel"/>
+        <variable
+            name="adapter"
+            type="could.bluepay.renyumvvm.view.adapter.bindingAdapter.DynamicBindingAdapter"/>
+        <variable
+            name="layoutManager"
+            type="android.support.v7.widget.RecyclerView.LayoutManager"/>
     </data>
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <could.bluepay.widget.xrecyclerview.XRecyclerView
+            android:id="@+id/xrv_my"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:adapter="@{adapter}"
+            android:setLoadingListener="@{viewModel.loadingListener}"
+            android:layoutManager="@{layoutManager}"
+            android:addOnChildAttachStateChangeListener="@{viewModel.attachStateChangeListener}"
+            >
+
+        </could.bluepay.widget.xrecyclerview.XRecyclerView>
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:id="@+id/bt_test"
             android:text="test"
             android:onClick="onClick"/>
-    </RelativeLayout>
+    </LinearLayout>
 </layout>

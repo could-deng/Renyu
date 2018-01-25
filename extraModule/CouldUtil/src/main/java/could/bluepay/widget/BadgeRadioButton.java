@@ -48,8 +48,8 @@ public class BadgeRadioButton extends FrameLayout{
     public BadgeRadioButton(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initViews(context);
-//        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.BadgeRadioButton);
-        TypedArray a= context.getTheme().obtainStyledAttributes(attrs,R.styleable.BadgeRadioButton,0,0);
+        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.BadgeRadioButton);
+//        TypedArray a= context.getTheme().obtainStyledAttributes(attrs,R.styleable.BadgeRadioButton,0,0);
         Drawable drawableTop = a.getDrawable(R.styleable.BadgeRadioButton_drawable_top);
         checkedColor = a.getColor(R.styleable.BadgeRadioButton_text_color_checked,Color.BLACK);
         uncheckedColor = a.getColor(R.styleable.BadgeRadioButton_text_color_unchecked,Color.BLACK);

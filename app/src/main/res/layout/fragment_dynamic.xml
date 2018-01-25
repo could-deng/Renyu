@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
+            name="viewModel"
+            type="could.bluepay.renyumvvm.viewmodel.DynamicViewModel"/>
+        <variable
             name="adapter"
             type="could.bluepay.renyumvvm.view.adapter.bindingAdapter.DynamicBindingAdapter"/>
         <variable
@@ -18,7 +21,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:adapter="@{adapter}"
-            app:layoutManager="@{layoutManager}">
+            android:setLoadingListener="@{viewModel.loadingListener}"
+            android:layoutManager="@{layoutManager}"
+            android:addOnChildAttachStateChangeListener="@{viewModel.attachStateChangeListener}"
+            >
 
         </could.bluepay.widget.xrecyclerview.XRecyclerView>
     </RelativeLayout>

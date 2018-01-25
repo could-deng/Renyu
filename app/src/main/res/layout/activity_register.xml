@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewModel"
+            type="could.bluepay.renyumvvm.viewmodel.RegisterViewModel"/>
+    </data>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/layout_toolbar"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/et_register_mobile"
+                style="@style/activity_login_edittext"
+                android:drawableLeft="@drawable/register_mobile"
+                android:hint="@string/activity_register_account_mobile"
+                android:imeOptions="actionNext"
+                />
+            <EditText
+                android:id="@+id/et_register_username"
+                style="@style/activity_login_edittext"
+                android:drawableLeft="@drawable/register_user"
+                android:hint="@string/activity_login_account_hint"
+                android:imeOptions="actionNext"
+                />
+            <EditText
+                android:id="@+id/et_register_psw"
+                style="@style/activity_login_edittext"
+                android:drawableLeft="@drawable/register_password"
+                android:hint="@string/activity_login_password_hint"/>
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="295dp"
+                style="@style/common_square_button"
+                android:layout_marginTop="5dp"
+                android:text="@string/activity_register" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

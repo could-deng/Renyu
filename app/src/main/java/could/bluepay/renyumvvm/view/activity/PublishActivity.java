@@ -10,15 +10,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.common.entity.LocalMedia;
 import could.bluepay.renyumvvm.common.config.PictureConfig;
 import could.bluepay.renyumvvm.common.config.PictureMimeType;
 import could.bluepay.renyumvvm.common.manager.FullyGridLayoutManager;
+import could.bluepay.renyumvvm.common.memoryleak.TextLineUtils;
 import could.bluepay.renyumvvm.common.permissions.RxPermissions;
 import could.bluepay.renyumvvm.databinding.ActivityPublicBinding;
 import could.bluepay.renyumvvm.utils.Logger;
@@ -94,7 +93,7 @@ public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
         (binding).rvActivityPublish.setLayoutManager(manager);
 
         (binding).rvActivityPublish.setAdapter(imageAdapter);
-        binding.tvPublishDivider.setHeight(ViewUtils.dp2px(this,1));
+//        binding.tvPublishDivider.setHeight(ViewUtils.dp2px(this,1));
     }
 
     private void permissionAllow(){
@@ -236,4 +235,9 @@ public class PublishActivity extends BaseActivity<ActivityPublicBinding>{
         return R.layout.activity_public;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TextLineUtils.clearTextLineCache();
+    }
 }

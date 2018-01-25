@@ -1,6 +1,6 @@
 package could.bluepay.renyumvvm.view.adapter;
 
-import android.app.Activity;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,12 +12,12 @@ import could.bluepay.renyumvvm.databinding.HeaderItemUserlistBinding;
 import could.bluepay.renyumvvm.databinding.ItemLvHotAndNewBinding;
 
 /**
- * Popular列表适配器
+ * FocusFragment-type:hot列表适配器
  */
 
 public class UserListPopularAdapter extends UserListAdapter {
 
-    public UserListPopularAdapter(Activity context) {
+    public UserListPopularAdapter(Context context) {
         super(context);
     }
 

@@ -17,7 +17,7 @@ import could.bluepay.renyumvvm.widget.photo.PhotoView;
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 /**
- * Created by bluepay on 2017/12/8.
+ * PictureViewpagerActivity上的图片适配器
  */
 
 public class PhotoViewPagerAdapter extends PagerAdapter {

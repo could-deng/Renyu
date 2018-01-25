@@ -2,43 +2,38 @@ package could.bluepay.renyumvvm.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-
 import com.squareup.leakcanary.RefWatcher;
-
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.databinding.FragmentDynamicBinding;
 import could.bluepay.renyumvvm.viewmodel.DynamicViewModel;
-import could.bluepay.widget.xrecyclerview.XRecyclerView;
-import io.reactivex.disposables.Disposable;
 
 /**
- * MainActivity底部第二个tab内容
+ * 动态Fragment
  */
 
-public class DynamicFragment extends BaseFragment<FragmentDynamicBinding> {
+public class DynamicFragment extends BaseFragment<FragmentDynamicBinding,DynamicViewModel> {
+
     public static final String TAG = "DynamicFragment";
     public String setFragmentName(){
         return TAG;
     }
 
-//    private MainModel mModel;
-//    private DynamicAdapter dynamicAdapter;
-    private boolean mIsFirst = true;
-
-//    private int page = 0;
-    LinearLayoutManager ll;
+    @Override
+    public DynamicViewModel setViewModel() {
+        if(baseFragmentViewModel == null){
+            baseFragmentViewModel = new DynamicViewModel();
+        }
+        return baseFragmentViewModel;
+    }
 
     public static DynamicFragment getInstance(){
         DynamicFragment instance = new DynamicFragment();
         return instance;
     }
 
-
-    private DynamicViewModel viewModel;
 
     @Override
     protected int getContent() {
@@ -51,52 +46,13 @@ public class DynamicFragment extends BaseFragment<FragmentDynamicBinding> {
         //显示加载中
         showLoading();
 
+        setViewModel().init(bindingView,DynamicFragment.this);
+        bindingView.setViewModel(setViewModel());
+
         //内容
         ((MainActivity)getActivity()).setToolbarTitle(getString(R.string.ui_title_dynamic));
 
-
-
-//        mModel = new MainModel();
-//        dynamicAdapter = new DynamicAdapter();
-//        dynamicAdapter.setModel(mModel);
-//        dynamicAdapter.setUid(((MainActivity)(getActivity())).getUid());
-//        dynamicAdapter.setNickName(PrefsHelper.with(MixApp.getContext(), Config.PREFS_USER).read(Config.SP_KEY_NICKNAME));
-//
-        bindingView.xrvDynamic.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                viewModel.loadDynamicData(true);
-            }
-
-            @Override
-            public void onLoadMore() {
-                viewModel.loadDynamicData(false);
-            }
-        });
-
-
-        viewModel = new DynamicViewModel(bindingView,getActivity());
-
-        viewModel.setUpdateView(new DynamicViewModel.UpdateView() {
-            @Override
-            public void showFragmentContentView(boolean ifSuccess) {
-                showContentView();
-                if(!ifSuccess){//如果是第一页并且是加载失败情况
-                    showError();
-                }
-            }
-
-            @Override
-            public void fragmentAddSubscription(Disposable disposable) {
-                addSubscription(disposable);
-            }
-
-            @Override
-            public void haveSetData() {
-                mIsFirst = false;
-            }
-        });
-        viewModel.setAdapterData();
+        setViewModel().setAdapterData();
 
 
         isPrepared = true;
@@ -109,14 +65,13 @@ public class DynamicFragment extends BaseFragment<FragmentDynamicBinding> {
 
     @Override
     protected void loadData() {
-        Logger.e(Logger.DEBUG_TAG,"DynamicFragment,loadData(),"+(isPrepared?"1":"0")+","+(mIsVisible?"1":"0")+","+(mIsFirst?"1":"0"));
-        if (!isPrepared ) {//|| !mIsFirst
+        Logger.e(Logger.DEBUG_TAG,"DynamicFragment,loadData(),"+(isPrepared?"1":"0")+","+(mIsVisible?"1":"0"));
+        if (!isPrepared || setViewModel().haveData()) {
             return;
         }
         // TODO: 2017/11/28  缓存,如果有缓存，则先showContentView()
 
-        viewModel.loadDynamicData(true);
-
+        setViewModel().onloadData();
     }
 
     @Override
@@ -125,13 +80,10 @@ public class DynamicFragment extends BaseFragment<FragmentDynamicBinding> {
     }
 
 
-    private void clear(){
-        viewModel=null;
-    }
     @Override
     public void onDestroy() {
+        Logger.e(Logger.DEBUG_TAG,TAG+"onDestroy");
         super.onDestroy();
-        clear();
         RefWatcher refWatcher = MixApp.getRefWatcher(getActivity());
         refWatcher.watch(this);
     }

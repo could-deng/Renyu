@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import could.bluepay.renyumvvm.BR;
+import could.bluepay.renyumvvm.R;
+import could.bluepay.renyumvvm.bindingAdapter.messenger.Messenger;
 import could.bluepay.renyumvvm.databinding.ItemDynamicImageBinding;
 import could.bluepay.renyumvvm.databinding.ItemDynamicVideoBinding;
 import could.bluepay.renyumvvm.http.RequestImpl;
@@ -24,6 +26,8 @@ import could.bluepay.renyumvvm.http.bean.WeiboBean;
 import could.bluepay.renyumvvm.utils.AppUtils;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.utils.PerfectClickListener;
+import could.bluepay.renyumvvm.view.activity.MainActivity;
+import could.bluepay.renyumvvm.view.bean.ImageWatchBean;
 import could.bluepay.renyumvvm.viewmodel.DynamicViewModel;
 import could.bluepay.renyumvvm.widget.CommentListView;
 import could.bluepay.renyumvvm.widget.ExpandTextView;
@@ -72,6 +76,29 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
 
     //endregion=====adapter与viewmodel的交互==============
 
+    public DynamicBindingAdapter(Context context,long uid,String nickName,HashMap<Integer,Integer> map,DynamicViewModel.poupWindowClick click){
+        this.context = context;
+        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        if(map!=null && map.size()>0) {
+//            itemTypeToLayoutMap = map;
+//        }else{
+            itemTypeToLayoutMap = new HashMap<>();
+//        }
+        // TODO: 2018/1/12 暂时写死
+        itemTypeToLayoutMap.put(DynamicBindingAdapter.RECYCLER_VIEW_DYNAMIC_TYPE_image, R.layout.item_dynamic_image);
+        itemTypeToLayoutMap.put(DynamicBindingAdapter.RECYCLER_VIEW_DYNAMIC_TYPE_video, R.layout.item_dynamic_video);
+
+        mCollections = new ArrayList<>();
+        mCollectionTypes = new ArrayList<>();
+
+        if(snsPopupWindow == null){
+            snsPopupWindow = new SnsPopupWindow(context);
+        }
+        this.uid = uid;
+        this.nickName = nickName;
+        this.click = click;
+    }
+
     public DynamicBindingAdapter(Context context) {
         this.context = context;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -92,6 +119,7 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
     public void setNickName(String nickName){
         this.nickName = nickName;
     }
+
     public String getNickName(){
         return nickName;
     }
@@ -116,6 +144,10 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
     public void removeAll(){
         mCollections.clear();
         mCollectionTypes.clear();
+    }
+
+    public boolean haveData(){
+        return mCollections!=null && mCollections.size()>0;
     }
 
     @Override
@@ -255,15 +287,12 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
                 binding.multiImageview.setVisibility(View.VISIBLE);
                 binding.multiImageview.setList(photoInfos);
                 binding.multiImageview.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View view,String pictureUrl,int PhotoPosition) {
-//                        click.clickPicture(position,view,pictureUrl,PhotoPosition);
-//                    }
-
                     @Override
                     public void onItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList) {
-                        click.onImageItemClick(view,position,dynamicItem,imagesList,imagesUrlList);
+//                        click.onImageItemClick(view,position,dynamicItem,imagesList,imagesUrlList);
+                        Messenger.getDefault().send(new ImageWatchBean(view,imagesList,imagesUrlList), MainActivity.SHOW_IMAGE_WATCH);
                     }
+
                 });
             }else{
                 binding.multiImageview.setVisibility(View.GONE);

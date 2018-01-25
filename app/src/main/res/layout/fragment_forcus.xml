@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="focus"/>-->
-    <!--</RelativeLayout>-->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="could.bluepay.renyumvvm.viewmodel.FocusFragmentViewModel"/>
+        <variable
+            name="adapter"
+            type="could.bluepay.renyumvvm.view.adapter.UserListAdapter"/>
+        <variable
+            name="layoutManager"
+            type="android.support.v7.widget.RecyclerView.LayoutManager"/>
+    </data>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_focus"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:onRefreshCommand="@{viewModel.onRefreshCommand}"
+        app:setOnRefreshing="@{viewModel.isRefreshing}">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/xrv_focus"
@@ -20,6 +26,12 @@
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarFadeDuration="1"
             android:scrollbarSize="4dp"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical"
+            app:adapter="@{adapter}"
+            android:layoutManager="@{layoutManager}"
+            app:addOnScrollListener="@{viewModel.onScrollListener}"
+            />
+
+
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

@@ -1,27 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_root"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPageBg">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="could.bluepay.renyumvvm.viewmodel.BaseFragmentViewModel"/>
+        <import type="android.view.View"/>
+        <variable
+            name="baseViewModel"
+            type="could.bluepay.renyumvvm.viewmodel.BaseFragmentViewModel"/>
+    </data>
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <RelativeLayout
-        android:id="@+id/container"
+        android:id="@+id/ll_root"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:background="@color/colorPageBg">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="15sp"
+            android:layout_margin="5dp"/>
+        <!--android:text="@{baseViewModel.viewStyle.testInt}"-->
+
+        <RelativeLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{baseViewModel.viewStyle.loadingSuccess?View.VISIBLE:View.GONE}">
+        </RelativeLayout>
         <!--加载失败-->
         <LinearLayout
             android:id="@+id/ll_error_refresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:layout_marginTop="10dp"
-            android:visibility="gone">
+            android:clickCommand="@{baseViewModel.onReloadCommand}"
+            android:visibility="@{baseViewModel.viewStyle.loadingError?View.VISIBLE:View.GONE}">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,8 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="加载失败,点击重试"
-                android:textSize="15sp"
-                />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -40,8 +59,10 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="80dp">
-            <could.bluepay.renyumvvm.widget.dialog.PictureSpinView
+            android:layout_centerInParent="true"
+            android:layout_marginTop="80dp"
+            android:visibility="@{baseViewModel.viewStyle.loadingProcess?View.VISIBLE:View.GONE}">
+            <ProgressBar
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 />
@@ -54,4 +75,4 @@
 
         </LinearLayout>
     </RelativeLayout>
-</LinearLayout>
+</layout>

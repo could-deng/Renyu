@@ -1,9 +1,8 @@
 package could.bluepay.renyumvvm.view.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -11,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.leakcanary.RefWatcher;
@@ -18,9 +18,12 @@ import java.util.List;
 import could.bluepay.renyumvvm.Config;
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.R;
+import could.bluepay.renyumvvm.bindingAdapter.messenger.Messenger;
 import could.bluepay.renyumvvm.common.PrefsHelper;
 import could.bluepay.renyumvvm.databinding.ActivityMainBinding;
 import could.bluepay.renyumvvm.model.MemExchange;
+import could.bluepay.renyumvvm.utils.ViewUtils;
+import could.bluepay.renyumvvm.view.bean.ImageWatchBean;
 import could.bluepay.renyumvvm.view.fragment.DynamicFragment;
 import could.bluepay.renyumvvm.view.fragment.TotalFragment;
 import could.bluepay.renyumvvm.view.fragment.VipFragment;
@@ -31,8 +34,10 @@ import could.bluepay.renyumvvm.widget.statusbar.StatusBarUtil;
 import could.bluepay.widget.BadgeRadioButton;
 import could.bluepay.widget.BadgeRadioGroup;
 import could.bluepay.widget.jiaozivideoplayer.JZVideoPlayer;
+import io.reactivex.functions.Consumer;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
+
 
     private BottomDialogFragment bottomDialog;
 
@@ -45,6 +50,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         initToolbar();
         initRxBus();
         initImageWatch();
+        registeMessage();
         initView();
 //        initContentFragment();
 //        startShowFragment();
@@ -66,12 +72,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if(JZVideoPlayer.backPress()){
             return;
         }
+        finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         clearData();
+        Messenger.getDefault().unregister(this);
         MemExchange.getInstance().clear();
         JZVideoPlayer.releaseAllVideos();
         RefWatcher refWatcher = MixApp.getRefWatcher(this);
@@ -111,7 +119,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         ViewGroup.LayoutParams layoutParams = binding.viewStatus.getLayoutParams();
         layoutParams.height = StatusBarUtil.getStatusBarHeight(this);
         binding.viewStatus.setLayoutParams(layoutParams);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            //透明状态栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            //透明导航栏
+//            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        }
     }
+
+    //region============选择菜单栏==========
+
 
 //region================以viewaPager展示fragment=========================
 //    private ViewPager.OnPageChangeListener onPageChangeListener;
@@ -166,11 +183,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private static final int FRAGMENT_My = 4;
 
     private int currentNavIndex = -1;
-    private TotalFragment totalFragment;
-    private DynamicFragment dynamicFragment;
-    private VipFragment vipFragment;
-    private MyFragment myFragment;
-
 
     @Override
     protected void onResumeFragments() {
@@ -195,7 +207,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     private void switchToFragment(int pageIndex){
-        Fragment fragment = null;
+        Fragment fragment;
         String fragmentTag;
 
         // TODO: 2017/12/22 存在bug，如果切换过快,currentNavIndex改变了，但是fragment没换过来
@@ -208,7 +220,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 fragmentTag = TotalFragment.TAG;
                 fragment = getSupportFragmentManager().findFragmentByTag(TotalFragment.TAG);
                 if(fragment == null) {
-                    fragment = getTotalFragment();
+                    fragment = new TotalFragment();
                 }else{
                     return;
                 }
@@ -217,8 +229,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 fragmentTag = DynamicFragment.TAG;
                 fragment = getSupportFragmentManager().findFragmentByTag(DynamicFragment.TAG);
                 if(fragment == null) {
-//                    fragment = getDynamicFragment();
-//                }else{
+                    fragment = new DynamicFragment();
+                }else{
                     return;
                 }
                 break;
@@ -226,7 +238,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 fragmentTag = VipFragment.TAG;
                 fragment = getSupportFragmentManager().findFragmentByTag(VipFragment.TAG);
                 if(fragment == null) {
-                    fragment = getVipFragment();
+                    fragment = new VipFragment();
                 }else{
                     return;
                 }
@@ -235,7 +247,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 fragmentTag = MyFragment.TAG;
                 fragment = getSupportFragmentManager().findFragmentByTag(MyFragment.TAG);
                 if(fragment == null) {
-                    fragment = getMyFragment();
+                    fragment = new MyFragment();
                 }else{
                     return;
                 }
@@ -271,44 +283,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         rb.setmChecked(true);
         this.currentNavIndex = pageIndex;
     }
-    private TotalFragment getTotalFragment(){
-        if(totalFragment == null){
-            totalFragment = new TotalFragment();
-        }
-        return totalFragment;
-    }
-    private DynamicFragment getDynamicFragment(){
-        if(dynamicFragment == null){
-            dynamicFragment = new DynamicFragment();
-        }
-        return dynamicFragment;
-    }
-    private VipFragment getVipFragment(){
-        if(vipFragment == null){
-            vipFragment = new VipFragment();
-        }
-        return vipFragment;
-    }
-    private MyFragment getMyFragment(){
-        if(myFragment == null){
-            myFragment = new MyFragment();
-        }
-        return myFragment;
-    }
 
 //endregion=====================fragment间以replace方式切换===============
 
 
     //region=========顶部toolbar相关==================
-    public void setIndicator(ViewPager viewpager){
+    public void setIndicator(ViewPager viewpager, String[] titles){
         if(viewpager!=null){
             binding.toolbar.tvToolbarTitle.setVisibility(View.GONE);
 
+//            binding.toolbar.indicator.setVisibility(View.VISIBLE);
+//            binding.toolbar.indicator.setTabMode(TabLayout.GRAVITY_CENTER);
+//            binding.toolbar.indicator.setupWithViewPager(viewpager);
             binding.toolbar.indicator.setVisibility(View.VISIBLE);
-            binding.toolbar.indicator.setTabMode(TabLayout.GRAVITY_CENTER);
-            binding.toolbar.indicator.setupWithViewPager(viewpager);
+            binding.toolbar.indicator.setTitles(titles);
+            binding.toolbar.indicator.setViewPager(viewpager);
         }
     }
+
     public void setToolbarTitle(String title){
         if(TextUtils.isEmpty(title)){
             title = getResources().getString(R.string.app_name);
@@ -329,9 +321,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     //endregion=========顶部toolbar相关==================
     private void initView(){
+        ViewGroup.LayoutParams layoutParams = binding.toolbar.indicator.getLayoutParams();
+        layoutParams.width = ViewUtils.dp2px(MainActivity.this,180);
+        binding.toolbar.indicator.setLayoutParams(layoutParams);
+
         binding.rgOuterFragment.setOnCheckedChangeListener(new BadgeRadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(BadgeRadioGroup group, @IdRes int checkedId) {
+            public void onCheckedChanged(BadgeRadioGroup group,int checkedId) {
                 switch (checkedId){
                     case R.id.rb_list:
                         if(currentNavIndex!=FRAGMENT_Total) {
@@ -445,6 +441,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     //region================imageWatch相关==============
 
+    public static final String SHOW_IMAGE_WATCH = "showImageWatch" + MixApp.appName;
+
     private void initImageWatch(){
         binding.imageWatcher.setTranslucentStatus(StatusBarUtil.getStatusBarHeight(this));
         // 配置error图标
@@ -457,6 +455,20 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             }
         });
     }
+
+    /**
+     * 注册关于Viewmodel之间的消息
+     */
+    private void registeMessage(){
+        Messenger.getDefault().register(this, MainActivity.SHOW_IMAGE_WATCH, ImageWatchBean.class, new Consumer<ImageWatchBean>() {
+                    @Override
+                    public void accept(ImageWatchBean imageWatchBean) throws Exception {
+                        showImageWatch(imageWatchBean.getViewOrigin(),imageWatchBean.getImageViewList(),imageWatchBean.getUrlList());
+                    }
+                }
+        );
+    }
+
     /**
      * 显示ImageWatch
      */

@@ -4,7 +4,7 @@ import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 
 /**
- * Created by bluepay on 2017/12/6.
+ * DynamicBindingAdapter适配器代理RecyclerView.ViewHolder
  */
 
 public class BindingViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {

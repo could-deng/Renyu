@@ -1,4 +1,4 @@
-package could.bluepay.renyumvvm.view.adapter;
+package could.bluepay.renyumvvm.view.adapter.baseadapter;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -17,8 +17,6 @@ import could.bluepay.renyumvvm.model.MainModel;
 import could.bluepay.renyumvvm.utils.AppUtils;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.utils.PerfectClickListener;
-import could.bluepay.renyumvvm.view.adapter.baseadapter.BaseRecyclerViewAdapter;
-import could.bluepay.renyumvvm.view.adapter.baseadapter.BaseRecyclerViewHolder;
 import could.bluepay.renyumvvm.widget.CommentListView;
 import could.bluepay.renyumvvm.widget.ExpandTextView;
 import could.bluepay.renyumvvm.widget.MultiImageView;

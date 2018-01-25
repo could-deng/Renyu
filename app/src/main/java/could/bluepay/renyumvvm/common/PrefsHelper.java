@@ -36,7 +36,23 @@ public class PrefsHelper {
         return read(what,DEFAULTSTRING);
     }
 
+
     //endregion========String=====
+
+    //region=====int============
+    /**
+     * @param what
+     * @param defaultInt
+     * @return Returns the stored value of 'what'
+     */
+    public int readInt(String what, int defaultInt) {
+        return sharedPreferences.getInt(what, defaultInt);
+    }
+
+    public void writeInt(String where,int what){
+        sharedPreferences.edit().putInt(where,what).apply();
+    }
+    //endregion=======int=======
 
     //region========long=========
 

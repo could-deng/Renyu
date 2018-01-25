@@ -8,6 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
+
+
     
     <style name="social_pop_anim" parent="Theme.AppCompat.Dialog">
         <item name="android:windowEnterAnimation">@anim/pop_enter_anim</item>
@@ -20,14 +27,48 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowAnimationStyle">@style/BottomDialog.AnimationStyle</item>
-
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
     </style>
+
     <style name="BottomDialog.AnimationStyle" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_from_top</item>
     </style>
 
 
+    
+    <!--登录注册-->
+    <style name="activity_login_edittext">
+        <item name="android:layout_width">295dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/common_edittext_bg</item>
+        <item name="android:paddingRight">24dp</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:layout_marginTop">22dp</item>
+        <item name="android:textColorHint">@color/gray_text_hint</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/edit_text_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="common_square_button">
+        <item name="android:layout_height">42dp</item>
+        <item name="android:background">@drawable/common_square_button</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="activity_login_text_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@drawable/text_click_selector</item>
+        <item name="android:clickable">true</item>
+    </style>
+    
+    
+    
+    
 
     <!--图片选择相关-->
 

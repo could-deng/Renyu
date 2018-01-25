@@ -1,6 +1,8 @@
-package could.bluepay.renyumvvm.utils;
+package could.bluepay.renyumvvm.bindingAdapter;
 
 import android.databinding.BindingAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +13,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import could.bluepay.renyumvvm.R;
+import could.bluepay.renyumvvm.utils.TimeUtils;
+import could.bluepay.renyumvvm.view.adapter.UserListFocusAdapter;
 import could.bluepay.renyumvvm.widget.GlideCircleTransform;
+import could.bluepay.widget.xrecyclerview.XRecyclerView;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -75,34 +80,33 @@ public class ImgLoadUtil {
 
 
 
-    @BindingAdapter("android:ttext")
-    public static void setText(TextView tv,int text){
-        tv.setText(text+"");
-    }
 
-    @BindingAdapter({"android:inviteShot","android:inviteCity"})
-    public static void setInviteState(TextView tv,int shot,String city){
-        if(shot == 2){
-            tv.setText(city+"-"+"可约拍");
-            tv.setTextColor(tv.getContext().getResources().getColor(R.color.font_color_41));
-        }else{
-            tv.setText(city+"-"+"暂停约拍");
-            tv.setTextColor(tv.getContext().getResources().getColor(R.color.font_color_7));
-        }
-    }
 
-    @BindingAdapter({"android:inviteShot","android:startTime","android:endTime"})
-    public static void setInviteTime(TextView tv,int shot,String shotStart,String shotEnd){
-        if(TextUtils.isEmpty(shotStart)|| TextUtils.isEmpty(shotEnd)){
-            return;
-        }
-        if(shot == 2){
-            tv.setVisibility(View.VISIBLE);
-            tv.setText(TimeUtils.getMonthDayDate(shotStart)+"-"+TimeUtils.getMonthDayDate(shotEnd));
-        }else{
-            tv.setVisibility(View.GONE);
-        }
-    }
+
+
+//    @BindingAdapter({"android:inviteShot","android:inviteCity"})
+//    public static void setInviteState(TextView tv,int shot,String city){
+//        if(shot == 2){
+//            tv.setText(city+"-"+"可约拍");
+//            tv.setTextColor(tv.getContext().getResources().getColor(R.color.font_color_41));
+//        }else{
+//            tv.setText(city+"-"+"暂停约拍");
+//            tv.setTextColor(tv.getContext().getResources().getColor(R.color.font_color_7));
+//        }
+//    }
+
+//    @BindingAdapter({"android:inviteShot","android:startTime","android:endTime"})
+//    public static void setInviteTime(TextView tv,int shot,String shotStart,String shotEnd){
+//        if(TextUtils.isEmpty(shotStart)|| TextUtils.isEmpty(shotEnd)){
+//            return;
+//        }
+//        if(shot == 2){
+//            tv.setVisibility(View.VISIBLE);
+//            tv.setText(TimeUtils.getMonthDayDate(shotStart)+"-"+TimeUtils.getMonthDayDate(shotEnd));
+//        }else{
+//            tv.setVisibility(View.GONE);
+//        }
+//    }
 
 
 

@@ -11,17 +11,30 @@ import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.view.adapter.MyFragmentPagerAdapter;
 import could.bluepay.renyumvvm.databinding.FragmentTotalBinding;
 import could.bluepay.renyumvvm.utils.Logger;
+import could.bluepay.renyumvvm.viewmodel.BaseFragmentViewModel;
 
 /**
  * MainActivity底部第一个tab内容
  */
 
-public class TotalFragment extends BaseFragment<FragmentTotalBinding>{
+public class TotalFragment extends BaseFragment<FragmentTotalBinding,BaseFragmentViewModel>{
     public static final String TAG = "TotalFragment";
+
+
+
     public String setFragmentName(){
         return TAG;
     }
 
+    @Override
+    public BaseFragmentViewModel setViewModel() {
+        if(baseFragmentViewModel == null) {
+            baseFragmentViewModel = new BaseFragmentViewModel();
+        }
+        return baseFragmentViewModel;
+    }
+
+    private MyFragmentPagerAdapter myAdapter;
     private ArrayList<String> mTitles ;
     private ArrayList<Fragment> mFragments;
 
@@ -43,7 +56,7 @@ public class TotalFragment extends BaseFragment<FragmentTotalBinding>{
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Logger.e(Logger.DEBUG_TAG,"onActivityCreated");
+        Logger.e(Logger.DEBUG_TAG,TAG+"onActivityCreated");
 
         super.onActivityCreated(savedInstanceState);
         //显示加载中
@@ -55,11 +68,12 @@ public class TotalFragment extends BaseFragment<FragmentTotalBinding>{
          * 这样setOffscreenPageLimit()就可以添加上，保留相邻3个实例，切换时不会卡
          * 但会内存溢出，在显示时加载数据
          */
-        MyFragmentPagerAdapter myAdapter = new MyFragmentPagerAdapter(getChildFragmentManager(),mFragments,mTitles);
+        myAdapter = new MyFragmentPagerAdapter(getChildFragmentManager(),mFragments,mTitles);
         bindingView.vpTotal.setAdapter(myAdapter);
         bindingView.vpTotal.setOffscreenPageLimit(mFragments.size()-1);
         myAdapter.notifyDataSetChanged();
-        ((MainActivity)getActivity()).setIndicator(bindingView.vpTotal);
+        String[] titles = new String[]{mTitles.get(0),mTitles.get(1),mTitles.get(2)};
+        ((MainActivity)getActivity()).setIndicator(bindingView.vpTotal,titles);
 
         //显示内容
         showContentView();
@@ -103,6 +117,7 @@ public class TotalFragment extends BaseFragment<FragmentTotalBinding>{
     private void clear(){
         mTitles.clear();
         mTitles = null;
+        myAdapter.clear();
         mFragments.clear();
         mFragments = null;
     }

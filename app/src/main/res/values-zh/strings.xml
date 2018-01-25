@@ -14,6 +14,23 @@
     <string name="title_invite">约拍</string>
 
 
+    <!--登录注册-->
+    <string name="title_activity_login">Hi Girl!</string>
+    <string name="activity_login_account_hint">请输入用户名</string>
+    <string name="activity_login_password_hint">请输入密码</string>
+    <string name="activity_login_sign_in">登录</string>
+    <string name="activity_login_register">立即注册></string>
+    <string name="activity_login_forgot_password">忘记密码?</string>
+    <string name="activity_login_logining">正在登录&#8230;</string>
+    <string name="activity_login_authorizing">正在授权</string>
+    <string name="activity_register_account_mobile">手机号码</string>
+    <string name="activity_register">注册</string>
+
+    <!--用户设置-->
+    <string name="activity_user_setting_logout">注销</string>
+    <string name="activity_user_setting">个人设置</string>
+
+
     <string name="load_more">正在加载更多</string>
     <string name="load_pull_to">上拉加载更多</string>
     <string name="load_none">没有更多内容了</string>

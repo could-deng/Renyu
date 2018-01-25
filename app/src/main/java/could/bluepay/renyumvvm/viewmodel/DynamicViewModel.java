@@ -12,6 +12,7 @@ import java.util.List;
 import could.bluepay.renyumvvm.Config;
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.R;
+import could.bluepay.renyumvvm.bindingAdapter.messenger.Messenger;
 import could.bluepay.renyumvvm.common.PrefsHelper;
 import could.bluepay.renyumvvm.databinding.FragmentDynamicBinding;
 import could.bluepay.renyumvvm.http.RequestImpl;
@@ -21,41 +22,102 @@ import could.bluepay.renyumvvm.model.MemExchange;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.view.adapter.bindingAdapter.DynamicBindingAdapter;
+import could.bluepay.renyumvvm.view.bean.ImageWatchBean;
+import could.bluepay.renyumvvm.view.fragment.BaseFragment;
 import could.bluepay.widget.jiaozivideoplayer.JZMediaManager;
 import could.bluepay.widget.jiaozivideoplayer.JZUtils;
 import could.bluepay.widget.jiaozivideoplayer.JZVideoPlayer;
+import could.bluepay.widget.xrecyclerview.XRecyclerView;
 import io.reactivex.disposables.Disposable;
 
 /**
  * DynamicFragment的viewModel
  */
 
-public class DynamicViewModel<SV extends ViewDataBinding> {
+public class DynamicViewModel<SV extends ViewDataBinding> extends BaseFragmentViewModel{
 
 
     private MainModel mModel;
-    private SV binding;
-    private Context context;
 
-    private DynamicBindingAdapter adapter;
+
+    private SV binding;
+    private BaseFragment context;
+
+    protected DynamicBindingAdapter adapter;
     private int page = 0;
 
 
     private LinearLayoutManager linearLayoutManager;
 
-    // TODO: 2017/12/6 传入的context是否造成内存泄漏
+    public DynamicViewModel(){
 
-    public DynamicViewModel(SV binding, Context context) {
+    }
+    public void init(SV binding,BaseFragment context){
         this.binding = binding;
         this.context = context;
         mModel = new MainModel();
     }
 
+    // TODO: 2017/12/6 传入的context是否造成内存泄漏
+
+    //region=====提供给view层调用======
+
+    public void loadData(){
+        this.loadDynamicData(true);
+    }
+    public boolean haveData(){
+        return adapter!=null && adapter.haveData();
+    }
+
+    //endregion=====提供给view层调用======
+    /**
+     * visible时自动调用、错误时点击重新加载
+     */
+    @Override
+    public void onloadData() {
+        super.onloadData();
+        loadData();
+    }
+
+
+
+    //region=========Command===============
+
+    public final XRecyclerView.LoadingListener loadingListener = new XRecyclerView.LoadingListener() {
+        @Override
+        public void onRefresh() {
+            loadDynamicData(true);
+        }
+
+        @Override
+        public void onLoadMore() {
+            loadDynamicData(false);
+        }
+    };
+
+    public final RecyclerView.OnChildAttachStateChangeListener attachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {
+        @Override
+        public void onChildViewAttachedToWindow(View view) {
+        }
+
+        @Override
+        public void onChildViewDetachedFromWindow(View view) {
+            JZVideoPlayer videoVideo = (JZVideoPlayer) view.findViewById(R.id.video_view);
+            if(videoVideo!=null && JZUtils.dataSourceObjectsContainsUri(videoVideo.dataSourceObjects, JZMediaManager.getCurrentDataSource())){
+                JZVideoPlayer.releaseAllVideos();
+            }
+        }
+    };
+
+    //endregion=========Command===============
+
+
+//
     public void setAdapterData(){
         if(adapter == null){
-            adapter = new DynamicBindingAdapter(context);
+            adapter = new DynamicBindingAdapter(context.getContext());
         }
-        adapter.setUid(((MainActivity)context).getUid());
+        adapter.setUid((MainModel.getmInstance().getUid()));
         adapter.setNickName(PrefsHelper.with(MixApp.getContext(), Config.PREFS_USER).read(Config.SP_KEY_NICKNAME));
 
         adapter.addType(DynamicBindingAdapter.RECYCLER_VIEW_DYNAMIC_TYPE_image, R.layout.item_dynamic_image);
@@ -86,9 +148,8 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
 
             @Override
             public void addSubscription(Disposable subscription) {
-                if (updateView!=null){
-                    updateView.fragmentAddSubscription(subscription);
-                }
+                Logger.e(Logger.DEBUG_TAG,"DynamicViewModel,addSubscription");
+                context.addSubscription(subscription);
             }
 
             @Override
@@ -100,48 +161,31 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
             public void doDeleteLike(long pid, RequestImpl request) {
                 mModel.deleteDynamicLike(pid,request);
             }
-
-//            @Override
-//            public void clickPicture(int WeiboPosition, View view, String pictureUrl, int PhotoPosition) {
-//                Intent intent = new Intent();
-//                intent.setClass(context, PictureViewPagerActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("WeiboPosition", WeiboPosition);
-//                bundle.putInt("PhotoPosition",PhotoPosition);
-//                intent.putExtras(bundle);
-////                context.startActivity(intent);
-//
-//                //
-//                ActivityTransitionLauncher.with((MainActivity)context)
-//                        .from(view)
-//                        .image(pictureUrl)
-//                        .launch(intent, true);//传入的是SimpleDraweeView所认可的路径字符串
-//            }
-
             @Override
             public void onImageItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList) {
-                if(context!=null) {
-                    ((MainActivity) (context)).showImageWatch(view,imagesList,imagesUrlList);
-                }
+//                if(context!=null) {
+//                    ((MainActivity) (context.getActivity())).showImageWatch(view,imagesList,imagesUrlList);//会造成内存泄漏
+//                }
             }
         });
 
         ((FragmentDynamicBinding)(binding)).setAdapter(adapter);
-        linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager = new LinearLayoutManager(context.getContext());
         ((FragmentDynamicBinding)(binding)).setLayoutManager(linearLayoutManager);
-        ((FragmentDynamicBinding)(binding)).xrvDynamic.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
-            @Override
-            public void onChildViewAttachedToWindow(View view) {
-            }
 
-            @Override
-            public void onChildViewDetachedFromWindow(View view) {
-                JZVideoPlayer videoVideo = (JZVideoPlayer) view.findViewById(R.id.video_view);
-                if(videoVideo!=null && JZUtils.dataSourceObjectsContainsUri(videoVideo.dataSourceObjects, JZMediaManager.getCurrentDataSource())){
-                    JZVideoPlayer.releaseAllVideos();
-                }
-            }
-        });
+//        ((FragmentDynamicBinding)(binding)).xrvDynamic.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+//            @Override
+//            public void onChildViewAttachedToWindow(View view) {
+//            }
+//
+//            @Override
+//            public void onChildViewDetachedFromWindow(View view) {
+//                JZVideoPlayer videoVideo = (JZVideoPlayer) view.findViewById(R.id.video_view);
+//                if(videoVideo!=null && JZUtils.dataSourceObjectsContainsUri(videoVideo.dataSourceObjects, JZMediaManager.getCurrentDataSource())){
+//                    JZVideoPlayer.releaseAllVideos();
+//                }
+//            }
+//        });
     }
 
     /**
@@ -151,7 +195,6 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
     public void loadDynamicData(boolean ifFirstPage){
         if(ifFirstPage) {
             page = 1;
-            mModel.setData(((MainActivity) context).getUid());
         }else{
             page++;
         }
@@ -164,7 +207,7 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
             @Override
             public void loadSuccess(Object object) {
                 ObservableArrayList<WeiboBean> dataList = (ObservableArrayList<WeiboBean>)object;
-                updateView.showFragmentContentView(true);
+                showContentView();
                 if(null == dataList || dataList.size() == 0){
                     if(page>1) {
                         page--;
@@ -181,13 +224,10 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
 
             @Override
             public void loadFailed() {
-                if(page>1){
-                    page--;
-                }
                 if(page == 1) {
-                    updateView.showFragmentContentView(false);
+                    showError();
                 }else{
-                    updateView.showFragmentContentView(true);
+                    page--;
                 }
 
                 ((FragmentDynamicBinding)(binding)).xrvDynamic.refreshComplete();
@@ -196,7 +236,8 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
 
             @Override
             public void addSubscription(Disposable disposable) {
-                updateView.fragmentAddSubscription(disposable);
+                Logger.e(Logger.DEBUG_TAG,"DynamicViewModel,addSubscription");
+                context.addSubscription(disposable);
             }
         });
 
@@ -210,25 +251,8 @@ public class DynamicViewModel<SV extends ViewDataBinding> {
         }else{
             adapter.addAll(dataList, DynamicBindingAdapter.RECYCLER_VIEW_DYNAMIC_TYPE);
         }
-        updateView.haveSetData();
-
     }
 
-
-    //region========viewmodel与DynamicFragment交互===========
-
-    private UpdateView updateView;
-    public void setUpdateView(UpdateView updateView){
-        this.updateView = updateView;
-    }
-    public interface UpdateView{
-        void showFragmentContentView(boolean ifSuccess);
-        void fragmentAddSubscription(Disposable disposable);
-        //通知已经设置了数据
-        void haveSetData();
-    }
-
-    //endregion========viewmodel与DynamicFragment交互===========
 
 
 

@@ -2,8 +2,15 @@ package could.bluepay.renyumvvm.viewmodel;
 
 import android.databinding.BindingAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
+import could.bluepay.renyumvvm.bindingAdapter.command.ReplyCommand;
 import could.bluepay.renyumvvm.view.adapter.PhotoViewPagerAdapter;
+import could.bluepay.renyumvvm.view.adapter.UserListFocusAdapter;
 import could.bluepay.renyumvvm.view.adapter.bindingAdapter.DynamicBindingAdapter;
 import could.bluepay.widget.xrecyclerview.XRecyclerView;
 
@@ -18,16 +25,69 @@ public class ViewBindingAdapter {
 //        recyclerView.setAdapter(adapter);
 //    }
 
+
+    //region============DynamicFragment布局相关===========
+
+    @BindingAdapter("android:setLoadingListener")
+    public static void setLoadingListener(XRecyclerView view, XRecyclerView.LoadingListener listener){
+        view.setLoadingListener(listener);
+    }
+
+    @BindingAdapter("android:addOnChildAttachStateChangeListener")
+    public static void addOnChildAttachStateChangeListener(RecyclerView view , RecyclerView.OnChildAttachStateChangeListener listener){
+        view.addOnChildAttachStateChangeListener(listener);
+    }
+
+
+    @BindingAdapter("android:ttext")
+    public static void setText(TextView tv, int text){
+        tv.setText(text+"");
+    }
+
     //recyclerView
     @BindingAdapter("layoutManager")
     public static void setLayoutManager(XRecyclerView view, XRecyclerView.LayoutManager manager) {
         view.setLayoutManager(manager);
     }
 
+    //DynamicFragment
     @BindingAdapter("adapter")
     public static void setAdapter(XRecyclerView view, DynamicBindingAdapter adapter) {
         view.setAdapter(adapter);
     }
+
+    //endregion============DynamicFragment布局相关===========
+
+    //region==========FocusFragment============
+
+
+//    @BindingAdapter("setOnRefreshListener")
+//    public static void setOnRefreshListener(SwipeRefreshLayout view, SwipeRefreshLayout.OnRefreshListener listener){
+//        view.setOnRefreshListener(listener);
+//    }
+
+    @BindingAdapter("adapter")
+    public static void setAdapter(RecyclerView view, UserListFocusAdapter adapter){
+        view.setAdapter(adapter);
+    }
+    @BindingAdapter("addOnScrollListener")
+    public static void addOnScrollListener(RecyclerView view,RecyclerView.OnScrollListener listener){
+        view.addOnScrollListener(listener);
+    }
+
+    @BindingAdapter("setOnRefreshing")
+    public static void setRefreshing(SwipeRefreshLayout view,boolean isRefreshing){
+        view.setRefreshing(isRefreshing);
+    }
+
+    @BindingAdapter("layoutManager")
+    public static void setLayoutManager(RecyclerView view,RecyclerView.LayoutManager manager){
+        view.setLayoutManager(manager);
+    }
+
+
+    //endregion==========FocusFragment============
+
 
 
     //viewPager
@@ -36,6 +96,7 @@ public class ViewBindingAdapter {
         view.setAdapter(adapter);
         view.addOnPageChangeListener(onPageChangeListener);
     }
+
 
 //     ViewPager
 //    @SuppressWarnings("unchecked")

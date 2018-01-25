@@ -2,9 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <import type="android.view.View" />
+        <!--<variable-->
+            <!--name="bean"-->
+            <!--type="could.bluepay.renyumvvm.http.bean.UserBeanItem"/>-->
         <variable
-            name="bean"
-            type="could.bluepay.renyumvvm.http.bean.UserBeanItem"/>
+            name="viewModel"
+            type="could.bluepay.renyumvvm.viewmodel.InviteFragmentItemViewModel"/>
     </data>
 <!--<android.support.v7.widget.CardView-->
     <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
@@ -22,7 +25,8 @@
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:showBookImg="@{bean.photo}"
+            android:showBookImg="@{viewModel.photo}"
+
             />
 
         <LinearLayout
@@ -46,7 +50,7 @@
                     android:ellipsize="end"
                     android:maxEms="10"
                     android:maxLines="1"
-                    android:text="@{bean.nick_name}"
+                    android:text="@{viewModel.nickName}"
                     android:textColor="@color/font_color_3"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -68,7 +72,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
 
-                        android:ttext="@{bean.fdcount}"
+                        android:text="@{viewModel.fdcount}"
                         android:textSize="12sp"
                         android:textColor="@color/font_color_41"/>
                     <!--android:text="@{Integer.valueOf(bean.fdcount)}"-->
@@ -104,10 +108,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:inviteShot='@{bean.shot}'
-                        android:inviteCity='@{bean.city}'
+                        android:text="@{viewModel.inviteStatus}"
                         android:textSize="16sp"
-                        android:textColor="@color/font_color_41"/>
+                        android:textColor="@{viewModel.inviteColor}"/>
 
                     <!--android:text="深圳-可约拍"-->
 
@@ -117,12 +120,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:inviteShot="@{bean.shot}"
-                        android:startTime="@{bean.shot_starttime}"
-                        android:endTime="@{bean.shot_endtime}"
-
+                        android:text="@{viewModel.InviteTime}"
                         android:textSize="12sp"
-                        android:visibility="gone"/>
+                        android:visibility="@{viewModel.InviteTimeVisibility?View.VISIBLE:View.GONE}"/>
 
                     <!--android:inviteTime='@{bean.shot,bean.shot_starttime,bean.shot_endtime}'-->
 

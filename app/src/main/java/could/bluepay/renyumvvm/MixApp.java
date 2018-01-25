@@ -21,6 +21,7 @@ import could.yuanqiang.http.HttpUtils;
 public class MixApp extends Application {
 
     private static Context APPLICATION_CONTEXT;
+    public static String appName;
     private RefWatcher refWatcher;
 
     public static RefWatcher getRefWatcher(Context context){
@@ -32,7 +33,7 @@ public class MixApp extends Application {
     public void onCreate() {
         super.onCreate();
         APPLICATION_CONTEXT = this;
-
+        appName = getPackageInfo().packageName;
         refWatcher = LeakCanary.install(this);
         BlockCanary.install(this,new BlockCanaryContext()).start();
         HttpUtils.getInstance().init(this, BuildConfig.DEBUG);

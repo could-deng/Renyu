@@ -14,8 +14,22 @@
     <string name="title_invite">Invite</string>
 
 
-    
-    
+
+    <string name="title_activity_login">Hi Girl!</string>
+    <string name="activity_login_account_hint">Registed UserName</string>
+    <string name="activity_login_password_hint">Password</string>
+    <string name="activity_login_sign_in">Login</string>
+    <string name="activity_login_register">Sign up</string>
+    <string name="activity_login_forgot_password">Forgot?</string>
+    <string name="activity_login_logining">Login</string>
+    <string name="activity_register_account_mobile">MobileNumber</string>
+    <string name="activity_register">Register</string>
+
+
+    <!--个人设置-->
+    <string name="activity_user_setting_logout">注销</string>
+    <string name="activity_user_setting">个人设置</string>
+
 
     <string name="load_more">正在加载更多</string>
     <string name="load_pull_to">上拉加载更多</string>

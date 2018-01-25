@@ -38,6 +38,15 @@
     <color name="itemLowBackground">@color/colorPrimary</color>
 
 
+    <!--登录注册-->
+    <color name="gray_text_hint">#8c8c8c</color>
+    <color name="edit_text_color">#ff5b544f</color>
+    <color name="text_normal_not_clicked">#fffb3c65</color>
+    <color name="text_normal_clicked">#8c8c8c</color>
+
+
+
+
 
 
     <color name="font_color_3">#333333</color>
@@ -67,6 +76,8 @@
     <!--viewpager的点选择器-->
     <color name="color_dot_normal">#DD7D7D7D</color>
 
+    <!--FragmentMy-->
+    <color name="font_color_11">#aaaaaa</color>
 
 
     <!--pictureSelector-->

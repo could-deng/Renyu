@@ -11,8 +11,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import could.bluepay.renyumvvm.R;
+import could.bluepay.renyumvvm.databinding.FragmentBaseBinding;
 import could.bluepay.renyumvvm.utils.Logger;
-import could.bluepay.renyumvvm.utils.PerfectClickListener;
+import could.bluepay.renyumvvm.viewmodel.BaseFragmentViewModel;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -20,9 +21,14 @@ import io.reactivex.disposables.Disposable;
  * Created by bluepay on 2017/11/20.
  */
 
-public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment {
+public abstract class BaseFragment<SV extends ViewDataBinding,SVM extends BaseFragmentViewModel> extends Fragment {
 
     public abstract String setFragmentName();
+
+    protected SVM baseFragmentViewModel;
+
+    //根布局
+    protected FragmentBaseBinding baseBindView;
 
     //布局view
     protected SV bindingView;
@@ -33,11 +39,11 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
     protected boolean isPrepared = false;
 
     //加载中
-    private LinearLayout mLlProgressbar;
+//    private LinearLayout mLlProgressbar;
     //加载失败
     private LinearLayout mRefresh;
     //内容布局
-    protected RelativeLayout mContainer;
+//    protected RelativeLayout mContainer;
 
 //    private CompositeSubscription mCompositeSubscription;
     private CompositeDisposable mCompositeDisposable;
@@ -52,6 +58,7 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
 
         super.setUserVisibleHint(isVisibleToUser);
         if(getUserVisibleHint()){
+            Logger.e(Logger.DEBUG_TAG,"BaseFragment,getUserVisibleHint(),true");
             mIsVisible = true;
             onVisible();
         }else{
@@ -59,20 +66,25 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
             onInvisible();
         }
     }
+    public abstract SVM setViewModel();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         //就是往基础fragment_base里面加入各自实现的bindingView
-        View ll = inflater.inflate(R.layout.fragment_base,null);
+//        View ll = inflater.inflate(R.layout.fragment_base,null);
+        baseBindView = DataBindingUtil.inflate(getActivity().getLayoutInflater(),R.layout.fragment_base,null,false);
+        baseBindView.setBaseViewModel(setViewModel());
+
         bindingView = DataBindingUtil.inflate(getActivity().getLayoutInflater(),getContent(),null,false);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         bindingView.getRoot().setLayoutParams(params);
-        mContainer = (RelativeLayout) ll.findViewById(R.id.container);
-        mContainer.addView(bindingView.getRoot());
+//        mContainer = (RelativeLayout) ll.findViewById(R.id.container);
+//        baseBindView.addView(bindingView.getRoot());
+        baseBindView.container.addView(bindingView.getRoot());
         onCreateViewExtra();
 
-        return ll;
+        return baseBindView.getRoot();
     }
     protected void onCreateViewExtra(){
 
@@ -103,16 +115,16 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mLlProgressbar = getView(R.id.ll_progress_bar);
+//        mLlProgressbar = getView(R.id.ll_progress_bar);
 
-        mRefresh = getView(R.id.ll_error_refresh);
-        mRefresh.setOnClickListener(new PerfectClickListener() {
-            @Override
-            protected void onDoubleClick(View view) {
-                showLoading();
-                onRefresh();
-            }
-        });
+//        mRefresh = getView(R.id.ll_error_refresh);
+//        mRefresh.setOnClickListener(new PerfectClickListener() {
+//            @Override
+//            protected void onDoubleClick(View view) {
+//                showLoading();
+//                onRefresh();
+//            }
+//        });
     }
     protected <T extends View>T getView(int id){
         return (T) getView().findViewById(id);
@@ -124,49 +136,32 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
     protected void onRefresh(){
 
     }
+
     /**
      * 显示正在加载中
      */
     protected void showLoading(){
-        if(mLlProgressbar.getVisibility()!=View.VISIBLE){
-            mLlProgressbar.setVisibility(View.VISIBLE);
-        }
-        if(bindingView.getRoot().getVisibility() !=View.GONE){
-            bindingView.getRoot().setVisibility(View.GONE);
-        }
-        if(mRefresh.getVisibility()!= View.GONE){
-            mRefresh.setVisibility(View.GONE);
-        }
+        setViewModel().viewStyle.loadingProcess.set(true);
+        setViewModel().viewStyle.loadingSuccess.set(false);
+        setViewModel().viewStyle.loadingError.set(false);
     }
 
     /**
      * 显示内容
      */
     protected void showContentView(){
-        if(mLlProgressbar.getVisibility()!=View.GONE){
-            mLlProgressbar.setVisibility(View.GONE);
-        }
-        if(bindingView.getRoot().getVisibility() !=View.VISIBLE){
-            bindingView.getRoot().setVisibility(View.VISIBLE);
-        }
-        if(mRefresh.getVisibility()!= View.GONE){
-            mRefresh.setVisibility(View.GONE);
-        }
+        setViewModel().viewStyle.loadingProcess.set(false);
+        setViewModel().viewStyle.loadingSuccess.set(true);
+        setViewModel().viewStyle.loadingError.set(false);
     }
 
     /**
      * 显示加载失败
      */
     protected void showError(){
-        if(mLlProgressbar.getVisibility()!=View.GONE){
-            mLlProgressbar.setVisibility(View.GONE);
-        }
-        if(bindingView.getRoot().getVisibility() !=View.GONE){
-            bindingView.getRoot().setVisibility(View.GONE);
-        }
-        if(mRefresh.getVisibility()!= View.VISIBLE){
-            mRefresh.setVisibility(View.VISIBLE);
-        }
+        setViewModel().viewStyle.loadingProcess.set(false);
+        setViewModel().viewStyle.loadingSuccess.set(false);
+        setViewModel().viewStyle.loadingError.set(true);
     }
 
 
@@ -183,13 +178,19 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
         mCompositeDisposable.add(s);
     }
 
-    private void clear(){
+    protected void clearBeforeVMClear(){
 
+    }
+    private void clear(){
+        if(baseFragmentViewModel!=null){
+            baseFragmentViewModel = null;
+        }
     }
     @Override
     public void onDestroy() {
         Logger.e(Logger.DEBUG_TAG,"onDestroy,"+setFragmentName());
         super.onDestroy();
+        clearBeforeVMClear();
         clear();
         if(this.mCompositeDisposable!=null && mCompositeDisposable.size()>0){
             this.mCompositeDisposable.clear();
