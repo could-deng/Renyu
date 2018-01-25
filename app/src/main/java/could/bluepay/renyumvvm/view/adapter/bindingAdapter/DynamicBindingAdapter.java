@@ -2,6 +2,7 @@ package could.bluepay.renyumvvm.view.adapter.bindingAdapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableField;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -76,29 +77,6 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
 
     //endregion=====adapter与viewmodel的交互==============
 
-    public DynamicBindingAdapter(Context context,long uid,String nickName,HashMap<Integer,Integer> map,DynamicViewModel.poupWindowClick click){
-        this.context = context;
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        if(map!=null && map.size()>0) {
-//            itemTypeToLayoutMap = map;
-//        }else{
-            itemTypeToLayoutMap = new HashMap<>();
-//        }
-        // TODO: 2018/1/12 暂时写死
-        itemTypeToLayoutMap.put(DynamicBindingAdapter.RECYCLER_VIEW_DYNAMIC_TYPE_image, R.layout.item_dynamic_image);
-        itemTypeToLayoutMap.put(DynamicBindingAdapter.RECYCLER_VIEW_DYNAMIC_TYPE_video, R.layout.item_dynamic_video);
-
-        mCollections = new ArrayList<>();
-        mCollectionTypes = new ArrayList<>();
-
-        if(snsPopupWindow == null){
-            snsPopupWindow = new SnsPopupWindow(context);
-        }
-        this.uid = uid;
-        this.nickName = nickName;
-        this.click = click;
-    }
-
     public DynamicBindingAdapter(Context context) {
         this.context = context;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -134,6 +112,7 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
     }
 
     public void addAll(List collections, int type){
+        // TODO: 2018/1/25 正式数据时使用viewmodel的bean 动态绑定
         mCollections.addAll(collections);
         for(int i = 0;i<collections.size();i++){
             mCollectionTypes.add(type);
@@ -511,5 +490,9 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
         }
     }
 
+    // TODO: 2018/1/25 正式数据时使用viewmodel的bean 动态绑定
+//    public class DynamicVMBean{
+//        private ObservableField<String> headIcon = new ObservableField<>();
+//    }
 
 }

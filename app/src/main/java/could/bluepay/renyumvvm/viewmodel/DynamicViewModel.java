@@ -132,11 +132,11 @@ public class DynamicViewModel<SV extends ViewDataBinding> extends BaseFragmentVi
                 int f = linearLayoutManager.findFirstVisibleItemPosition();
                 int e = linearLayoutManager.findLastVisibleItemPosition();
 
-                //因为recyclerView的默认加了一个空白头，所以index从1开始，而非0
+                //因为recyclerView的默认加了一个空白头(刷新提示栏)，所以index从1开始，而非0
                 dynamicIndex++;
                 Logger.e(Logger.DEBUG_TAG,"first:"+f+",last:"+e+",dynamicIndex:"+dynamicIndex);
 
-                if(f<=(dynamicIndex) && (dynamicIndex)>=e){
+                if(f<=(dynamicIndex) && (dynamicIndex)<=e){
                     adapter.notifyItemChanged(dynamicIndex);
                 }
 

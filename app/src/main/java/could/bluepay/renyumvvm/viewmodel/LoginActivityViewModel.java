@@ -40,8 +40,11 @@ public class LoginActivityViewModel implements ViewModel {
         //点击登录
         ((LoginActivity)view.getContext()).showLoadingDialog();
 
-        //登录成功了
+        //TODO: 2017/11/28 暂时写死
         PrefsHelper.with((view.getContext()), Config.PREFS_USER).writeInt(Config.SP_KEY_LAST_LOGIN_TYPE, 1);
+        PrefsHelper.with(MixApp.getContext(), Config.PREFS_USER).writeLong(Config.SP_KEY_UID,1);
+        PrefsHelper.with(MixApp.getContext(), Config.PREFS_USER).write(Config.SP_KEY_NICKNAME,"二蛋");
+
         Intent intent = new Intent(view.getContext(), MainActivity.class);
         view.getContext().startActivity(intent);
 

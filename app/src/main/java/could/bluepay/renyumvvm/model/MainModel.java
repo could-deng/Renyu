@@ -269,9 +269,6 @@ public class MainModel {
                 });
     }
 
-    public void getMyDynamicsData(){
-//        getMyDynamics
-    }
     /**
      * 点赞
      */

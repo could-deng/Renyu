@@ -104,9 +104,10 @@ public class MyFragmentViewModel <SV extends ViewDataBinding> extends BaseFragme
                 dynamicIndex++;
                 Logger.e(Logger.DEBUG_TAG,"first:"+f+",last:"+e+",dynamicIndex:"+dynamicIndex);
 
-                if(f<=(dynamicIndex) && (dynamicIndex)>=e){
-                    adapter.notifyItemChanged(dynamicIndex);
-                }
+                // TODO: 2018/1/25 正式环境时不用该方式更新数据，而是使用adapter中viewModel动态更新
+//                if(f<=(dynamicIndex) && (dynamicIndex)>=e){
+//                    adapter.notifyItemChanged(dynamicIndex);
+//                }
 
 
                 Logger.e(Logger.DEBUG_TAG,"updateRecyclerView");

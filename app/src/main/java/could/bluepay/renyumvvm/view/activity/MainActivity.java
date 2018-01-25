@@ -100,18 +100,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     //endregion=======生命周期==============
 
-    long uid = 0;
-    public long getUid(){
-        //// TODO: 2017/11/28 暂时写死
-        PrefsHelper.with(MixApp.getContext(), Config.PREFS_USER).writeLong(Config.SP_KEY_UID,1);
-        PrefsHelper.with(MixApp.getContext(), Config.PREFS_USER).write(Config.SP_KEY_NICKNAME,"二蛋");
-
-        if(uid == 0) {
-            uid = PrefsHelper.with(MixApp.getContext(), Config.PREFS_USER).readLong(Config.SP_KEY_UID);
-        }
-        return uid;
-    }
-
     /**
      * 生成状态栏
      */
