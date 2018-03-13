@@ -46,14 +46,29 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.userData = new ArrayList<>();
     }
 
-    public void setList(List<UserBeanItem> userData) {
-        this.userData = userData;
+    public void setList(List<UserBeanItem> userData,boolean ifStart) {
+        if(ifStart) {
+            this.userData.clear();
+            this.userData = userData;
+        }else{
+            this.userData.addAll(userData);
+        }
         notifyDataSetChanged();
     }
-    public void addList(List<UserBeanItem> userData){
-        this.userData.addAll(userData);
+
+    public void setDataAll(List<UserBeanItem> collections){
+        // TODO: 2018/1/25 正式数据时使用viewmodel的bean 动态绑定
+        if(this.userData!=null && collections!=this.userData){
+            this.userData.clear();
+        }
+        this.userData = collections;
         notifyDataSetChanged();
     }
+
+//    public void addList(List<UserBeanItem> userData){
+//
+//        notifyDataSetChanged();
+//    }
     public boolean haveData(){
         return userData!=null && userData.size()>0;
     }

@@ -63,7 +63,7 @@ public class ImgLoadUtil {
     public static void showCircleImg(ImageView imageView,String url){
         RequestOptions options = new RequestOptions()
                 .bitmapTransform(new GlideCircleTransform(imageView.getContext()))
-                .placeholder(R.drawable.head)
+//                .placeholder(R.drawable.head)
                 .error(R.drawable.head);
 
         Glide.with(imageView.getContext())
@@ -77,37 +77,6 @@ public class ImgLoadUtil {
                 .into(imageView);
 
     }
-
-
-
-
-
-
-
-//    @BindingAdapter({"android:inviteShot","android:inviteCity"})
-//    public static void setInviteState(TextView tv,int shot,String city){
-//        if(shot == 2){
-//            tv.setText(city+"-"+"可约拍");
-//            tv.setTextColor(tv.getContext().getResources().getColor(R.color.font_color_41));
-//        }else{
-//            tv.setText(city+"-"+"暂停约拍");
-//            tv.setTextColor(tv.getContext().getResources().getColor(R.color.font_color_7));
-//        }
-//    }
-
-//    @BindingAdapter({"android:inviteShot","android:startTime","android:endTime"})
-//    public static void setInviteTime(TextView tv,int shot,String shotStart,String shotEnd){
-//        if(TextUtils.isEmpty(shotStart)|| TextUtils.isEmpty(shotEnd)){
-//            return;
-//        }
-//        if(shot == 2){
-//            tv.setVisibility(View.VISIBLE);
-//            tv.setText(TimeUtils.getMonthDayDate(shotStart)+"-"+TimeUtils.getMonthDayDate(shotEnd));
-//        }else{
-//            tv.setVisibility(View.GONE);
-//        }
-//    }
-
 
 
     private static int getDefaultPic(int type) {

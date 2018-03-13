@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.databinding.ActivityLoginBinding;
+import could.bluepay.renyumvvm.rx.RxApiManager;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.viewmodel.LoginActivityViewModel;
 import could.bluepay.renyumvvm.viewmodel.ViewModel;
@@ -15,6 +16,7 @@ import could.bluepay.renyumvvm.viewmodel.ViewModel;
 
 public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
 
+    public static String TAG = "LoginActivity";
     @Override
     protected int setContent() {
         return R.layout.activity_login;
@@ -39,7 +41,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Logger.e(Logger.DEBUG_TAG,"LoginActivity,onDestroy()");
+        RxApiManager.get().cancel(LoginActivity.TAG);
     }
 
     public void setToolbarTitle(String title){

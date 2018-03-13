@@ -11,6 +11,18 @@
         <attr name="item_selector_color" format="color"/>
     </declare-styleable>
 
+    <!--pull to refresh-->
+    <declare-styleable name="PullToRefreshView">
+        <attr name="ptr_type" format="enum">
+            <enum name="f" value="0"/>
+        </attr>
+        <attr name="ptr_direction">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+            <enum name="both" value="2" />
+        </attr>
+    </declare-styleable>
+
 
     <!--attr的值-->
     <!--主题切换可实现-->

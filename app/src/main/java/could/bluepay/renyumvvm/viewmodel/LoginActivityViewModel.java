@@ -2,7 +2,6 @@ package could.bluepay.renyumvvm.viewmodel;
 
 import android.content.Intent;
 import android.databinding.ObservableField;
-import android.text.TextUtils;
 import android.view.View;
 
 import could.bluepay.renyumvvm.Config;
@@ -11,6 +10,7 @@ import could.bluepay.renyumvvm.bindingAdapter.command.ReplyCommand;
 import could.bluepay.renyumvvm.common.PrefsHelper;
 import could.bluepay.renyumvvm.http.RequestImpl;
 import could.bluepay.renyumvvm.model.MainModel;
+import could.bluepay.renyumvvm.rx.RxApiManager;
 import could.bluepay.renyumvvm.view.activity.LoginActivity;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.view.activity.RegisterActivity;
@@ -63,12 +63,12 @@ public class LoginActivityViewModel implements ViewModel {
 //
 //                    @Override
 //                    public void loadFailed() {
-//
+
 //                    }
 //
 //                    @Override
 //                    public void addSubscription(Disposable disposable) {
-//
+//                        RxApiManager.get().add(LoginActivity.TAG,disposable);
 //                    }
 //                });
 //            }else{

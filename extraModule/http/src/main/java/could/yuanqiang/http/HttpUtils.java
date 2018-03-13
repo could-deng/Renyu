@@ -102,6 +102,17 @@ public class HttpUtils {
         return (T) appHttps;
     }
 
+    public <T> T getBestServer(Class<T> a,String serverHost){
+        if(appHttps == null){
+            synchronized (HttpUtils.class){
+                if(appHttps == null){
+                    appHttps = getBuilder(serverHost).build().create(a);
+                }
+            }
+        }
+        return (T) appHttps;
+    }
+
     public <T> T getGankIOServer(Class<T> a) {
         if (gankHttps == null) {
             synchronized (HttpUtils.class) {
@@ -140,10 +151,11 @@ public class HttpUtils {
         builder.baseUrl(apiUrl);//设置远程地址
         builder.addConverterFactory(new NullOnEmptyConverterFactory());
         builder.addConverterFactory(GsonConverterFactory.create(getGson()));//该convert是对Call<T>中T的转换。。。使得:接受的回复Call<ResponseBody>,枚举类型不再是ResponseBody，可以接收自定义的Gson，当然也可以不传
-        builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());//该CallAdapter是对Call的转换。。。（retrofit与Rxjava结合）这样一来返回的对象就不是Call，而是Observable
+        builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());//该CallAdapter是对Call的转换。。。（retrofit与Rxjava结合）把retrofit2.Call对象适配转换为Observable<T>对象，
         return builder;
     }
 
+    //region=====获取converterFactory(对返回类型的自动转换)=========
 
     private Gson getGson() {
         if (gson == null) {
@@ -164,6 +176,11 @@ public class HttpUtils {
             return a != null ? a.value() : FieldNamingPolicy.IDENTITY.translateName(field);
         }
     }
+
+    //endregion=====获取converterFactory(对返回类型的自动转换)=========
+
+
+    //region=====获取okHttpClient=================
 
     public OkHttpClient getUnsafeOkHttpClient() {
         try {
@@ -215,10 +232,14 @@ public class HttpUtils {
         return client1;
     }
 
+    //endregion=====获取okHttpClient=================
+
     public void setTokenListener(IpmlTokenGetListener listener) {
         this.listener = listener;
     }
 
+
+    //region=========在OkhttpClient中增加的拦截器=======
 
     class HttpHeadInterceptor implements Interceptor {
         @Override
@@ -226,7 +247,7 @@ public class HttpUtils {
             Request request = chain.request();
             Request.Builder builder = request.newBuilder();
             builder.addHeader("Accept", "application/json;versions=1");
-            if (CheckNetwork.isNetworkConnected(context)) {
+            if (CheckNetwork.isNetworkConnected(context)) {//该拦截器的意义在于如果无网络，但是我还调接口，说明只要求我已经缓存的数据
                 int maxAge = 60;
                 builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
             } else {
@@ -252,4 +273,5 @@ public class HttpUtils {
         }
         return interceptor;
     }
+    //endregion=========在OkhttpClient中增加的拦截器=======
 }

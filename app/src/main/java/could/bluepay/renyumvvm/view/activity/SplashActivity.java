@@ -75,6 +75,7 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
             intent = new Intent(SplashActivity.this, MainActivity.class);
         } else {
             intent = new Intent(SplashActivity.this, LoginActivity.class);
+//            intent = new Intent(SplashActivity.this,BestChartActivity.class);
         }
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

@@ -118,7 +118,7 @@ public class MyFragmentViewModel <SV extends ViewDataBinding> extends BaseFragme
             @Override
             public void addSubscription(Disposable subscription) {
                 Logger.e(Logger.DEBUG_TAG,"DynamicViewModel,addSubscription");
-                context.addSubscription(subscription);
+//                context.addSubscription(subscription);
             }
 
             @Override

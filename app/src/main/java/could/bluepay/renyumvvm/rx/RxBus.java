@@ -21,6 +21,7 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 /**
+ * 利用Rxjava达到消息通知进行通讯
  * 使用Flowable与consumer(或者subscriber)实现上下游关系进行事件的订阅
  *
  * Created by yuanqiang on 16/5/17.
@@ -83,7 +84,8 @@ public class RxBus {
      * @return return
      */
     public  <T> Flowable<T> toObservable(Class<T> eventType) {
-        return _bus.toFlowable(BackpressureStrategy.BUFFER).ofType(eventType);//BackpressureStrategy.BUFFER)使得缓存水缸大小不再是128，无上限大小。根据传递的 eventType 类型返回特定类型(eventType)的 被观察者
+        //BackpressureStrategy.BUFFER)使得缓存水缸大小不再是128，无上限大小。根据传递的 eventType 类型返回特定类型(eventType)的 被观察者
+        return _bus.toFlowable(BackpressureStrategy.BUFFER).ofType(eventType);
     }
 
     /**

@@ -9,6 +9,7 @@ import could.bluepay.renyumvvm.Config;
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.common.PrefsHelper;
 import could.bluepay.renyumvvm.http.bean.BaseBean;
+import could.bluepay.renyumvvm.http.bean.BestResultBean;
 import could.bluepay.renyumvvm.http.bean.FavortResultBean;
 import could.bluepay.renyumvvm.http.bean.HotDynamicBean;
 import could.bluepay.renyumvvm.http.bean.UserListBean;
@@ -22,6 +23,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
@@ -36,7 +38,9 @@ public interface HttpClient {
         public static HttpClient getDouBanService() {
             return HttpUtils.getInstance().getDouBanServer(HttpClient.class);
         }
-
+        public static HttpClient getBestService(){
+            return HttpUtils.getInstance().getBestServer(HttpClient.class,Config.API_HOST_BEST_SEARCH);
+        }
         public static HttpClient getAppServer(){
             return HttpUtils.getInstance().getAPPServer(HttpClient.class,Config.API_HOST_BLUEPAY);
         }
@@ -59,13 +63,28 @@ public interface HttpClient {
     @GET("v2/movie/in_theaters")
     Observable<String> getHotMovie();
 
+    /**
+     * best搜索
+     * @param headers
+     * @param time
+     * @param currency
+     * @param producerId
+     * @param type
+     * @return
+     */
+    @GET("tools/avenue")
+    Observable<BestResultBean> bestSearch(@HeaderMap Map<String,String> headers, @Query("time")int time, @Query("currency")String currency,
+                                          @Query("producerId") int producerId, @Query("type") int type);
+
     @POST("/higirls/login")
     Observable<String> login(@HeaderMap Map<String, String> headers, @Body RequestBody body);
 
 
+    @Multipart
     @POST("/higirls/register")
-    Observable<String> register(@Part("description") RequestBody description,
-                                @Part MultipartBody.Part file);//@HeaderMap Map<String, String> headers,
+    Observable<String> register(@HeaderMap Map<String,String> headers,
+                                @Part("description") RequestBody description,
+                                @Part MultipartBody.Part file);
 
 
 

@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import com.squareup.leakcanary.RefWatcher;
 import could.bluepay.renyumvvm.MixApp;
+import could.bluepay.renyumvvm.model.MemExchange;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.view.activity.MainActivity;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.databinding.FragmentDynamicBinding;
 import could.bluepay.renyumvvm.viewmodel.DynamicViewModel;
+import could.bluepay.widget.jiaozivideoplayer.JZVideoPlayer;
 
 /**
  * 动态Fragment
@@ -52,7 +54,7 @@ public class DynamicFragment extends BaseFragment<FragmentDynamicBinding,Dynamic
         //内容
         ((MainActivity)getActivity()).setToolbarTitle(getString(R.string.ui_title_dynamic));
 
-        setViewModel().setAdapterData();
+//        setViewModel().setAdapterData();
 
 
         isPrepared = true;
@@ -66,19 +68,19 @@ public class DynamicFragment extends BaseFragment<FragmentDynamicBinding,Dynamic
     @Override
     protected void loadData() {
         Logger.e(Logger.DEBUG_TAG,"DynamicFragment,loadData(),"+(isPrepared?"1":"0")+","+(mIsVisible?"1":"0"));
-        if (!isPrepared || setViewModel().haveData()) {
+        if (!isPrepared) {
             return;
         }
-        // TODO: 2017/11/28  缓存,如果有缓存，则先showContentView()
-
         setViewModel().onloadData();
     }
 
-    @Override
-    protected void onRefresh() {
-        loadData();
-    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        JZVideoPlayer.releaseAllVideos();
+//        MemExchange.getInstance().get
+    }
 
     @Override
     public void onDestroy() {

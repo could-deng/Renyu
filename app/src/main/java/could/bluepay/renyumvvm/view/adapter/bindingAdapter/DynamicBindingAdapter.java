@@ -111,9 +111,13 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
 
     }
 
-    public void addAll(List collections, int type){
+    public void setDataAll(List collections, int type){
         // TODO: 2018/1/25 正式数据时使用viewmodel的bean 动态绑定
-        mCollections.addAll(collections);
+        if(this.mCollections!=null && collections!=this.mCollections){
+            this.mCollections.clear();
+            this.mCollectionTypes.clear();
+        }
+        mCollections = collections;
         for(int i = 0;i<collections.size();i++){
             mCollectionTypes.add(type);
         }
@@ -262,12 +266,12 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
 
             List<PhotoInfo> photoInfos = object.getPic();
             if(photoInfos!=null && photoInfos.size()>0){
-                binding.multiImageview.setDynamicItem(object);
+//                binding.multiImageview.setDynamicItem(object);
                 binding.multiImageview.setVisibility(View.VISIBLE);
                 binding.multiImageview.setList(photoInfos);
                 binding.multiImageview.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList) {
+                    public void onItemClick(View view, int position, List<ImageView> imagesList, List<String> imagesUrlList) {
 //                        click.onImageItemClick(view,position,dynamicItem,imagesList,imagesUrlList);
                         Messenger.getDefault().send(new ImageWatchBean(view,imagesList,imagesUrlList), MainActivity.SHOW_IMAGE_WATCH);
                     }
@@ -385,7 +389,8 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
             });
             // TODO: 2017/12/18 更替数据源
             binding.videoView.setUp(
-                    "http://jzvd.nathen.cn/384d341e000145fb82295bdc54ecef88/103eab5afca34baebc970378dd484942-5287d2089db37e62345123a1be272f8b.mp4", JZVideoPlayer.SCREEN_WINDOW_LIST,
+                    "http://jzvd.nathen.cn/384d341e000145fb82295bdc54ecef88/103eab5afca34baebc970378dd484942-5287d2089db37e62345123a1be272f8b.mp4",
+                    JZVideoPlayer.SCREEN_WINDOW_LIST,
                     object.getPcontent());
 
 
@@ -436,6 +441,7 @@ public class DynamicBindingAdapter extends RecyclerView.Adapter<BindingViewHolde
                             try {
                                 FavortItem bean = (FavortItem) object;
                                 weiboBean.getFavorters().add(bean);
+
 
                                 //// TODO: 2017/11/30 更新点赞列表及弹出框显示的字
                                 if(click!=null){

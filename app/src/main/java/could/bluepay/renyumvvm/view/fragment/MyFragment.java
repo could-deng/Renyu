@@ -48,8 +48,6 @@ public class MyFragment extends BaseFragment<FragmentMyBinding,MyFragmentViewMod
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-//        ((MainActivity)getActivity()).setMenuTabFirstClick(menuClickMethod);
-
         showContentView();
         ((MainActivity)getActivity()).setToolbarTitle(getString(R.string.ui_title_my));
 
@@ -69,7 +67,6 @@ public class MyFragment extends BaseFragment<FragmentMyBinding,MyFragmentViewMod
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        ((MainActivity)getActivity()).setMenuTabFirstClick(null);
     }
 
     @Override
@@ -96,16 +93,6 @@ public class MyFragment extends BaseFragment<FragmentMyBinding,MyFragmentViewMod
         });
     }
 
-//    MainActivity.MenuClickMethod menuClickMethod = new MainActivity.MenuClickMethod(){
-//        @Override
-//        public void onMenuFirstClick() {
-//            Intent intent = new Intent(getActivity(), UserSettingActivity.class);
-//            startActivity(intent);
-//        }
-//    };
-
-
-
     @Override
     protected void loadData() {
         super.loadData();
@@ -113,8 +100,6 @@ public class MyFragment extends BaseFragment<FragmentMyBinding,MyFragmentViewMod
             return;
         }
     }
-
-
 
 
 

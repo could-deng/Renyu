@@ -56,8 +56,6 @@
             android:screenOrientation="portrait"
             />
 
-
-
         <activity android:name=".view.activity.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait">
@@ -116,7 +114,10 @@
             <!--android:name=".PicturePlayAudioActivity"-->
             <!--android:screenOrientation="portrait"-->
             <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar" />-->
+        <activity android:name=".view.activity.BestChartActivity"
+            android:screenOrientation="landscape">
 
+            </activity>
     </application>
 
 </manifest>

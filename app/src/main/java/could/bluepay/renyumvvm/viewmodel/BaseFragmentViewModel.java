@@ -1,6 +1,12 @@
 package could.bluepay.renyumvvm.viewmodel;
 import android.databinding.ObservableBoolean;
+
+import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.bindingAdapter.command.ReplyCommand;
+import could.bluepay.renyumvvm.bindingAdapter.messenger.Messenger;
+import could.bluepay.renyumvvm.view.activity.BestChartActivity;
+import could.bluepay.renyumvvm.view.activity.MainActivity;
+import could.yuanqiang.http.utils.CheckNetwork;
 
 /**
  * Created by bluepay on 2018/1/10.
@@ -60,5 +66,22 @@ public class BaseFragmentViewModel implements ViewModel{
     //endregion====数据驱动UI模块,更改数据========
 
     protected void onloadData(){
+    }
+
+    /**
+     * 网络是否断开
+     * @param showErrorLayout
+     * @return true为断开，false为正常
+     */
+    protected boolean onNetWorkDisConnecte(boolean showErrorLayout){
+        if (!CheckNetwork.isNetworkConnected(MixApp.getContext())) {
+            if(showErrorLayout) {
+                showError();
+            }else{
+                Messenger.getDefault().send("网络异常", MainActivity.MainActivity_Message_Toast);
+            }
+            return true;
+        }
+        return false ;
     }
 }

@@ -1,6 +1,5 @@
 package could.bluepay.renyumvvm.bindingAdapter.messenger;
 
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,15 +10,15 @@ import java.util.List;
 import io.reactivex.functions.Consumer;
 
 /**
- * Created by kelin on 15-8-14.
+ * 模仿EventBus的Messenger消息
  */
 public class Messenger {
 
     private static Messenger defaultInstance;
 
-    private HashMap<Type, List<WeakActionAndToken>> recipientsOfSubclassesAction;
+    private HashMap<Type, List<WeakActionAndToken>> recipientsOfSubclassesAction;//传递的Bean类的类型，即消息类型来作为标示
 
-    private HashMap<Type, List<WeakActionAndToken>> recipientsStrictAction;
+    private HashMap<Type, List<WeakActionAndToken>> recipientsStrictAction;//传递的Bean类的类型，即消息类型来作为标示
 
     public static Messenger getDefault() {
         if (defaultInstance == null) {
@@ -36,6 +35,9 @@ public class Messenger {
     public static void reset() {
         defaultInstance = null;
     }
+
+
+    //region========注册Messenger事件===============
 
     /**
      *
@@ -123,7 +125,6 @@ public class Messenger {
 
     /**
      *
-     * @param recipient {@link com.kelin.mvvmlight.messenger.Messenger#register(Object, Action0)}
      * @param tClass class of T
      * @param action this action has one params that type of tClass
      * @param <T> message data type
@@ -133,7 +134,6 @@ public class Messenger {
     }
 
     /**
-     * see {@link com.kelin.mvvmlight.messenger.Messenger#register(Object, Class, Action1)}
      * @param recipient receiver of message
      * @param receiveDerivedMessagesToo whether derived class of recipient can receive the message
      * @param tClass class of T
@@ -145,7 +145,6 @@ public class Messenger {
     }
 
     /**
-     * see {@link com.kelin.mvvmlight.messenger.Messenger#register(Object, Object, Action0)}
      * @param recipient receiver of message
      * @param token register with a unique token,when a messenger send a msg with same token,it will receive this msg
      * @param tClass class of T for Action1
@@ -157,10 +156,9 @@ public class Messenger {
     }
 
     /**
-     *  see {@link com.kelin.mvvmlight.messenger.Messenger#register(Object, Object, Class, Action1)}
      * @param recipient receiver of message 接收消息Class
      * @param token register with a unique token,when a messenger send a msg with same token,it will receive this msg 消息（位移）
-     * @param receiveDerivedMessagesToo  whether derived class of recipient can receive the message
+     * @param receiveDerivedMessagesToo  whether derived class of recipient can receive the message 发送者是否能收到消息
      * @param action this action has one params that type of tClass
      * @param tClass class of T for Action1 接收到消息后的Runnable
      * @param <T> message data type 传递的Bean类
@@ -202,11 +200,13 @@ public class Messenger {
     }
 
 
-    private void cleanup() {
-        cleanupList(recipientsOfSubclassesAction);
-        cleanupList(recipientsStrictAction);
-    }
 
+    //endregion========注册Messenger事件===============
+
+
+
+
+    //region=========发送Messenger消息事件==================
     /**
      *
      * @param token send with a unique token,when a receiver has register with same token,it will receive this msg
@@ -267,26 +267,107 @@ public class Messenger {
         sendToTargetOrType(message, target.getClass(), null);
     }
 
+
     /**
-     *  Unregister the receiver such as:
-     *  Messenger.getDefault().unregister(this)" in onDestroy in the Activity is required avoid to memory leak!
-     * @param recipient receiver of message
+     * 发送token，没有messenger的情况
+     * @param messageTargetType
+     * @param token
      */
-    public void unregister(Object recipient) {
-        unregisterFromLists(recipient, recipientsOfSubclassesAction);
-        unregisterFromLists(recipient, recipientsStrictAction);
+    private void sendToTargetOrType(Type messageTargetType, Object token) {
+        Class messageType = NotMsgType.class;
+        if (recipientsOfSubclassesAction != null) {
+            // Clone to protect from people registering in a "receive message" method
+            // Bug correction Messaging BL0008.002
+//            var listClone = recipientsOfSubclassesAction.Keys.Take(_recipientsOfSubclassesAction.Count()).ToList();
+            List<Type> listClone = new ArrayList<>();
+            listClone.addAll(recipientsOfSubclassesAction.keySet());
+            for (Type type : listClone) {
+                List<WeakActionAndToken> list = null;
+
+                if (messageType == type
+                        || ((Class) type).isAssignableFrom(messageType)
+                        || classImplements(messageType, type)) {
+                    list = recipientsOfSubclassesAction.get(type);
+                }
+
+                sendToList(list, messageTargetType, token);
+            }
+        }
+
+        if (recipientsStrictAction != null) {
+            if (recipientsStrictAction.containsKey(messageType)) {
+                List<WeakActionAndToken> list = recipientsStrictAction.get(messageType);
+                sendToList(list, messageTargetType, token);
+            }
+        }
+
         cleanup();
     }
 
+    private static void sendToList(
+            Collection<WeakActionAndToken> list,
+            Type messageTargetType,
+            Object token) {
+        if (list != null) {
+            // Clone to protect from people registering in a "receive message" method
+            // Bug correction Messaging BL0004.007
+            ArrayList<WeakActionAndToken> listClone = new ArrayList<>();
+            listClone.addAll(list);
 
-    public <T> void unregister(Object recipient, Object token) {
-        unregisterFromLists(recipient, token, null, recipientsStrictAction);
-        unregisterFromLists(recipient, token, null, recipientsOfSubclassesAction);
-        cleanup();
+            for (WeakActionAndToken item : listClone) {
+                WeakAction executeAction = item.getAction();
+                if (executeAction != null
+                        && item.getAction().isLive()
+                        && item.getAction().getTarget() != null
+                        && (messageTargetType == null
+                        || item.getAction().getTarget().getClass() == messageTargetType
+                        || classImplements(item.getAction().getTarget().getClass(), messageTargetType))
+                        && ((item.getToken() == null && token == null)
+                        || item.getToken() != null && item.getToken().equals(token))) {
+                    executeAction.execute();
+                }
+            }
+        }
     }
 
+    /**
+     * 发送Token，同时也有message的情况
+     * @param message
+     * @param messageTargetType
+     * @param token
+     * @param <T>
+     */
+    private <T> void sendToTargetOrType(T message, Type messageTargetType, Object token) {
+        Class messageType = message.getClass();
 
 
+        if (recipientsOfSubclassesAction != null) {
+            // Clone to protect from people registering in a "receive message" method
+            // Bug correction Messaging BL0008.002
+//            var listClone = recipientsOfSubclassesAction.Keys.Take(_recipientsOfSubclassesAction.Count()).ToList();
+            List<Type> listClone = new ArrayList<>();
+            listClone.addAll(recipientsOfSubclassesAction.keySet());
+            for (Type type : listClone) {
+                List<WeakActionAndToken> list = null;
+
+                if (messageType == type
+                        || ((Class) type).isAssignableFrom(messageType)//
+                        || classImplements(messageType, type)) {//属于实现接口关系
+                    list = recipientsOfSubclassesAction.get(type);
+                }
+                sendToList(message, list, messageTargetType, token);
+            }
+        }
+
+        if (recipientsStrictAction != null) {
+            if (recipientsStrictAction.containsKey(messageType)) {
+                List<WeakActionAndToken> list = recipientsStrictAction.get(messageType);
+                sendToList(message, list, messageTargetType, token);
+            }
+        }
+
+        cleanup();
+    }
     private static <T> void sendToList(
             T message,
             Collection<WeakActionAndToken> list,
@@ -313,6 +394,82 @@ public class Messenger {
             }
         }
     }
+
+
+    private void cleanup() {
+        cleanupList(recipientsOfSubclassesAction);
+        cleanupList(recipientsStrictAction);
+    }
+
+
+
+    private static boolean classImplements(Type instanceType, Type interfaceType) {
+        if (interfaceType == null
+                || instanceType == null) {
+            return false;
+        }
+        Class[] interfaces = ((Class) instanceType).getInterfaces();
+        for (Class currentInterface : interfaces) {
+            if (currentInterface == interfaceType) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 清理list，把里面注册的没有action的事件清除掉
+     * @param lists
+     */
+    private static void cleanupList(HashMap<Type, List<WeakActionAndToken>> lists) {
+        if (lists == null) {
+            return;
+        }
+        for (Iterator it = lists.entrySet().iterator(); it.hasNext(); ) {
+            Object key = it.next();
+            List<WeakActionAndToken> itemList = lists.get(key);
+            if (itemList != null) {
+                for (WeakActionAndToken item : itemList) {
+                    if (item.getAction() == null
+                            || !item.getAction().isLive()) {
+                        itemList.remove(item);
+                    }
+                }
+                if (itemList.size() == 0) {
+                    lists.remove(key);
+                }
+            }
+        }
+    }
+
+    //endregion=========发送Messenger消息事件==================
+
+
+
+    //region=======取消注册Messenger消息事件===============
+
+    /**
+     *  Unregister the receiver such as:
+     *  Messenger.getDefault().unregister(this)" in onDestroy in the Activity is required avoid to memory leak!
+     * @param recipient receiver of message
+     */
+    public void unregister(Object recipient) {
+        unregisterFromLists(recipient, recipientsOfSubclassesAction);
+        unregisterFromLists(recipient, recipientsStrictAction);
+        cleanup();
+    }
+
+
+    public <T> void unregister(Object recipient, Object token) {
+        unregisterFromLists(recipient, token, null, recipientsStrictAction);
+        unregisterFromLists(recipient, token, null, recipientsOfSubclassesAction);
+        cleanup();
+    }
+
+
+
+
 
     private static void unregisterFromLists(Object recipient, HashMap<Type, List<WeakActionAndToken>> lists) {
         if (recipient == null
@@ -452,131 +609,12 @@ public class Messenger {
         }
     }
 
-    private static boolean classImplements(Type instanceType, Type interfaceType) {
-        if (interfaceType == null
-                || instanceType == null) {
-            return false;
-        }
-        Class[] interfaces = ((Class) instanceType).getInterfaces();
-        for (Class currentInterface : interfaces) {
-            if (currentInterface == interfaceType) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static void cleanupList(HashMap<Type, List<WeakActionAndToken>> lists) {
-        if (lists == null) {
-            return;
-        }
-        for (Iterator it = lists.entrySet().iterator(); it.hasNext(); ) {
-            Object key = it.next();
-            List<WeakActionAndToken> itemList = lists.get(key);
-            if (itemList != null) {
-                for (WeakActionAndToken item : itemList) {
-                    if (item.getAction() == null
-                            || !item.getAction().isLive()) {
-                        itemList.remove(item);
-                    }
-                }
-                if (itemList.size() == 0) {
-                    lists.remove(key);
-                }
-            }
-        }
-    }
-
-    private void sendToTargetOrType(Type messageTargetType, Object token) {
-        Class messageType = NotMsgType.class;
-        if (recipientsOfSubclassesAction != null) {
-            // Clone to protect from people registering in a "receive message" method
-            // Bug correction Messaging BL0008.002
-//            var listClone = recipientsOfSubclassesAction.Keys.Take(_recipientsOfSubclassesAction.Count()).ToList();
-            List<Type> listClone = new ArrayList<>();
-            listClone.addAll(recipientsOfSubclassesAction.keySet());
-            for (Type type : listClone) {
-                List<WeakActionAndToken> list = null;
-
-                if (messageType == type
-                        || ((Class) type).isAssignableFrom(messageType)
-                        || classImplements(messageType, type)) {
-                    list = recipientsOfSubclassesAction.get(type);
-                }
-
-                sendToList(list, messageTargetType, token);
-            }
-        }
-
-        if (recipientsStrictAction != null) {
-            if (recipientsStrictAction.containsKey(messageType)) {
-                List<WeakActionAndToken> list = recipientsStrictAction.get(messageType);
-                sendToList(list, messageTargetType, token);
-            }
-        }
-
-        cleanup();
-    }
-
-    private static void sendToList(
-            Collection<WeakActionAndToken> list,
-            Type messageTargetType,
-            Object token) {
-        if (list != null) {
-            // Clone to protect from people registering in a "receive message" method
-            // Bug correction Messaging BL0004.007
-            ArrayList<WeakActionAndToken> listClone = new ArrayList<>();
-            listClone.addAll(list);
-
-            for (WeakActionAndToken item : listClone) {
-                WeakAction executeAction = item.getAction();
-                if (executeAction != null
-                        && item.getAction().isLive()
-                        && item.getAction().getTarget() != null
-                        && (messageTargetType == null
-                        || item.getAction().getTarget().getClass() == messageTargetType
-                        || classImplements(item.getAction().getTarget().getClass(), messageTargetType))
-                        && ((item.getToken() == null && token == null)
-                        || item.getToken() != null && item.getToken().equals(token))) {
-                    executeAction.execute();
-                }
-            }
-        }
-    }
-
-    private <T> void sendToTargetOrType(T message, Type messageTargetType, Object token) {
-        Class messageType = message.getClass();
 
 
-        if (recipientsOfSubclassesAction != null) {
-            // Clone to protect from people registering in a "receive message" method
-            // Bug correction Messaging BL0008.002
-//            var listClone = recipientsOfSubclassesAction.Keys.Take(_recipientsOfSubclassesAction.Count()).ToList();
-            List<Type> listClone = new ArrayList<>();
-            listClone.addAll(recipientsOfSubclassesAction.keySet());
-            for (Type type : listClone) {
-                List<WeakActionAndToken> list = null;
+    //endregion=======取消注册Messenger消息事件===============
 
-                if (messageType == type
-                        || ((Class) type).isAssignableFrom(messageType)//
-                        || classImplements(messageType, type)) {//属于实现接口关系
-                    list = recipientsOfSubclassesAction.get(type);
-                }
 
-                sendToList(message, list, messageTargetType, token);
-            }
-        }
 
-        if (recipientsStrictAction != null) {
-            if (recipientsStrictAction.containsKey(messageType)) {
-                List<WeakActionAndToken> list = recipientsStrictAction.get(messageType);
-                sendToList(message, list, messageTargetType, token);
-            }
-        }
-
-        cleanup();
-    }
 
     private class WeakActionAndToken {
         private WeakAction action;

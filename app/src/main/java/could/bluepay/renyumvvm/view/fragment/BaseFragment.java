@@ -38,14 +38,6 @@ public abstract class BaseFragment<SV extends ViewDataBinding,SVM extends BaseFr
     //setUserVisibleHit()和onCreateView()的先后顺序没有明确界定。应次loadData()在onActivityCreate()加载完控件之后才是可以的
     protected boolean isPrepared = false;
 
-    //加载中
-//    private LinearLayout mLlProgressbar;
-    //加载失败
-    private LinearLayout mRefresh;
-    //内容布局
-//    protected RelativeLayout mContainer;
-
-//    private CompositeSubscription mCompositeSubscription;
     private CompositeDisposable mCompositeDisposable;
 
     @Override
@@ -79,8 +71,6 @@ public abstract class BaseFragment<SV extends ViewDataBinding,SVM extends BaseFr
         bindingView = DataBindingUtil.inflate(getActivity().getLayoutInflater(),getContent(),null,false);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         bindingView.getRoot().setLayoutParams(params);
-//        mContainer = (RelativeLayout) ll.findViewById(R.id.container);
-//        baseBindView.addView(bindingView.getRoot());
         baseBindView.container.addView(bindingView.getRoot());
         onCreateViewExtra();
 
@@ -115,26 +105,6 @@ public abstract class BaseFragment<SV extends ViewDataBinding,SVM extends BaseFr
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        mLlProgressbar = getView(R.id.ll_progress_bar);
-
-//        mRefresh = getView(R.id.ll_error_refresh);
-//        mRefresh.setOnClickListener(new PerfectClickListener() {
-//            @Override
-//            protected void onDoubleClick(View view) {
-//                showLoading();
-//                onRefresh();
-//            }
-//        });
-    }
-    protected <T extends View>T getView(int id){
-        return (T) getView().findViewById(id);
-    }
-
-    /**
-     * 加载失败后点击的操作
-     */
-    protected void onRefresh(){
-
     }
 
     /**
@@ -167,16 +137,12 @@ public abstract class BaseFragment<SV extends ViewDataBinding,SVM extends BaseFr
 
 
 
-    public void addSubscription(Disposable s){
-//        if(this.mCompositeSubscription == null){
-//            mCompositeSubscription = new CompositeSubscription();
+//    public void addSubscription(Disposable s){
+//        if(this.mCompositeDisposable == null){
+//            mCompositeDisposable = new CompositeDisposable();
 //        }
-//        this.mCompositeSubscription.add(s);
-        if(this.mCompositeDisposable == null){
-            mCompositeDisposable = new CompositeDisposable();
-        }
-        mCompositeDisposable.add(s);
-    }
+//        mCompositeDisposable.add(s);
+//    }
 
     protected void clearBeforeVMClear(){
 
@@ -192,8 +158,8 @@ public abstract class BaseFragment<SV extends ViewDataBinding,SVM extends BaseFr
         super.onDestroy();
         clearBeforeVMClear();
         clear();
-        if(this.mCompositeDisposable!=null && mCompositeDisposable.size()>0){
-            this.mCompositeDisposable.clear();
-        }
+//        if(this.mCompositeDisposable!=null && mCompositeDisposable.size()>0){
+//            this.mCompositeDisposable.clear();
+//        }
     }
 }

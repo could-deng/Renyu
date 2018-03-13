@@ -5,7 +5,9 @@ package could.bluepay.renyumvvm;
  */
 
 public class Config {
-
+    //best查询使用的服务器
+    public static final String API_HOST_BEST_SEARCH = "http://192.168.4.210:8200/";
+    //Renyu使用的服务器
     public static final String API_HOST_BLUEPAY = "http://192.168.4.210:8165/";
 
     public static final String AppName = "Hi Girl!";
@@ -23,4 +25,13 @@ public class Config {
     /** 用户UID SP键名,long型*/
     public static final String SP_KEY_UID = "uid";
     public static final String SP_KEY_NICKNAME = "nickname";
+
+
+
+
+    /** Dynamic模块中adapter中item类型 */
+    public static final int RECYCLER_VIEW_DYNAMIC_TYPE = 1;//image和video都为同一种类型
+    public static final int RECYCLER_VIEW_DYNAMIC_TYPE_image = 2;
+    public static final int RECYCLER_VIEW_DYNAMIC_TYPE_video = 3;
+
 }

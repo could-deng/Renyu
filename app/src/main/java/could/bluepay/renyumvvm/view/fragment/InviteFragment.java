@@ -24,7 +24,7 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding,InviteFra
     @Override
     public InviteFragmentViewModel setViewModel() {
         if(baseFragmentViewModel == null) {
-            baseFragmentViewModel = new InviteFragmentViewModel(InviteFragment.this);
+            baseFragmentViewModel = new InviteFragmentViewModel();
         }
         return baseFragmentViewModel;
     }
@@ -35,12 +35,7 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding,InviteFra
     private static final String TYPE = "param1";
 //    private String city = "全国";
 
-
     private MainActivity activity;
-
-
-//    private LinearLayoutManager mLayoutManager;
-//    private UserListInviteAdapter adapter;
 
     @Override
     protected int getContent() {
@@ -74,7 +69,6 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding,InviteFra
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-//        Logger.e(Logger.DEBUG_TAG,"InviteFragment,serUserVisibleHit()"+(getUserVisibleHint()?"visible":"invisible"));
     }
 
     @Override
@@ -111,132 +105,5 @@ public class InviteFragment extends BaseFragment<FragmentInviteBinding,InviteFra
         refWatcher.watch(this);
     }
 
-//    private void loadCustomData(long uid, int page){
-//        HttpClient.Builder.getAppServer().getInvite(HttpClient.Builder.getHeader(),uid,page, TextUtils.isEmpty(city)?"全国":city)
-//                .subscribeOn(Schedulers.io())//请求在主线程中执行
-//                .observeOn(AndroidSchedulers.mainThread())//请求完成后在主线程处理
-//                .subscribe(new Observer<UserListBean>() {
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Logger.e(Logger.DEBUG_TAG,"onError"+e.getMessage());
-//                        showContentView();
-//                        if(bindingView.srlInvite.isRefreshing()){
-//                            bindingView.srlInvite.setRefreshing(false);
-//                        }
-//                        if(mStart == 1){
-//                            showError();
-//                            return;
-//                        }
-//                        mStart --;
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        showContentView();
-//                        if(bindingView.srlInvite.isRefreshing()){
-//                            bindingView.srlInvite.setRefreshing(false);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        addSubscription(d);
-//                    }
-//
-//                    @Override
-//                    public void onNext(UserListBean userListBean) {
-//                        Logger.e(Logger.DEBUG_TAG,userListBean.toString());
-//                        if(mStart == 1){
-//                            if(userListBean!=null &&userListBean.getData()!=null
-//                                    && userListBean.getData().getUser()!=null
-//                                    &&userListBean.getData().getUser().size()>0){
-//                                if(adapter == null){
-//                                    adapter = new UserListInviteAdapter(getActivity());
-//                                }
-//                                adapter.setList(userListBean.getData().getUser());
-//
-//                                bindingView.xrvInvite.setAdapter(adapter);
-//                            }
-//                            mIsFirst = false;
-//                        }else {
-//                            if(userListBean!=null &&userListBean.getData()!=null
-//                                    && userListBean.getData().getUser()!=null
-//                                    && userListBean.getData().getUser().size()>0) {
-//                                adapter.addList(userListBean.getData().getUser());
-//
-//                            }else{
-//                                mStart --;
-//                                adapter.updateLoadStatus(UserListInviteAdapter.LOAD_END);
-//                                //todo 需要做footView逐渐消失的功能
-//
-//                                return;
-//                            }
-//                        }
-//                        if(adapter!=null){
-//                            adapter.updateLoadStatus(UserListInviteAdapter.LOAD_PULL_TO);
-//                        }
-//                    }
-//                });
-//    }
-
-
-    /**
-     * RecycleView滚动监听
-     */
-//    private void scrollRecycleView(){
-//        bindingView.xrvInvite.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            int lastVisibleItem;
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                /**new State 一共有三种状态
-//                 * SCROLL_STATE_IDLE：0,目前RecyclerView不是滚动。
-//                 * SCROLL_STATE_DRAGGING：1,RecyclerView目前被外部输入如用户触摸输入。
-//                 * SCROLL_STATE_SETTLING：2,RecyclerView目前动画虽然不是在最后一个位置
-//                 外部控制。
-//                 * */
-//
-//                Logger.e(Logger.DEBUG_TAG,"onScrollStateChanged(),newState = "+newState);
-//
-//
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if(newState == RecyclerView.SCROLL_STATE_IDLE){
-//                    lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-//                    if(adapter ==null){
-//                        return;
-//                    }
-//                    if(mLayoutManager.getItemCount() == 0){
-//                        adapter.updateLoadStatus(UserListInviteAdapter.LOAD_NONE);
-//                        return;
-//                    }
-//
-//                    if(lastVisibleItem+1 == mLayoutManager.getItemCount()
-//                            && adapter.getLoadStatus()!=UserListInviteAdapter.LOAD_MORE){
-//
-//                        adapter.updateLoadStatus(UserListInviteAdapter.LOAD_MORE);
-//                        bindingView.xrvInvite.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                mStart ++;
-//                                loadCustomData(((MainActivity)getActivity()).getUid(),mStart);
-//                            }
-//                        },500);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-//
-//            }
-//        });
-//    }
-
-    @Override
-    protected void onRefresh() {
-        loadData();
-    }
 
 }

@@ -1,8 +1,5 @@
 package could.bluepay.renyumvvm.http.bean;
 
-
-import could.yuanqiang.http.ParamNames;
-
 public class FavortItem {
 
 //	@ParamNames("id")

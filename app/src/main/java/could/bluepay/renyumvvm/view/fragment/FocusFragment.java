@@ -9,6 +9,7 @@ import com.squareup.leakcanary.RefWatcher;
 import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.databinding.FragmentForcusBinding;
+import could.bluepay.renyumvvm.rx.RxApiManager;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.viewmodel.FocusFragmentViewModel;
 
@@ -109,7 +110,7 @@ public class FocusFragment extends BaseFragment<FragmentForcusBinding,FocusFragm
 
     @Override
     protected void loadData() {
-        Logger.e(Logger.DEBUG_TAG,((mType == ContentTypeFocus)?"FocusFragment":"PopularFragment")+"loadData(),"+(isPrepared?"1":"0")+","+(mIsVisible?"1":"0")+",");
+        Logger.e(Logger.DEBUG_TAG,((mType == ContentTypeFocus)?"FocusFragment,":"PopularFragment,")+"loadData(),"+(isPrepared?"1":"0")+","+(mIsVisible?"1":"0")+",");
         if(!isPrepared  || setViewModel().haveData()|| !mIsVisible){
             return;
         }
@@ -123,15 +124,12 @@ public class FocusFragment extends BaseFragment<FragmentForcusBinding,FocusFragm
     @Override
     public void onDestroy() {
         super.onDestroy();
+        RxApiManager.get().cancel(FocusFragment.TAG+FocusFragment.ContentTypeFocus);
+
         RefWatcher refWatcher = MixApp.getRefWatcher(getActivity());
 		refWatcher.watch(this);
     }
 
-
-    @Override
-    protected void onRefresh() {
-        loadData();
-    }
 
     //region=======约拍特定布局相关====================
 

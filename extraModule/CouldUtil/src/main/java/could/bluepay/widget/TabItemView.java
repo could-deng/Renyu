@@ -50,7 +50,7 @@ public class TabItemView extends FrameLayout {
         ColorStateList radioButtonTextColor = new ColorStateList(states, color);
         tabTitle.setTextColor(radioButtonTextColor);
         tabTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-
+//        tabTitle.setSingleLine();
         tabTitle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

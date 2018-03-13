@@ -42,9 +42,9 @@ public class ViewBindingAdapter {
     }
 
     @SuppressWarnings("unchecked")
-    @BindingAdapter({"android:onLoadMoreCommand"})
+    @BindingAdapter({"onLoadMoreCommand"})
     public static void onLoadMoreCommand(final RecyclerView recyclerView, final ReplyCommand<Integer> onLoadMoreCommand) {
-        RecyclerView.OnScrollListener listener = new OnScrollListener(onLoadMoreCommand);
+        OnScrollListener listener = new OnScrollListener(onLoadMoreCommand);
         recyclerView.addOnScrollListener(listener);
     }
 
@@ -63,8 +63,6 @@ public class ViewBindingAdapter {
                             onLoadMoreCommand.execute(integer);
                         }
                     });
-//            methodInvoke.throttleFirst(1, TimeUnit.SECONDS)
-//                    .subscribe(c -> onLoadMoreCommand.execute(c));
         }
 
         @Override

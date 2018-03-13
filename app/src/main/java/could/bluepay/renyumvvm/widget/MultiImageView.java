@@ -46,7 +46,7 @@ public class MultiImageView extends LinearLayout {
 	private LayoutParams morePara, moreParaColumnFirst;
 	private LayoutParams rowPara;
 
-	private WeiboBean mDynamicItem;
+//	private WeiboBean mDynamicItem;
 
 	private OnItemClickListener mOnItemClickListener;
 	public void setOnItemClickListener(OnItemClickListener onItemClickListener){
@@ -80,9 +80,9 @@ public class MultiImageView extends LinearLayout {
 		initView();
 	}
 
-	public void setDynamicItem(WeiboBean item){
-		this.mDynamicItem = item;
-	}
+//	public void setDynamicItem(WeiboBean item){
+//		this.mDynamicItem = item;
+//	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -255,14 +255,14 @@ public class MultiImageView extends LinearLayout {
 		@Override
 		public void onClick(View view) {
 			if(mOnItemClickListener != null){
-				mOnItemClickListener.onItemClick(view, position, mDynamicItem, imagesList, imagesUrlList);
+				mOnItemClickListener.onItemClick(view, position, imagesList, imagesUrlList);
 //				mOnItemClickListener.onItemClick(view,imagesUrlList.get(position),position);
 			}
 		}
 	}
 
 	public interface OnItemClickListener{
-		void onItemClick(View view, int position, WeiboBean dynamicItem, List<ImageView> imagesList, List<String> imagesUrlList);
+		void onItemClick(View view, int position, List<ImageView> imagesList, List<String> imagesUrlList);
 //		void onItemClick(View view,String pictureUrl,int PhotoPosition);
 	}
 

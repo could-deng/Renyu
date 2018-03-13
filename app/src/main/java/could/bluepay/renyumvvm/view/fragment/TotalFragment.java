@@ -56,7 +56,7 @@ public class TotalFragment extends BaseFragment<FragmentTotalBinding,BaseFragmen
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Logger.e(Logger.DEBUG_TAG,TAG+"onActivityCreated");
+        Logger.e(Logger.DEBUG_TAG,TAG+",onActivityCreated");
 
         super.onActivityCreated(savedInstanceState);
         //显示加载中

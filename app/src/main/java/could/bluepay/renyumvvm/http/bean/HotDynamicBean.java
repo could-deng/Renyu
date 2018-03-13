@@ -4,6 +4,7 @@ package could.bluepay.renyumvvm.http.bean;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import could.yuanqiang.http.ParamNames;
@@ -33,7 +34,7 @@ public class HotDynamicBean extends BaseBean{
         @ParamNames("myinfo")
         private UserBeanItem myinfo;
         @ParamNames("weibo")
-        private ObservableArrayList<WeiboBean> weibo;
+        private ArrayList<WeiboBean> weibo;
         @ParamNames("user")
         private List<UserBeanItem> user;
 
@@ -61,11 +62,11 @@ public class HotDynamicBean extends BaseBean{
             this.myinfo = myinfo;
         }
 
-        public ObservableArrayList<WeiboBean> getWeibo() {
+        public ArrayList<WeiboBean> getWeibo() {
             return weibo;
         }
 
-        public void setWeibo(ObservableArrayList<WeiboBean> weibo) {
+        public void setWeibo(ArrayList<WeiboBean> weibo) {
             this.weibo = weibo;
         }
 

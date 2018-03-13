@@ -5,27 +5,28 @@
         <variable
             name="viewModel"
             type="could.bluepay.renyumvvm.viewmodel.DynamicViewModel"/>
-        <variable
-            name="adapter"
-            type="could.bluepay.renyumvvm.view.adapter.bindingAdapter.DynamicBindingAdapter"/>
-        <variable
-            name="layoutManager"
-            type="android.support.v7.widget.RecyclerView.LayoutManager"/>
+        <import type="me.tatarka.bindingcollectionadapter.LayoutManagers"/>
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <could.bluepay.widget.xrecyclerview.XRecyclerView
-            android:id="@+id/xrv_dynamic"
+        <could.bluepay.renyumvvm.widget.pulltorefresh.RefreshLayout
+            android:id="@+id/pull_to_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:adapter="@{adapter}"
-            android:setLoadingListener="@{viewModel.loadingListener}"
-            android:layoutManager="@{layoutManager}"
-            android:addOnChildAttachStateChangeListener="@{viewModel.attachStateChangeListener}"
+            app:setRefreshLayoutListener="@{viewModel.onRefreshListener}"
+            app:setOnRefreshing="@{viewModel.loadingData}"
             >
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_dynamic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="@{LayoutManagers.linear()}"
+                app:itemView="@{viewModel.itemView}"
+                app:items="@{viewModel.viewModelList}"
+                app:addOnChildAttachStateChangeListener="@{viewModel.attachStateChangeListener}"/>
 
-        </could.bluepay.widget.xrecyclerview.XRecyclerView>
+        </could.bluepay.renyumvvm.widget.pulltorefresh.RefreshLayout>
     </RelativeLayout>
 </layout>

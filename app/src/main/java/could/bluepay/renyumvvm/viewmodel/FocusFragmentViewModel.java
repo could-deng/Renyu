@@ -12,6 +12,8 @@ import could.bluepay.renyumvvm.databinding.FragmentForcusBinding;
 import could.bluepay.renyumvvm.http.RequestImpl;
 import could.bluepay.renyumvvm.http.bean.UserBeanItem;
 import could.bluepay.renyumvvm.model.MainModel;
+import could.bluepay.renyumvvm.model.MemExchange;
+import could.bluepay.renyumvvm.rx.RxApiManager;
 import could.bluepay.renyumvvm.utils.Logger;
 import could.bluepay.renyumvvm.view.adapter.UserListAdapter;
 import could.bluepay.renyumvvm.view.adapter.UserListFocusAdapter;
@@ -60,8 +62,11 @@ public class FocusFragmentViewModel<SV extends ViewDataBinding> extends BaseFrag
         @Override
         public void run() {
             isRefreshing.set(true);
-            mStart = 1;
-            loadCustomData(mStart);
+            if(!onNetWorkDisConnecte(false)) {
+                isRefreshing.set(false);
+                mStart = 1;
+                loadCustomData(mStart);
+            }
         }
     });
 
@@ -99,9 +104,11 @@ public class FocusFragmentViewModel<SV extends ViewDataBinding> extends BaseFrag
                         && adapter.getLoadStatus()!=UserListAdapter.LOAD_MORE){
 
                     adapter.updateLoadStatus(UserListAdapter.LOAD_MORE);
-
-                    mStart ++;
-                    loadCustomData(mStart);
+                    if(!onNetWorkDisConnecte(false)) {
+                        adapter.updateLoadStatus(UserListAdapter.LOAD_NONE);
+                        mStart++;
+                        loadCustomData(mStart);
+                    }
                 }
             }
         }
@@ -122,9 +129,35 @@ public class FocusFragmentViewModel<SV extends ViewDataBinding> extends BaseFrag
         return adapter!=null && adapter.haveData();
     }
     public void loadData(){
-        mStart = 1;
-        this.loadCustomData(mStart);
+        List<UserBeanItem> beanList;
+        int page;
+        if(type == FocusFragment.ContentTypeFocus){
+            beanList = MemExchange.getInstance().getFocusList();
+            page = MemExchange.getInstance().getFocusListPage();
+        }else{
+            beanList = MemExchange.getInstance().getPopularList();
+            page = MemExchange.getInstance().getPopularListPage();
+        }
+        if(beanList.size()>0 && page!=0){
+//            adapter.setList(MemExchange.getInstance().getFocusList(),true);
+            adapter.setDataAll(beanList);
+            showContentView();
+        }else {
+            Logger.e(Logger.DEBUG_TAG, "focusFragmentViewModel,网络请求加载第一页数据");
+            if(!onNetWorkDisConnecte(true)) {
+                mStart = 1;
+                this.loadCustomData(mStart);
+            }
+        }
+    }/**
+     * visible时自动调用、错误时点击重新加载
+     */
+    @Override
+    public void onloadData() {
+        super.onloadData();
+        loadData();
     }
+
 
     public void setAdapterData(){
         if(adapter == null){
@@ -147,21 +180,35 @@ public class FocusFragmentViewModel<SV extends ViewDataBinding> extends BaseFrag
 
 
 
-    private void loadCustomData(int page){
+    private void loadCustomData(final int page){
         mainModel.getFocusData(page, type,city,context,new RequestImpl() {
             @Override
             public void loadSuccess(Object object) {
                 List<UserBeanItem> itemList = (List<UserBeanItem>) object;
+
                 if(adapter == null){
                     return;
                 }
                 if(mStart == 1) {
                     if (itemList.size() > 0) {
-                        adapter.setList(itemList);
+                        if(type == FocusFragment.ContentTypeFocus) {
+                            MemExchange.getInstance().setFocusList(itemList, page);
+                            adapter.setDataAll(MemExchange.getInstance().getFocusList());
+                        }else{
+                            MemExchange.getInstance().setPopularList(itemList,page);
+                            adapter.setDataAll(MemExchange.getInstance().getPopularList());
+                        }
                     }
                 }else{
                     if(itemList.size() > 0) {
-                        adapter.addList(itemList);
+                        if(type == FocusFragment.ContentTypeFocus) {
+                            MemExchange.getInstance().setFocusList(itemList, page);
+//                        adapter.setList(itemList,false);
+                            adapter.setDataAll(MemExchange.getInstance().getFocusList());
+                        }else{
+                            MemExchange.getInstance().setPopularList(itemList,page);
+                            adapter.setDataAll(MemExchange.getInstance().getPopularList());
+                        }
                     }else{
                         mStart --;
                         adapter.updateLoadStatus(UserListAdapter.LOAD_END);
@@ -179,21 +226,20 @@ public class FocusFragmentViewModel<SV extends ViewDataBinding> extends BaseFrag
 
             @Override
             public void loadFailed() {
-
+                isRefreshing.set(false);
                 if(mStart == 1){
                     showError();
                     return;
                 }
-
                 showContentView();
-                isRefreshing.set(false);
                 mStart --;
             }
 
             @Override
             public void addSubscription(Disposable disposable) {
                 Logger.e(Logger.DEBUG_TAG,"FocusFragmentViewModel,addSubscription");
-                context.addSubscription(disposable);
+//                context.addSubscription(disposable);
+                RxApiManager.get().add(FocusFragment.TAG+FocusFragment.ContentTypeFocus,disposable);
             }
         });
     }

@@ -25,10 +25,6 @@ import me.tatarka.bindingcollectionadapter.BaseItemViewSelector;
 import me.tatarka.bindingcollectionadapter.ItemView;
 import me.tatarka.bindingcollectionadapter.ItemViewSelector;
 
-/**
- *
- */
-
 public class InviteFragmentViewModel extends BaseFragmentViewModel{
 
     private String city = "全国";
@@ -36,23 +32,11 @@ public class InviteFragmentViewModel extends BaseFragmentViewModel{
 
     // 开始请求的角标
     private int mStart = 1;
-    //    private UserListInviteAdapter adapter;
-
-// 一次请求的数量
-//    private int mCount = 18;
-
-    //context
-    private InviteFragment mFragment;
 
     /**
      * model
      */
     private UserListBean dataBean;
-
-
-    public InviteFragmentViewModel(InviteFragment mFragment) {
-        this.mFragment = mFragment;
-    }
 
     public final ViewStyle inviteFragmentViewStyle = new ViewStyle();
 
@@ -86,8 +70,7 @@ public class InviteFragmentViewModel extends BaseFragmentViewModel{
         @Override
         public void run() {
             inviteFragmentViewStyle.isRefreshing.set(true);
-            mStart = 1;
-            loadCustomData(MainModel.getmInstance().getUid(),mStart);
+            loadData(true);
         }
     });
 
@@ -95,20 +78,29 @@ public class InviteFragmentViewModel extends BaseFragmentViewModel{
     public final ReplyCommand<Integer> onLoadMoreCommand = new ReplyCommand<Integer>(new Runnable() {
         @Override
         public void run() {
-            loadCustomData(MainModel.getmInstance().getUid(),++mStart);
+            loadData(false);
         }
     });
 
+
     //region===提供给View层=====
 
-    public void loadData(){
-        mStart = 1;
+    public void loadData(boolean ifRefresh){
+        if(onNetWorkDisConnecte(false)){
+            return;
+        }
+        if(ifRefresh) {
+            mStart = 1;
+        }else{
+            ++mStart;
+        }
         this.loadCustomData(MainModel.getmInstance().getUid(),mStart);
     }
 
     public boolean haveData(){
         return dataBean!=null;
     }
+
     //endregion===提供给View层=====
 
 
@@ -120,7 +112,9 @@ public class InviteFragmentViewModel extends BaseFragmentViewModel{
         super.onloadData();
         inviteFragmentViewStyle.isRefreshing.set(true);
         Logger.e(Logger.DEBUG_TAG,"inviteFragmentViewStyle.isRefreshing.set(true);");
-        loadData();
+        if(!onNetWorkDisConnecte(true)) {
+            loadData(true);
+        }
     }
 
     //region=====model层==========
@@ -200,7 +194,7 @@ public class InviteFragmentViewModel extends BaseFragmentViewModel{
                 .subscribe(new Consumer<UserBeanItem>() {
                     @Override
                     public void accept(UserBeanItem beanItem) throws Exception {
-                        viewModelList.add(new InviteFragmentItemViewModel(mFragment.getActivity(), beanItem));
+                        viewModelList.add(new InviteFragmentItemViewModel(beanItem));
                     }
 
                 });

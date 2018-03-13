@@ -1,10 +1,10 @@
 package could.bluepay.renyumvvm.viewmodel;
 
-import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-
+import android.view.View;
+import could.bluepay.renyumvvm.MixApp;
 import could.bluepay.renyumvvm.R;
 import could.bluepay.renyumvvm.http.bean.UserBeanItem;
 import could.bluepay.renyumvvm.utils.TimeUtils;
@@ -14,9 +14,6 @@ import could.bluepay.renyumvvm.utils.TimeUtils;
  */
 
 public class InviteFragmentItemViewModel implements ViewModel {
-    //context
-    private Context context;
-
     //model
     private UserBeanItem itemData;
 
@@ -29,12 +26,14 @@ public class InviteFragmentItemViewModel implements ViewModel {
     public final ObservableField<String> InviteTime = new ObservableField<>();
     public final ObservableBoolean InviteTimeVisibility = new ObservableBoolean(false);
 
-
-    public InviteFragmentItemViewModel(Context context,UserBeanItem itemData){
-        if(context == null){
-            return;
+    public final View.OnClickListener OnclickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            fdcount.set(String.valueOf(itemData.getFdcount()+1));
         }
-        this.context = context;
+    } ;
+
+    public InviteFragmentItemViewModel(UserBeanItem itemData){
         this.itemData = itemData;
 
         photo.set(itemData.getPhoto());
@@ -43,14 +42,14 @@ public class InviteFragmentItemViewModel implements ViewModel {
 
         if(itemData.getShot() == 2){
             inviteStatus.set(itemData.getCity()+"-"+"可约拍");
-            inviteColor.set(context.getResources().getColor(R.color.font_color_41));
+            inviteColor.set(MixApp.getContext().getResources().getColor(R.color.font_color_41));
 
             InviteTimeVisibility.set(true);
             InviteTime.set(TimeUtils.getMonthDayDate((String)itemData.getShot_starttime()) + "-" +TimeUtils.getMonthDayDate((String) itemData.getShot_endtime()));
 
         }else{
             inviteStatus.set(itemData.getCity()+"-"+"暂停约拍");
-            inviteColor.set(context.getResources().getColor(R.color.font_color_7));
+            inviteColor.set(MixApp.getContext().getResources().getColor(R.color.font_color_7));
             InviteTimeVisibility.set(false);
         }
     }

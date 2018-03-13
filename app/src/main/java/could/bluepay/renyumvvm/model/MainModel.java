@@ -16,6 +16,7 @@ import could.bluepay.renyumvvm.common.PrefsHelper;
 import could.bluepay.renyumvvm.http.HttpClient;
 import could.bluepay.renyumvvm.http.RequestImpl;
 import could.bluepay.renyumvvm.http.bean.BaseBean;
+import could.bluepay.renyumvvm.http.bean.BestResultBean;
 import could.bluepay.renyumvvm.http.bean.FavortResultBean;
 import could.bluepay.renyumvvm.http.bean.HotDynamicBean;
 import could.bluepay.renyumvvm.http.bean.UserListBean;
@@ -31,6 +32,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import retrofit2.http.Multipart;
 
 /**
  * Model层
@@ -69,6 +71,50 @@ public class MainModel {
 //        }
 //        Logger.e(Logger.DEBUG_TAG,"first:"+f+",last:"+e);
 //    }
+
+
+
+    /**
+     * Best平台搜索收入
+     * http://192.168.4.210:8200/tools/avenue?time=1&currency=THB&producerId=178&type=1
+     * @param time
+     * @param currency
+     * @param producerId
+     * @param type
+     */
+    public void searchBestInput(int time,String currency,int producerId,int type,final RequestImpl listener){
+        HttpClient.Builder.getBestService().bestSearch(HttpClient.Builder.getHeader(),time,
+                    currency,producerId,type)
+                .onTerminateDetach()
+                .subscribeOn(Schedulers.io())//上游。在IO线程进行网络请求
+                .observeOn(AndroidSchedulers.mainThread())//下游。回到主线程去处理请求结果
+                .subscribe(new Observer<BestResultBean>() {
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(BestResultBean bestResultBean) {
+                        if(bestResultBean!=null && bestResultBean.getStatus() == 200) {
+                            listener.loadSuccess(bestResultBean.getDate());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.loadFailed();
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
 
     /**
      * 登录
@@ -111,6 +157,15 @@ public class MainModel {
                 });
     }
 
+    /**
+     *
+     * @param type
+     * @param username
+     * @param mobile
+     * @param password
+     * @param headIcon 文件名
+     * @param file 上传的文件
+     */
     public void register(int type,String username,String mobile,String password,String headIcon,File file){
         Map<String, Object> params = new HashMap<>();
         params.put("userType", type);
@@ -119,19 +174,13 @@ public class MainModel {
         params.put("password", password);
         params.put("headIcon", headIcon);
 
+        RequestBody body = RequestBody.create(MediaType.parse("Content-Type, application/json"),(new JSONObject(params)).toString());
 
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("application/octet-stream"), file);
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("headIcon",headIcon,requestFile);
 
-//        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"),(new JSONObject(params)).toString())
-
-//        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-//                .addFormDataPart("userType", type)
-//                .addFormDataPart("nickname", username)
-//                .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file))
-//                .build();
-//        RequestBody requestBody = RequestBody.create()
-
-//        HttpClient.Builder.getAppServer().register(HttpClient.Builder.getHeader(),body)
-
+        HttpClient.Builder.getAppServer().register(HttpClient.Builder.getHeader(),body,filePart);
     }
 
     public Request uploadToService(String url, List<String> files, List<String> tags){
@@ -352,8 +401,6 @@ public class MainModel {
                 });
 
     }
-
-
 
 
 }

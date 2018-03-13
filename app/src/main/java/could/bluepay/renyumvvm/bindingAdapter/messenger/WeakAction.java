@@ -43,6 +43,9 @@ public class WeakAction<T> {
 
     }
 
+    /**
+     * 标志为无用
+     */
     public void markForDeletion() {
         reference.clear();
         reference = null;

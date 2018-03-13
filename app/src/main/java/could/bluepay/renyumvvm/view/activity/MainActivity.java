@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.squareup.leakcanary.RefWatcher;
 import java.util.List;
 import could.bluepay.renyumvvm.Config;
@@ -39,6 +41,9 @@ import io.reactivex.functions.Consumer;
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
 
+    public static String TAG = "MainActivity";
+    public static String MainActivity_Message_Toast = TAG+"Message_Toast";
+
     private BottomDialogFragment bottomDialog;
 
     //region=======生命周期==============
@@ -52,8 +57,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         initImageWatch();
         registeMessage();
         initView();
+        registerMessenger();
 //        initContentFragment();
 //        startShowFragment();
+    }
+    private void registerMessenger(){
+        Messenger.getDefault().register(this, MainActivity_Message_Toast, String.class, new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                if(!TextUtils.isEmpty(s)) {
+                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    private void unregisterMessenger(){
+        Messenger.getDefault().unregister(this);
     }
 
     @Override
@@ -83,6 +102,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         MemExchange.getInstance().clear();
         JZVideoPlayer.releaseAllVideos();
         RefWatcher refWatcher = MixApp.getRefWatcher(this);
+        unregisterMessenger();
         refWatcher.watch(this);
     }
 
@@ -284,6 +304,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 //            binding.toolbar.indicator.setTabMode(TabLayout.GRAVITY_CENTER);
 //            binding.toolbar.indicator.setupWithViewPager(viewpager);
             binding.toolbar.indicator.setVisibility(View.VISIBLE);
+
+            ViewGroup.LayoutParams params = binding.toolbar.indicator.getLayoutParams();
+            params.width = ViewUtils.dp2px(MainActivity.this,200);
+            binding.toolbar.indicator.setLayoutParams(params);
+
             binding.toolbar.indicator.setTitles(titles);
             binding.toolbar.indicator.setViewPager(viewpager);
         }

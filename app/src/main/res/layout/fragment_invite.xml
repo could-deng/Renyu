@@ -31,7 +31,7 @@
             app:layoutManager="@{LayoutManagers.linear()}"
             app:itemView="@{viewModel.itemView}"
             app:items="@{viewModel.viewModelList}"
-            android:onLoadMoreCommand="@{viewModel.onLoadMoreCommand}"
+            app:onLoadMoreCommand="@{viewModel.onLoadMoreCommand}"
             />
         <!--app:adapter="@{adapter}"-->
         <!--app:layoutManager="@{LayoutManagers.linear()}"-->
